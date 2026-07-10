@@ -1,0 +1,98 @@
+[
+  {
+    "stage": "pre",
+    "question": "词性标注（POS Tagging）的目标是什么？",
+    "options": [
+      "检测文本情感",
+      "翻译句子",
+      "给每个词元打上语法类别标签（名词、动词、形容词…）",
+      "提取命名实体"
+    ],
+    "correct": 2,
+    "explanation": "词性标注为句子中的每个词元分配一个语法类别——这是词形还原、句法分析和命名实体识别的前提。"
+  },
+  {
+    "stage": "pre",
+    "question": "跨语言词性标注的标准标签集是什么？",
+    "options": [
+      "Penn Treebank (PTB)",
+      "Stanford Dependencies",
+      "Universal Dependencies (UD)——17 个粗粒度、语言中立的标签",
+      "CoNLL-2003"
+    ],
+    "correct": 2,
+    "explanation": "Universal Dependencies 提供了一个统一的 17 标签体系，覆盖 100+ 种语言。在跨语言场景中，不要混用不同语言的标签体系。"
+  },
+  {
+    "stage": "check",
+    "question": "Bigram HMM 词性标注器建模了什么？",
+    "options": [
+      "仅 P(tags) 的分布",
+      "P(tag_i | tag_{i-1}) 转移概率 + P(word_i | tag_i) 发射概率，通过 Viterbi 解码最高概率序列",
+      "词嵌入的相似度",
+      "依存树结构"
+    ],
+    "correct": 1,
+    "explanation": "Bigram HMM = 标签转移表 + 词发射表。Viterbi 动态规划在整个标签网格中寻找全局最优序列——这是序列标注问题的最经典解法。"
+  },
+  {
+    "stage": "check",
+    "question": "Viterbi 算法在 HMM 标注器中的作用是什么？",
+    "options": [
+      "计算转移矩阵",
+      "在 O(n × |T|²) 时间复杂度内通过动态规划找到最高概率的标签序列",
+      "计算每个标签的边际概率",
+      "仅计算前向概率"
+    ],
+    "correct": 1,
+    "explanation": "Viterbi 是序列标注的经典动态规划算法。它的核心洞察：第 i 步的最优路径可以由第 i-1 步的最优路径推出（马尔可夫性质），避免了枚举所有指数级别的可能序列。"
+  },
+  {
+    "stage": "check",
+    "question": "为什么 Penn Treebank (PTB) 词性标注的准确率上限在 97-98%？",
+    "options": [
+      "模型在 NLP 中都达不到 98%",
+      "Universal Dependencies 限制了准确率",
+      "人类标注者之间的共识率大约只有 97%——超过这个水平的模型可能是在过拟合测试集而非学到更好的语法",
+      "硬件限制"
+    ],
+    "correct": 2,
+    "explanation": "标注者的分歧给任何模型设定了一个不可逾越的上限。当一个模型声称 PTB 准确率 > 98.5% 时，它极大概率是在过拟合，不是真的比标注者更懂语法。"
+  },
+  {
+    "stage": "post",
+    "question": "在 2026 年 LLM 流水线中，词性标注和依存分析为什么仍然重要？",
+    "options": [
+      "LLM 没有词性标注就无法运行",
+      "词形还原、基于方面的情感分析、查询分解、结构化输出验证和跨语言迁移仍然依赖词性或依存分析的结果——即使文本本身是 LLM 生成的",
+      "词性标注是分词的必需步骤",
+      "词性标注取代了 Transformer"
+    ],
+    "correct": 1,
+    "explanation": "LLM 可以生成流畅的文本，但不能保证生成过程中遵守语法约束。词性标注和依存分析提供了语法层面的验证信号——这正是 LLM 的短板。"
+  },
+  {
+    "stage": "post",
+    "question": "生产环境中应该用哪个库做词性和依存分析？",
+    "options": [
+      "scikit-learn",
+      "NumPy",
+      "spaCy——快速、准确、与分词+NED+词形还原一体；需要更广语言覆盖时用 stanza 或 trankit",
+      "自己从头写一个解析器"
+    ],
+    "correct": 2,
+    "explanation": "spaCy 的生产级 pipeline 集成了分词→词性标注→依存分析→NER→词形还原，全部在一行 `nlp(text)` 中完成。stanza 覆盖 60+ 种语言，trankit 在 UD 准确率上处于 SOTA 级别。"
+  },
+  {
+    "stage": "post",
+    "question": "中文词性标注相比英文最关键的差异是什么？",
+    "options": [
+      "中文没有词性",
+      "中文没有屈折变化——英文可以通过后缀（-tion→名词、-ly→副词）推断词性，中文的同一个词（如'学习'）在不同上下文中可以是名词也可以是动词，必须完全依赖上下文判断",
+      "中文只能用 HMM",
+      "中文词性标签比英文少"
+    ],
+    "correct": 1,
+    "explanation": "英文的词形本身提供了大量词性线索（后缀、大小写）。中文没有这些信号——'学习'在'我在学习'中是动词，在'机器学习'中是名词。词性标注对上下文窗口的依赖比英文大得多。"
+  }
+]
