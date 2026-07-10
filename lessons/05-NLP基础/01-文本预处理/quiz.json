@@ -1,0 +1,98 @@
+[
+  {
+    "stage": "pre",
+    "question": "为什么语言模型在训练之前需要文本预处理？",
+    "options": [
+      "预处理可以提升 GPU 利用率",
+      "模型只能处理离散的整数词元 ID，不能直接读取原始文本",
+      "模型可以直接读取字符串",
+      "只有没有空格分隔的语言才需要预处理"
+    ],
+    "correct": 1,
+    "explanation": "所有语言模型操作的都是整数词元 ID。预处理的作用是将连续的文本语言"翻译"为模型能理解的离散输入——这个转换不是中性的，它直接影响模型看到什么。"
+  },
+  {
+    "stage": "pre",
+    "question": "以下哪项是中文 NLP 相比英文 NLP 特有的预处理步骤？",
+    "options": [
+      "词干提取",
+      "词形还原",
+      "分词（Word Segmentation）",
+      "词性标注"
+    ],
+    "correct": 2,
+    "explanation": "英文用空格自然分词，而中文没有空格分隔。因此中文 NLP 需要专门的"分词"步骤将连续的汉字序列切分为有意义的词语单元。这是中文 NLP 最基础也最有挑战的预处理问题。"
+  },
+  {
+    "stage": "check",
+    "question": "Porter 词干提取算法 Step 1a 对 'ponies' 的输出是什么？",
+    "options": [
+      "ponies",
+      "ponie",
+      "pony",
+      "poni"
+    ],
+    "correct": 3,
+    "explanation": "'ies' 规则将后缀替换为 'i'，得到 'poni'。完整的 Porter 算法中，Step 1b 会进一步将 'poni' 修正为 'pony'。这说明单步规则可能产生非词的中间结果，后续步骤会修复。"
+  },
+  {
+    "stage": "check",
+    "question": "为什么词形还原通常需要词性标注（POS Tag）？",
+    "options": [
+      "为了处理 Unicode 编码",
+      "为了提升速度",
+      "语法上下文可以消除歧义——例如 'better' 作为形容词和动词时，还原结果不同",
+      "为了减少内存占用"
+    ],
+    "correct": 2,
+    "explanation": "词形还原的结果依赖于词在句子中的语法角色。'better' 作为形容词还原为 'good'，作为动词还原为 'better'（本身已是原形）。没有词性标注，还原器无法做出正确选择。"
+  },
+  {
+    "stage": "check",
+    "question": "正向最大匹配（FMM）和逆向最大匹配（BMM），在中文分词中哪个通常更准确？",
+    "options": [
+      "FMM 总是更准确",
+      "BMM 通常略优于 FMM",
+      "两者完全一样",
+      "没有规律"
+    ],
+    "correct": 1,
+    "explanation": "中文的偏正结构中，修饰语在前、中心语在后（如"研究/生命"而非"研究生/命"）。BMM 从右向左匹配，更倾向于保留中心语的完整性，因此统计上准确率略高于 FMM。jieba 等工业工具实际使用更复杂的算法（如基于词图和动态规划），而非单纯的规则匹配。"
+  },
+  {
+    "stage": "post",
+    "question": "什么是 NLP 预处理中的"训练/推理不一致（Training/Inference Mismatch）"？",
+    "options": [
+      "训练和推理使用了不同的 batch size",
+      "训练和推理使用了不同的预处理逻辑，导致模型在推理时看到的数据分布与训练时不同",
+      "GPU 显存不足",
+      "在一个 Notebook 中混用了不同的分词器"
+    ],
+    "correct": 1,
+    "explanation": "这是生产环境中最常见的 NLP 故障。训练时做了小写化、去停用词、词干提取，部署时写了一套新代码——导致推理时的输入分布与训练时不同，模型准确率悄然下降，且很难定位根因。"
+  },
+  {
+    "stage": "post",
+    "question": "在使用 Transformer 模型（如 BERT、GPT）时，应该使用哪种分词方案？",
+    "options": [
+      "NLTK 的 word_tokenize",
+      "模型自带的 Tokenizer（通过 transformers 库加载）",
+      "正则表达式分词器",
+      "jieba 分词"
+    ],
+    "correct": 1,
+    "explanation": "每个 Transformer 模型训练时使用了特定的分词器（如 BERT 的 WordPiece、GPT 的 BPE）。推理时必须使用与训练完全一致的同一个分词器，否则词元 ID 的映射关系会错乱。Transformers 库的 AutoTokenizer 会自动加载匹配的分词器。"
+  },
+  {
+    "stage": "post",
+    "question": "以下哪项是中文预处理中词干提取和词形还原的正确做法？",
+    "options": [
+      "使用 Porter Stemmer 处理中文文本",
+      "中文没有英文式的屈折形态变化，通常不需要词干提取和词形还原",
+      "直接照搬英文 NLP 的预处理流程",
+      "将中文字符全部转为拼音后再做词干提取"
+    ],
+    "correct": 1,
+    "explanation": "中文是孤立语，没有"run/running/ran"这样的屈折变化。中文预处理的核心是分词（Word Segmentation），而非词干提取或词形还原。直接照搬英文 NLP 流程是常见的新手错误。"
+  }
+]
