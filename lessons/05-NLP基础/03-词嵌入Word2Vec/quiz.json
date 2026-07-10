@@ -1,0 +1,98 @@
+[
+  {
+    "stage": "pre",
+    "question": "分布假设（Distributional Hypothesis）的核心观点是什么？",
+    "options": [
+      "词频高的词包含更多语义信息",
+      "可以通过一个词的上下文来理解它的含义——'观其伴而知其义'",
+      "所有词都可以嵌入到 300 维空间",
+      "词汇在文档中均匀分布"
+    ],
+    "correct": 1,
+    "explanation": "Firth (1957) 的分布假设：如果两个词经常出现在相似的上下文中，它们很可能具有相似的含义。这是 Word2Vec 和几乎所有词嵌入方法的理论基础。"
+  },
+  {
+    "stage": "pre",
+    "question": "为什么 Word2Vec 不用全词表 Softmax 而用负采样（Negative Sampling）？",
+    "options": [
+      "Softmax 无法计算梯度",
+      "全词表 Softmax 每次需要计算 10 万+ 个概率，计算代价过高——负采样将其简化为 k+1 次二分类",
+      "Softmax 只适合图像分类",
+      "负采样能提高准确率"
+    ],
+    "correct": 1,
+    "explanation": "全词表 Softmax 需要为每个正样本计算整个词表的概率分布——10 万类 × 每次更新，即使 GPU 也吃不消。负采样将问题降级：只对 1 个正样本和 k 个负样本做二分类，k 通常只有 5-20。"
+  },
+  {
+    "stage": "check",
+    "question": "Skip-gram 和 CBOW 的核心区别是什么？",
+    "options": [
+      "Skip-gram 用 bigram，CBOW 用 unigram",
+      "Skip-gram：给定中心词预测上下文词。CBOW：给定上下文词预测中心词",
+      "Skip-gram 预测中心词，CBOW 预测上下文词",
+      "Skip-gram 是深层网络，CBOW 是浅层网络"
+    ],
+    "correct": 1,
+    "explanation": "Skip-gram 从中心词出发预测周围的上下文词——对稀有词更友好。CBOW 从周围上下文词的平均预测中心词——更快但稀有词效果较差。实践中 Skip-gram 更常用。"
+  },
+  {
+    "stage": "check",
+    "question": "训练完 Word2Vec 后，哪个权重矩阵被作为最终的词嵌入？",
+    "options": [
+      "输入到隐藏层的 W 矩阵（中心词嵌入表）",
+      "两个矩阵的乘积",
+      "隐藏到输出的 W' 矩阵（上下文嵌入表）",
+      "每轮训练后重新投影的结果"
+    ],
+    "correct": 0,
+    "explanation": "中心词嵌入表 W 是标准输出——每一行就是对应词的嵌入向量。上下文嵌入表 W' 通常被丢弃，有时与 W 平均以提高鲁棒性。"
+  },
+  {
+    "stage": "check",
+    "question": "负采样训练中，正样本的目标是什么？",
+    "options": [
+      "强制两个向量正交",
+      "最小化它们的点积",
+      "最大化 sigmoid(W[center]·W'[context]) 使其接近 1",
+      "消除向量间的相关性"
+    ],
+    "correct": 2,
+    "explanation": "正样本对（真正共现的词对）希望 sigmoid(点积) 接近 1。负样本对（随机采样的词对）希望 sigmoid(点积) 接近 0。整个训练等价于二元逻辑回归：'这两个词是否共现？'"
+  },
+  {
+    "stage": "post",
+    "question": "为什么 Word2Vec 无法处理一词多义（如'苹果'既指水果也指公司）？",
+    "options": [
+      "窗口太小",
+      "它忽略稀有词",
+      "负采样会丢弃稀有含义",
+      "它为每个词只分配一个静态向量——'苹果'的所有含义被迫共享同一个向量，无法根据上下文切换"
+    ],
+    "correct": 3,
+    "explanation": "静态嵌入（Static Embedding）的根本局限：一个词只有一个向量。'river bank'和'financial bank'使用同一个 'bank' 向量。上下文嵌入（ELMo、BERT、所有 Transformer）通过为每个出现生成不同的向量解决了这个问题。"
+  },
+  {
+    "stage": "post",
+    "question": "在 2026 年，什么场景下你仍然会选择 Word2Vec 而非 Transformer 嵌入？",
+    "options": [
+      "需要解决一词多义时",
+      "轻量级设备端检索、领域特定语料快速训练（笔记本一小时即可）、推理延迟只有一个查表操作——当这些条件同时满足时",
+      "输入文本非常长时",
+      "对话质量是首要目标时"
+    ],
+    "correct": 1,
+    "explanation": "Word2Vec 的优势在轻量和快速：训练只需 CPU + 几 GB 内存；推理只做一次行查询（查表），延迟 < 0.1ms；100-300 维向量可以直接用 PCA/t-SNE 可视化验证聚类质量。"
+  },
+  {
+    "stage": "post",
+    "question": "'king - man + woman ≈ queen' 这个类比是如何实现的？",
+    "options": [
+      "模型编码了皇室身份的标记位",
+      "Skip-gram 在皇室语料上训练",
+      "向量空间中编码了线性的关系方向——(king - man) 近似捕获'皇室'方向，加到 'woman' 上就靠近 'queen' 所在区域",
+      "余弦相似度不受性别影响"
+    ],
+    "correct": 2,
+    "explanation": "嵌入空间中的方向可以编码关系特征。'king - man'捕获了从'男性'到'皇室男性'的偏移方向（可以理解为'皇室'方向），将这个方向加到'woman'上，自然就靠近'皇室女性'=queen 的区域。这不是魔法——是分布假设在大规模语料上的统计结果。"
+  }
+]
