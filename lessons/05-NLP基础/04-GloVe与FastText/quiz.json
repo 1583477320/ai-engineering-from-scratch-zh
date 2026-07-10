@@ -1,0 +1,98 @@
+[
+  {
+    "stage": "pre",
+    "question": "GloVe 相比 Word2Vec 的核心改进是什么？",
+    "options": [
+      "直接对全局词-词共现矩阵做加权矩阵分解",
+      "引入了字节级分词",
+      "使用了更深的神经网络",
+      "新增了子词 n-gram 嵌入"
+    ],
+    "correct": 0,
+    "explanation": "GloVe 构建全局共现矩阵，用加权回归（而非 Word2Vec 的在线滑动窗口）学习嵌入。两者效果接近，但 GloVe 训练开销更小——共现矩阵只需要遍历一次语料即可构建。"
+  },
+  {
+    "stage": "pre",
+    "question": "FastText 解决了 Word2Vec 和 GloVe 都解决不了的问题是什么？",
+    "options": [
+      "降低训练成本",
+      "多语言迁移",
+      "为训练中未见过的词（OOV）生成向量——通过组合字符 n-gram 嵌入",
+      "一词多义消歧"
+    ],
+    "correct": 2,
+    "explanation": "FastText 将每个词表示为字符 n-gram 嵌入的求和。即使 'Zoomer-approved' 从未出现在训练集中，它的 n-gram（'Zoo', 'oom', 'mer'...）已从其他词中学到，组合起来就是一个合理的向量。"
+  },
+  {
+    "stage": "check",
+    "question": "GloVe 损失函数中的权重函数 f(x) = (x/x_max)^alpha 起什么作用？",
+    "options": [
+      "初始化权重",
+      "选择负样本",
+      "压制极高频共现对（如 'the' 与 'and' 共现百万次）对损失的主导——防止模型只关注这些平凡模式",
+      "将向量归一化到单位长度"
+    ],
+    "correct": 2,
+    "explanation": "如果不加权，'the-and' 这对共现次数可能是 'cat-purr' 的数十万倍——损失完全被高频平凡模式主导，稀有但有意义的模式学不到。权重函数削平了这种不平衡。"
+  },
+  {
+    "stage": "check",
+    "question": "BPE 的每次迭代选择哪一对字符/子词进行合并？",
+    "options": [
+      "随机选一对",
+      "按字典序选第一个",
+      "选整个语料中出现频率最高的相邻 token 对",
+      "选 IDF 最高的对"
+    ],
+    "correct": 2,
+    "explanation": "BPE 的核心就是贪心——每次都合并最频繁的相邻对。't'+'h'→'th'（如果 'th' 最常见），下一轮可能是 'th'+'e'→'the'……合并过程就从字符逐渐构建出有意义的子词单元。"
+  },
+  {
+    "stage": "check",
+    "question": "为什么 GPT-2 选择字节级 BPE（Byte-level BPE）？",
+    "options": [
+      "字节级 BPE 跳过了训练阶段",
+      "基础词表就是 256 个可能的字节——任何 UTF-8 输入都可以编码，彻底消灭了 OOV",
+      "字节比字符训练更快",
+      "字节可以保留原始大小写信息"
+    ],
+    "correct": 1,
+    "explanation": "用 256 个字节作为起点，确保任何输入（包括生僻字、emoji、二进制数据）都能被拆解为有效的 token 序列。这是 LLM 时代分词器的标准做法——不存在'未知词'这个概念。"
+  },
+  {
+    "stage": "post",
+    "question": "微调一个预训练的 Transformer 模型时，你应该使用什么分词器？",
+    "options": [
+      "永远是 SentencePiece——它最通用",
+      "该模型出厂时自带的那个分词器——tokenizer 和模型权重是锁死的，换了就废",
+      "词表最大的那个——覆盖面更广",
+      "字节级 BPE——它不会 OOV"
+    ],
+    "correct": 1,
+    "explanation": "每个 Transformer 模型在预训练时使用特定的 tokenizer 学习词嵌入——token ID 和嵌入向量的映射是在预训练过程中确定、不可更改的。换 tokenizer = 嵌入矩阵全部错乱，模型输出退化为随机。"
+  },
+  {
+    "stage": "post",
+    "question": "什么场景下你会选 FastText 而非 GloVe 作为预训练词向量？",
+    "options": [
+      "只需要 50 维向量时",
+      "面向形态变化丰富的语言（如芬兰语、土耳其语）、或领域内频繁出现新词和拼写错误时——FastText 的子词组合可以给这些词一个合理的向量",
+      "延迟预算最紧张时",
+      "语料非常小时"
+    ],
+    "correct": 1,
+    "explanation": "FastText 的子词组合天生对形态变化、新词、拼写错误有鲁棒性。如果你做社交媒体 NLP（大量的网络新词和拼写变体），FastText 是比 GloVe 更好的选择。中文也有此优势——汉字偏旁、部首天然是子词信号。"
+  },
+  {
+    "stage": "post",
+    "question": "BPE、WordPiece、SentencePiece 的共同点是什么？",
+    "options": [
+      "全是句子级别的编码",
+      "全都是子词（subword）分词器——它们的 token 粒度都在字符和完整词之间，只是合并规则或训练方式不同",
+      "都能处理多语言",
+      "都来自 Google"
+    ],
+    "correct": 1,
+    "explanation": "三者都是子词分词器：BPE 贪心合并最高频相邻对，WordPiece 用似然最大化的方式选择合并，SentencePiece 在原始 Unicode 流上操作且支持 BPE 和 Unigram 两种模式。它们的基本粒度都在字符和完整词之间。"
+  }
+]
