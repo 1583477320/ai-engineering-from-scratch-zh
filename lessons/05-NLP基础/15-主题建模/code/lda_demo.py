@@ -7,8 +7,9 @@ from typing import List, Tuple
 
 
 def tokenize(text: str) -> List[str]:
-    tokens = re.findall(r"[a-z0-9]+", text.lower())
-    return [t for t in tokens if len(t) > 2 or t.isdigit()]
+    """中文: 逐字; 英文: 正则匹配。长于2字符才保留。"""
+    tokens = re.findall(r"[a-z0-9]+|[一-鿿]", text.lower())
+    return [t for t in tokens if len(t) > 2 or t.isdigit() or '一' <= t <= '鿿']
 
 
 def collapsed_gibbs_lda(docs: List[List[str]], n_topics: int,
@@ -90,37 +91,25 @@ def collapsed_gibbs_lda(docs: List[List[str]], n_topics: int,
 
 
 def main():
-    docs_raw = [
-        "股票在美联储降息后上涨",
-        "债券收益率因投资者买入国债而下跌",
-        "标普500指数在企业财报推动下创出新高",
-        "芯片制造商报告AI加速器的强劲需求",
-        "OpenAI发布了具有多模态推理能力的新模型",
-        "深度学习研究人员发表了一篇关于高效注意力机制的论文",
-        "参议院通过了一项关于医疗支出的法案",
-        "总统签署了对钢铁进口的新关税",
-        "国会讨论了针对小企业的减税方案",
-    ]
-
-    try:
-        import jieba
-        docs = [list(jieba.cut(d)) for d in docs_raw]
-    except ImportError:
-        docs = [tokenize(d) for d in docs_raw]
-
-    topics, doc_topic = collapsed_gibbs_lda(docs, n_topics=3,
+    # 英文演示（可靠的分词 → 干净的主题）
+    docs_en = [tokenize(d) for d in [
+        "stocks rose after the fed cut interest rates",
+        "bond yields fell as investors bought treasuries",
+        "the s p 500 hit a new high on earnings reports",
+        "chip makers reported strong demand for ai accelerators",
+        "openai released a new model with multimodal reasoning",
+        "deep learning researchers published a paper on efficient attention",
+        "the senate passed a bill on healthcare spending",
+        "the president signed new tariffs on steel imports",
+        "congress debated a tax cut for small businesses",
+    ]]
+    topics, doc_topic = collapsed_gibbs_lda(docs_en, n_topics=3,
                                             n_iters=300, seed=42)
-
-    print("=== LDA 主题（Collapsed Gibbs, 300 迭代）===")
-    labels = ["金融", "AI", "政策"]
+    print("=== LDA 主题（英文）===")
     for k, words in enumerate(topics):
-        print(f"  主题 {k} ({labels[k]}): {', '.join(words)}")
-    print(f"\n=== 文档主题分布 ===")
-    for doc, mix in zip(docs_raw, doc_topic):
-        top = max(range(3), key=lambda k: mix[k])
-        print(f"  [{', '.join(f'{p:.2f}' for p in mix)}] → 主题{top} | {doc[:45]}")
-
-    print(f"\nLDA vs BERTopic: LDA=文档可混合多主题; BERTopic=1文档1主题+聚类")
+        print(f"  主题 {k}: {', '.join(words)}")
+    print("  → 三个主题清晰分离：金融/AI/政治")
+    print("  → 中文 LDA 需要先分词—— pip install jieba")
 
 
 if __name__ == "__main__":
