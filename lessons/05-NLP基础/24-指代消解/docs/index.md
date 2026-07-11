@@ -54,21 +54,122 @@
 
 ---
 
-## 3. 工业工具——2026 技术栈
+## 3. 从零实现
+
+### 第 1 步：预训练神经指代消解
+
+```python
+import spacy
+nlp = spacy.load("en_coreference_web_trf")   # 实验性模型
+doc = nlp("Apple announced new products. The company said they would ship soon.")
+for cluster in doc._.coref_clusters:
+    print(cluster, "->", [m.text for m in cluster])
+# Cluster 1: [Apple, The company, they]
+# Cluster 2: [new products]
+```
+
+### 第 2 步：基于规则的代词消解器（教学版）
+
+`code/main.py` 中有一个仅用标准库的实现：提取提及（命名实体+代词+定指描述），对每个代词向前 K 个提及打分——性别/数的一致（启发式）、近因（越近越好）、句法角色（偏好主语）→ 链接最高分先行词。不具备与神经模型的竞争力，但展示了搜索空间和端到端模型必须做出的决策。
+
+### 第 3 步：LLM 做指代消解
+
+```python
+prompt = f"""Text: {text}
+列出所有指向人或公司的代词和名词短语。按指向对象聚类。输出JSON：
+[{{"entity": "Apple", "mentions": ["Apple", "the company", "it"]}}, ...]
+"""
+```
+
+两个失败模式需要关注：**(1)** LLM 过度合并——将"him"和"her"（指向两个不同的人）错误合并。**(2)** 长文档中 LLM 静默丢弃提及——跨 50+ 段落时一次性 API 调用不可靠。使用滑动窗口 + 合并策略。
+
+### 第 4 步：评估
+
+标准 CoNLL-2012 脚本计算 MUC、B³、CEAF-φ4 并报告三者平均。内部评估从 span 级精确率/召回率开始，再加入提及链接 F1。
+
+---
+
+## 4. 陷阱
+
+- **单例爆炸。** 有些系统将每个提及报告为一个独立簇——B³ 对此宽容，MUC 惩罚。始终检查全部三个指标
+- **长上下文中的代词。** 在 2000+ token 的文档上性能下降约 15 F1。谨慎分块
+- **性别假设。** 硬编码性别规则在非二元指称、组织和动物上失效。使用学到的模型或中性打分
+- **长文档上的 LLM 漂移。** 单次 API 调用无法在 50+ 段落上可靠地聚类提及。使用滑动窗口 + 合并
+
+---
+
+## 5. 工业工具——2026 技术栈
 
 | 场景 | 选择 |
 |---|---|
 | 英文、单文档 | `en_coreference_web_trf`（spaCy-experimental）或 AllenNLP neural coref |
-| 多语言 | SpanBERT/XLM-R 在 OntoNotes 上训练 |
+| 多语言 | SpanBERT/XLM-R 在 OntoNotes 或 Multilingual CoNLL 上训练 |
+| 跨文档事件指代消解 | 专用端到端模型（2025-26 SOTA） |
 | 快速 LLM 基线 | GPT-4o/Claude + 结构化输出指代消解 prompt |
 | 生产对话系统 | 规则回退 + 神经主模型 + 关键槽位人工复核 |
 
 **2026 集成模式：** 先跑 NER → 跑指代消解 → 将指代消解簇合并进 NER 实体。下游任务看到的是每个簇一个实体——而非每个提及一个实体。
 
-### 中文零指代——英文没有的额外挑战
+---
 
-中文是代词脱落语言——当主语可从上下文推断时，代词可以完全省略。"张三走进房间。Ø 坐下来。Ø 打开了电脑。"第二句和第三句的主语在文本中根本不存在。中文指代消解必须额外检测和恢复这些隐形的指称——**这是英文工具无法直接迁移的根本原因。** 2026 年务实做法：封闭域用规则+距离约束，开放域用 LLM prompt。
+## 6. 常见错误
+
+### 错误 1：中文指代消解直接用英文工具
+
+**现象：** 用 spaCy `en_coreference_web_trf` 处理中文文本——返回空簇或随机聚类。
+
+**原因：** 英文指代消解模型依赖英文的词性、句法树和代词体系。中文没有英文式的代词格变化（he/him/his），且存在零指代——英文模型完全无法处理。
+
+**修复：** 中文指代消解需要专门的解决方案。封闭域：规则+距离约束消解"它"/"他"/"她"。开放域：LLM prompt（中文提示词——"这段话中的'他'指的是谁？"）。零指代恢复：上下文窗口 3 句内查找最近的一致主语。
 
 ---
 
-> 本课程参考了 AI Engineering From Scratch（MIT License）的课程体系。中文零指代分析为原创内容。
+## 7. 面试考点
+
+### Q1：为什么指代消解需要五个评估指标？（难度：⭐⭐）
+
+**参考答案：**
+因为聚类质量无法用单一指标捕获。MUC（link-based）惩罚过度合并。B³（mention-based）对单例爆炸宽容。CEAF-φ4（entity-based）要求簇的对齐。三者平均（CoNLL F1）是 2026 年报告的标准。任何一个指标单独使用都会给特定类型的系统留下"钻空子"的空间——例如只报告 B³ 的系统可以通过将所有提及分为独立簇获得高分，但实际上什么都没消解。
+
+---
+
+## 🔑 关键术语
+
+| 术语 | 人们怎么说 | 实际含义 |
+|---|---|---|
+| 提及 (Mention) | "一个指称" | 指向某实体的一段文本（名字、代词、名词短语） |
+| 先行词 (Antecedent) | "'it'指的是什么" | 后来的提及与之同指的较早提及 |
+| 簇 (Cluster) | "实体的所有叫法" | 全部指向同一现实实体的提及集合 |
+| 回指 (Anaphora) | "向后指" | 后来的提及指向较早的提及（"他"→"张三"） |
+| 前指 (Cataphora) | "向前指" | 较早的提及指向后来的提及（"When he arrived, John..."） |
+| 桥接 (Bridging) | "隐式指代" | "我买了辆车。轮子是坏的。"（那辆车的轮子） |
+| CoNLL F1 | "排行榜上的数字" | MUC、B³、CEAF-φ4 F1 分数的平均值 |
+
+---
+
+## 📚 小结
+
+指代消解将"Apple"、"the company"、"they"、"it"聚合到一个簇中——NER 的下游任务因此看到的是实体，而非孤立的提及。Span-based 端到端（Lee et al., 2017）是现代默认。中文零指代是英文工具无法处理的额外挑战——封闭域用规则+距离约束，开放域用 LLM prompt。CoNLL F1 = MUC+B³+CEAF 三者平均——永远不要只报告一个指标。
+
+---
+
+## ✏️ 练习
+
+1. 【理解】在 5 段手写段落上运行基于规则的代词消解器。对照人工标注衡量提及链接准确率。
+
+2. 【实现】使用预训练神经指代消解模型处理一篇新闻文章。与你自己的人工标注对比聚类结果。模型在哪里失败了？
+
+3. 【实验】构建指代消解增强的 NER 流水线：先 NER，再通过指代消解簇合并实体。在 100 篇文章上衡量实体覆盖率相比纯 NER 的提升。
+
+---
+
+## 📖 参考资料
+
+1. [教材] Jurafsky & Martin, SLP3 Ch. 26 — Coreference Resolution and Entity Linking. https://web.stanford.edu/~jurafsky/slp3/26.pdf
+2. [论文] Lee et al. "End-to-end Neural Coreference Resolution". EMNLP, 2017. https://arxiv.org/abs/1707.07045 — span-based 端到端
+3. [论文] Joshi et al. "SpanBERT: Improving Pre-training by Representing and Predicting Spans". TACL, 2020. https://arxiv.org/abs/1907.10529 — 提升指代消解的预训练
+4. [论文] Hobbs. "Resolving Pronoun References". 1978. — 基于规则的经典
+
+---
+
+> 本课程参考了 AI Engineering From Scratch（MIT License）的课程体系。中文零指代分析、中文指代消解建议为原创内容。
