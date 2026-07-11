@@ -97,6 +97,34 @@ def chunk_parent_child(text, parent_size=2048, child_size=256):
 
 **关键洞察：去重父块。** 多个子块可能映射到同一个父块——全部返回等于浪费上下文。
 
+### 语义分块
+
+```python
+def chunk_semantic(text, encoder, threshold=0.6, min_chars=200, max_chars=2048):
+    sentences = split_sentences(text)
+    if not sentences: return []
+    embs = encoder.encode(sentences, normalize_embeddings=True)
+    chunks = [[sentences[0]]]
+    for i in range(1, len(sentences)):
+        sim = float(embs[i] @ embs[i - 1])  # 邻句余弦相似度
+        current_len = sum(len(s) for s in chunks[-1])
+        if sim < threshold and current_len >= min_chars:
+            chunks.append([sentences[i]])   # 相似度骤降 → 此处切分
+        else:
+            chunks[-1].append(sentences[i])
+    # 合并组内句子，超大块递归二次切分
+    result = []
+    for group in chunks:
+        text_group = " ".join(group)
+        if len(text_group) > max_chars:
+            result.extend(chunk_recursive(text_group, size=max_chars))
+        else:
+            result.append(text_group)
+    return result
+```
+
+**在你的领域上调 `threshold`。** 太高 → 碎片化。太低 → 一个巨大的块。Vectara 2026 基准中语义分块被递归击败——但它在主题切换检测\*应该\*有理论优势。实际限制：句子嵌入相似度在短句上噪音大，min_chars 的强制是最重要的防护。
+
 ### 上下文检索（Anthropic 模式）
 
 ```python
@@ -107,11 +135,47 @@ def contextualize_chunks(document, chunks, llm):
     return [f"{ctx}\n\n{c}" for ctx, c in zip(contexts, chunks)]
 ```
 
-索引上下文化的块。查询时检索受益于额外的周围信号。Anthropic 自身基准提升 35-50% 检索效果。
+索引上下文化的块。查询时检索受益于额外的周围信号。Anthropic 自身基准提升 35-50% 检索效果。**代价：** 每个块一次 LLM 调用——对 1 万块的语料库，构建索引的成本显著增加。仅在对检索质量有刚性要求（法律/金融/医疗文档）时使用。
+
+### 评估
+
+```python
+def recall_at_k(queries, corpus_chunks, encoder, k=5):
+    chunk_embs = encoder.encode(corpus_chunks, normalize_embeddings=True)
+    hits = 0
+    for q_text, gold_idxs in queries:
+        q_emb = encoder.encode([q_text], normalize_embeddings=True)[0]
+        top = np.argsort(-(chunk_embs @ q_emb))[:k]
+        if any(i in gold_idxs for i in top): hits += 1
+    return hits / len(queries)
+```
+
+**始终基准测试。** 你的语料库的"最佳"策略可能与任何博客文章都不匹配。在 50 条查询评估集上测量 Recall@5——事实型、分析型、多跳三类分层——然后调参。
 
 ---
 
 ## 4. 陷阱
+
+- **只按事实型查询评估分块。** 多跳查询揭示截然不同的赢家。用分类型查询评估集
+- **语义分块不设最小块大小。** 产生 40 token 碎片——破坏检索。始终强制 `min_tokens`
+- **重叠作为 cargo cult。** 2026 研究发现重叠常常提供零收益且翻倍索引成本。测量，不假设
+- **无最小/最大强制。** 5 token 或 5000 token 的块都会破坏检索。钳制
+- **跨文档分块。** 永远不让一个块跨越两篇文档。始终按文档独立分块，再合并
+
+---
+
+## 5. 工业工具——2026 技术栈
+
+| 场景 | 策略 |
+|---|---|
+| 首次构建、语料未知 | 递归、512 token、无重叠 |
+| 事实型 QA | 递归、256-512 token |
+| 分析型/多跳 | 递归、512-1024 token + 父文档 |
+| 大量交叉引用（合同/论文） | Late Chunking 或上下文检索 |
+| 对话语料 | 按轮次分块 + 说话人元数据 |
+| 短文本（微博/评论） | 一篇文档 = 一个块 |
+
+**从递归 512 开始。** 在 50 条查询评估集上测量 Recall@5。从那里开始调参。
 
 - **只按事实型查询评估分块。** 多跳查询揭示截然不同的赢家。用分类型查询评估集
 - **语义分块不设最小块大小。** 产生 40 token 碎片——破坏检索。始终强制 `min_tokens`
@@ -130,8 +194,54 @@ def contextualize_chunks(document, chunks, llm):
 
 ## 📚 小结
 
-六种分块策略——固定、递归、语义、句级、父文档、上下文检索。递归 512-token 是 2026 默认（击败语义 69% vs 54%）。查询类型决定块大小——事实型 256-512、分析型 512-1024。重叠在 2026 基准中常为零收益。中文按 `。`→`；`→`，` 优先级递归分块，重叠以完整句子为单位。在 50 条查询评估集上测量 Recall@5——不要假设博客文章中的"最佳实践"适合你的数据。
+六种分块策略——固定、递归、语义、句级、父文档、上下文检索。递归 512-token 是 2026 默认（击败语义 69% vs 54%）。查询类型决定块大小——事实型 256-512、分析型 512-1024。重叠在 2026 基准中常为零收益。中文按 `。`→`；`→`，` 优先级递归分块，重叠以完整句子为单位。
+
+从递归 512 开始。在 50 条查询评估集上测量 Recall@5。不要假设博客文章中的"最佳实践"适合你的数据——你的领域是最好的裁判。
 
 ---
 
-> 本课程参考了 AI Engineering From Scratch（MIT License）的课程体系。
+## ✏️ 练习
+
+1. 【理解】用固定(512,0)、递归(512,0)和递归(512,100)在 20 页文档上分块。对比块数量和边界质量。
+
+2. 【实现】在 5 篇文档上构建 30 条查询的评估集。衡量递归、语义和父文档三种策略的 Recall@5。哪个赢了？与博客文章的结论一致吗？
+
+3. 【实验】实现上下文检索。衡量相比基线递归的 MRR 提升。报告索引成本（LLM 调用次数）vs 准确率提升。
+
+4. 【思考】你的中文法律合同 RAG 在"违约责任"查询上召回率很高但在"不可抗力条款"查询上很低。分块策略可能是原因吗？如何仅靠调整分块参数（不改嵌入模型）来改进？
+
+---
+
+## 🚀 产出
+
+| 产出 | 文件 | 说明 |
+|---|---|---|
+| 可复用提示词 | `outputs/skill-chunker.md` | 按语料和查询类型选择分块策略、大小和重叠的系统化方案 |
+
+---
+
+## 🔑 关键术语
+
+| 术语 | 人们怎么说 | 实际含义 |
+|---|---|---|
+| 块 (Chunk) | "文档的一片" | 被嵌入、索引和检索的子文档单元 |
+| 重叠 (Overlap) | "安全边界" | 相邻块间共享的 N 个 token；2026 基准中常无作用 |
+| 语义分块 | "聪明地切" | 在邻句嵌入相似度骤降处切分 |
+| 父文档 | "两级检索" | 检索小子块，返回大父块——精度 + 不丢上下文 |
+| Late Chunking | "先嵌入后分块" | 在 token 级嵌入整个文档，再池化为块向量——保留跨块上下文 |
+| 上下文检索 | "Anthropic 的把戏" | LLM 为每块生成它在文档中位置的摘要→前缀在块上—构建索引前注入周围信号 |
+| 上下文悬崖 | "2500 token 的墙" | RAG 响应质量在约 2.5k 上下文 token 处观察到的质量突降（2026 年 1 月） |
+
+---
+
+## 📖 参考资料
+
+1. [官方文档] LangChain — Recursive Character Text Splitter. https://python.langchain.com/docs/how_to/recursive_text_splitter/ — 生产中的默认实现
+2. [论文] Vectara. "Chunking configurations analysis". NAACL, 2025. https://arxiv.org/abs/2410.13070 — 分块配置与嵌入选择同等重要
+3. [技术博客] Jina AI — Late Chunking in Long-Context Embedding Models. 2024. https://jina.ai/news/late-chunking-in-long-context-embedding-models/ — Late Chunking 论文
+4. [技术博客] Anthropic — Contextual Retrieval. 2024. https://www.anthropic.com/news/contextual-retrieval — LLM 生成的上下文前缀提升检索 35-50%
+5. [技术博客] NVIDIA / PremAI — RAG Chunking Strategies: The 2026 Benchmark Guide. https://blog.premai.io/rag-chunking-strategies-the-2026-benchmark-guide/ — 按查询类型的块大小建议
+
+---
+
+> 本课程参考了 AI Engineering From Scratch（MIT License）的课程体系，在此基础上进行了重构和原创内容的扩充。所有中文表达、中文分块建议（递归优先级、句级重叠、Markdown `##` 分块）、工程最佳实践、常见错误等均为原创内容。
