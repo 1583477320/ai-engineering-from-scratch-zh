@@ -1,0 +1,4 @@
+[
+  {"stage":"pre","question":"音乐生成的两大技术路线是什么？","options":["只有扩散模型","符号 LM（MusicGen）+ 扩散（Stable Audio）+ 混合（Suno）","只有 GAN","只有 RNN"],"correct":1,"explanation":"2026 年三大路线并存：神经编解码 LM（MusicGen，在 EnCodec token 上自回归）、潜在扩散（Stable Audio）、以及闭源混合架构（Suno/Udio，可能是 AR codec LM + 扩散声码器）。"},
+  {"stage":"post","question":"2026 年音乐生成的法律风险是什么？","options":["没有法律问题","Warner/UMG 和解（2025-2026）定义了安全区——AI 生成音乐必须加水印和元数据披露，禁止未经许可使用受版权保护的训练数据","只需要用户同意","仅商业用途有法律问题"],"correct":1,"explanation":"Warner Music 和 Universal Music Group 的大额和解在 2025-2026 年重塑了音乐生成领域。生产系统必须：(1) 添加不可闻水印；(2) 在元数据中披露 AI 生成；(3) 训练数据必须有合法授权。"}
+]
