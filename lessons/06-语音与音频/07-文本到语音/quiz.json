@@ -1,0 +1,38 @@
+[
+  {
+    "stage": "pre",
+    "question": "现代 TTS 系统的核心流水线是什么？",
+    "options": [
+      "文本直接转波形",
+      "文本→音素序列→梅尔频谱图→波形（声码器）",
+      "只需要一个分类器",
+      "音频直接转文本"
+    ],
+    "correct": 1,
+    "explanation": "现代 TTS 是流水线：(1) 文本→音素（G2P 或字面拆分）；(2) 音素→梅尔频谱图（FastSpeech/GlowTTS）；(3) 梅尔→波形（Vocoder：HiFi-GAN/Vocos）。VITS 可端到端 2+3，但步骤 1 仍然存在。"
+  },
+  {
+    "stage": "check",
+    "question": "Vocoder 的作用是什么？2026 年有哪些主流声码器？",
+    "options": [
+      "做文本解析",
+      "将梅尔频谱图转换为波形。主流：HiFi-GAN、Vocos（更少参数）、BigVGAN、F5-TTS 内联声码器",
+      "做语音识别",
+      "做文本分类"
+    ],
+    "correct": 1,
+    "explanation": "声码器是 TTS 的最后一步——将中间表示（梅尔频谱图）转换回可听波形。HiFi-GAN 最常用（基于 GAN）。Vocos 用 2-3 倍更少参数达到相同质量。F5-TTS 将声码器集成进架构内。"
+  },
+  {
+    "stage": "post",
+    "question": "F5-TTS 和 Kokoro 在 2026 年受关注的两个不同原因是什么？",
+    "options": [
+      "它们都是最古老的 TTS 系统",
+      "F5-TTS：无需音素对齐的零样本 TTS，质量接近人类（UTMOS 3.95）。Kokoro：仅 82M 参数，可离线在笔记本上运行",
+      "它们只能做英文",
+      "它们需要服务器集群"
+    ],
+    "correct": 1,
+    "explanation": "F5-TTS 用 Flow Matching 替代自回归——不需要音素对齐，支持少样本。Kokoro v0.19 仅 82M 参数但 UTMOS 3.87——是当前最小的开源高质量模型，可离线运行。两者都降低了 TTS 的技术门槛。"
+  }
+]
