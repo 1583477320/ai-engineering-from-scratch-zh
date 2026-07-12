@@ -1,0 +1,62 @@
+[
+  {
+    "stage": "pre",
+    "question": "Whisper 架构的核心是什么？",
+    "options": [
+      "纯 CNN 模型",
+      "Transformer 编码器-解码器，编码器处理 30 秒 log-mel，解码器逐 token 生成文本",
+      "RNN 序列到序列",
+      "纯注意力机制（无编码器）"
+    ],
+    "correct": 1,
+    "explanation": "Whisper 是标准 Transformer 编码器-解码器。编码器：stride-2 卷积降采样 + N 层 Transformer block，输入 30s/80mel/3000帧。解码器：因果自注意力 + 交叉注意力。51865 token BPE 词表。"
+  },
+  {
+    "stage": "check",
+    "question": "Whisper-Base vs Whisper-Large-v3-turbo 的关键差异是什么？",
+    "options": [
+      "Base 不支持多语言",
+      "Turbo 只有 4 层解码器（Large-v3 有 32 层），用更大批量的蒸馏数据补偿，速度提升 6-8 倍",
+      "Turbo 使用不同的词表",
+      "Turbo 不支持时间戳"
+    ],
+    "correct": 1,
+    "explanation": "Turbo 是 Large-v3 的蒸馏版：32 层编码器不变，解码器从 32 层减到 4 层。在相同 WER 水平下速度快 6-8 倍。使用更大 batch 的知识蒸馏数据进行训练。2026 年的默认选择。"  
+  },
+  {
+    "stage": "check",
+    "question": "Whisper 的最大输入长度是多少？超过它怎么办？",
+    "options": [
+      "无限长，模型自动处理",
+      "30 秒。超过的音频需要分块——滑动窗口 + 重叠（stride 5s），再合并结果",
+      "10 秒",
+      "1 分钟"
+    ],
+    "correct": 1,
+    "explanation": "Whisper 的编码器固定处理 30 秒。短于 30s 的音频零填充到 30s。超过 30s 的长音频需要先分块——典型策略是 30s 窗口 + 5s 步进，逐块识别后合并。WhisperX 工具实现了高效的分块 + 强制对齐。"
+  },
+  {
+    "stage": "post",
+    "question": "LoRA 微调 Whisper 的关键参数是什么？",
+    "options": [
+      "全参数 fine-tune，所有参数都更新",
+      "LoRA r=16 在 q_proj 和 v_proj 上，可训练参数降至原模型的 1/100+，编码器完全冻结",
+      "冻结解码器，只训练编码器",
+      "只训练词嵌入层"
+    ],
+    "correct": 1,
+    "explanation": "LoRA（Low-Rank Adaptation）在 q_proj 和 v_proj 上添加低秩分解（r=16）。可训练参数 = 2×d_model×rank per layer。对于 Medium 级别（24层1024维），LoRA 只需训练约 7.8M 参数——而原模型有 1.5B 参数。编码器完全冻结只用预训练权重。"  
+  },
+  {
+    "stage": "post",
+    "question": "Whisper 在哪些场景下容易失败？",
+    "options": [
+      "只有英文文本",
+      "静默片段（幻觉文本）、领域术语、说话人口音、短片段、噪声环境",
+      "只有长音频",
+      "只有干净音频"
+    ],
+    "correct": 1,
+    "explanation": "Whisper 在静默上会产生幻觉文本（'Thanks for watching!'）。领域专业术语、特定说话人口音、短于 1s 的片段、高噪声环境都会显著降低 WER。解决方案：VAD 过滤静默、领域微调、分块策略。"
+  }
+]
