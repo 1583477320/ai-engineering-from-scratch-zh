@@ -1,0 +1,28 @@
+[
+  {
+    "stage": "pre",
+    "question": "人类对话的轮换延迟大约是多少？",
+    "options": ["50ms", "230ms", "1000ms", "2000ms"],
+    "correct": 1,
+    "explanation": "人类对话的轮换延迟（静默到回应）约为 230ms。超过 500ms 感觉像机器人，超过 1500ms 感觉坏了。2026 年的语音助手目标是 < 500ms。"
+  },
+  {
+    "stage": "check",
+    "question": "打断检测需要在多长时间内完成？",
+    "options": ["10ms", "50ms", "100ms", "500ms"],
+    "correct": 2,
+    "explanation": "打断检测需要在 100ms 内完成三个动作：(a) 检测到用户开口，(b) 停止 TTS 播放，(c) 取消 LLM 剩余输出。超过这个时间用户会感觉助手"聋了"。"
+  },
+  {
+    "stage": "post",
+    "question": "Moshi 如何做到 200ms 全双工？",
+    "options": [
+      "使用更快的 GPU",
+      "将 ASR+LLM+TTS 合并到单个模型中——消除组件间通信延迟",
+      "只处理英文",
+      "跳过了 VAD"
+    ],
+    "correct": 1,
+    "explanation": "Moshi（Kyutai, 2024）使用端到端模型而非级联流水线——将 ASR、LLM、TTS 整合到一个模型架构中，消除了组件间的数据传输和模型切换开销。这是全双工 200ms 的关键。"
+  }
+]

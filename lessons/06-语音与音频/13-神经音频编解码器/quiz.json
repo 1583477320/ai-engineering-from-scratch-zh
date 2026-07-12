@@ -1,0 +1,38 @@
+[
+  {
+    "stage": "pre",
+    "question": "RVQ（残差向量量化）的核心思想是什么？",
+    "options": [
+      "用一个大 codebook 编码所有信息",
+      "用一系列小 codebook 级联量化——第一个量化原始信号，后续每个量化残差。1024 码 × 8 级 = 10^24 有效词汇",
+      "直接量化波形",
+      "使用哈希表压缩"
+    ],
+    "correct": 1,
+    "explanation": "RVQ 用一系列小 codebook 级联替代单个大 codebook。每个 codebook 1024 码，8 个级联 = 1024^8 = 10^24 的有效词汇量，远超任何单一 codebook 能达到的质量。"
+  },
+  {
+    "stage": "check",
+    "question": "Mimi 编解码器为什么被称为 2026 游戏改变者？",
+    "options": [
+      "它的质量最高",
+      "它的 codebook 0 从 WavLM 蒸馏——编码语义内容而非声学细节。这分离了语言结构和声学结构，让 LLM 建模更简单",
+      "它的帧率最快",
+      "它最便宜"
+    ],
+    "correct": 1,
+    "explanation": "Mimi 的核心创新是语义-声学分离：codebook 0 编码语言/语音内容（从 WavLM 蒸馏），codebooks 1-7 编码声学细节。这让 LLM 只需建模语言结构，声学由解码器处理——解决了纯重建编解码器在生成时产生模糊语音的问题。"
+  },
+  {
+    "stage": "post",
+    "question": "为什么帧率对 LLM 语音生成的性能影响巨大？",
+    "options": [
+      "帧率越高越好",
+      "帧率决定了序列长度——12.5Hz 的 Mimi 比 75Hz 的 EnCodec 产生 6 倍更少的 token。更短序列 = 更快的 LM 推理 + 更低的内存占用",
+      "帧率只影响音质",
+      "帧率和 LLM 无关"
+    ],
+    "correct": 1,
+    "explanation": "LLM 的计算复杂度与序列长度线性相关。EnCodec-24k 产生 75 token/秒，Mimi 产生 12.5 token/秒。使用 Mimi 的 Moshi 比使用 EnCodec 的模型在推理上快约 6 倍——帧率是 LLM 语音生成性能的关键瓶颈。"
+  }
+]
