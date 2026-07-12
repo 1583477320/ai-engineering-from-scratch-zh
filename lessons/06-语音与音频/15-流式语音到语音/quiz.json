@@ -1,0 +1,23 @@
+[
+  {
+    "stage": "pre",
+    "question": "Moshi 的理论延迟是多少？",
+    "options": ["100ms", "160ms（80ms Mimi帧 + 80ms声学延迟）", "500ms", "2000ms"],
+    "correct": 1,
+    "explanation": "Moshi 的理论延迟由 Mimi 编解码器的帧率（12.5Hz → 80ms/帧）和声学解码延迟（80ms）决定，总计 160ms。实际在单 L4 GPU 上约 200ms。"
+  },
+  {
+    "stage": "check",
+    "question": "Moshi 的"内心独白"文本流有什么作用？",
+    "options": ["只用于日志记录", "提高语义连贯性、支持可交换的语言模型头、免费获得转录", "只用于调试", "没有实际作用"],
+    "correct": 1,
+    "explanation": "Moshi 强制输出文本 token 与音频并行——这相当于 Moshi 正在说的内容的转录。这改进了语义连贯性，使替换语言模型头更容易，并且免费提供了转录。"
+  },
+  {
+    "stage": "post",
+    "question": "Hibiki 为什么比传统级联翻译更鲁棒？",
+    "options": ["使用了更先进的翻译模型", "逐 chunk 流式翻译——源音频实时输入，目标语言音频实时输出，无需等待完整句子", "不需要源语言 ASR", "使用了规则翻译"],
+    "correct": 1,
+    "explanation": "Hibiki 是端到端语音到语音翻译——源音频 chunk 实时输入，目标语言 chunk 实时输出。没有传统级联（ASR → 文本翻译 → TTS）的组件间延迟和错误累积。Hibiki-Zero 还消除了词级对齐的需求，用句子级数据+强化学习优化延迟。"
+  }
+]

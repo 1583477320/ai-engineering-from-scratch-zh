@@ -1,0 +1,23 @@
+[
+  {
+    "stage": "pre",
+    "question": "VAD（语音活动检测）需要做出的三个决定是什么？",
+    "options": ["语言检测 + 质量评估", "当前帧是否语音 + 用户是否开始说话 + 用户是否说完", "音频格式识别 + 采样率匹配", "背景噪声消除"],
+    "correct": 1,
+    "explanation": "VAD 流水线的三个层次：(1) 当前帧是否有语音（VAD，二分类）；(2) 用户是否开始新的话轮（onset 检测）；(3) 用户是否说完（end-pointing，端点检测）。"
+  },
+  {
+    "stage": "check",
+    "question": "Silero VAD 的延迟和吞吐量是多少？",
+    "options": ["30ms/帧", "<1ms/30ms帧，单CPU线程，约1M参数", "100ms/帧", "5ms/帧"],
+    "correct": 1,
+    "explanation": "Silero VAD 4.0 是深度学习模型，在 CPU 上处理一个 30ms 帧只需要约 1ms。在 6000+ 语言上训练，TPR 87.7% @ 5% FPR。是 2026 年开源 VAD 的默认选择。"
+  },
+  {
+    "stage": "post",
+    "question": "Flush trick 是什么？为什么能将 STT 延迟从 500ms 降到 125ms？",
+    "options": ["跳过了 VAD", "当 VAD 触发端点信号时，发送 flush 命令给 STT，强制立即输出；STT 以 4 倍实时速度处理 500ms 缓冲 → 实际仅需 125ms", "使用更快的 STT 模型", "减少音频质量"],
+    "correct": 1,
+    "explanation": "流式 STT 有 500ms 的前瞻延迟。Flush trick 在 VAD 触发时发送 flush 信号给 STT，强制立即输出部分转录，而不是等待完整的前瞻窗口。STT 处理速度远快于实时（~4x），所以 500ms 缓冲只需约 125ms 处理。"
+  }
+]
