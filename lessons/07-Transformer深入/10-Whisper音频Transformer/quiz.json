@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "Whisper用多少弱监督数据训练？",
+    "options": [
+      "1万小时",
+      "68万小时",
+      "100万小时",
+      "1000万小时"
+    ],
+    "correct": 1,
+    "explanation": "680K小时——大部分来自互联网，不需要精心标注"
+  },
+  {
+    "stage": "post",
+    "question": "Whisper产生幻觉文本的场景和修复方法？",
+    "options": [
+      "任何输入",
+      "对静默音频——训练分布全是语音→困惑→虚构文本。VAD门控修复",
+      "长音频",
+      "低质量音频"
+    ],
+    "correct": 1,
+    "explanation": "VAD在Whisper前过滤静默段——最简单有效的方法"
+  }
+]

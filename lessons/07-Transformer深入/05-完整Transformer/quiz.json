@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "check",
+    "question": "残差连接在Transformer中的作用？",
+    "options": [
+      "增加参数",
+      "让梯度直通——防止深层网络梯度消失",
+      "计算位置编码",
+      "加速推理"
+    ],
+    "correct": 1,
+    "explanation": "x + attention(x)让梯度直接流过注意力层"
+  },
+  {
+    "stage": "post",
+    "question": "Pre-LN vs Post-LN的区别？",
+    "options": [
+      "参数不同",
+      "Pre-LN先归一化再注意力——深层网络更稳定",
+      "顺序相反而已",
+      "Pre-LN不需要LN"
+    ],
+    "correct": 1,
+    "explanation": "Pre-LN梯度路径上始终有直通残差连接"
+  }
+]

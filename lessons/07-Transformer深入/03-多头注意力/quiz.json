@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "输出投影Wo的作用？",
+    "options": [
+      "增加参数",
+      "将拼接后的多头输出融合回原始维度",
+      "防止梯度消失",
+      "计算softmax"
+    ],
+    "correct": 1,
+    "explanation": "拼接多头输出后维度=n_heads×dv——Wo将其映射回d_model"
+  },
+  {
+    "stage": "post",
+    "question": "所有头共享Wq/Wk/Wv会怎样？",
+    "options": [
+      "性能更好",
+      "输出与单头没有区别",
+      "训练更快",
+      "内存更少"
+    ],
+    "correct": 1,
+    "explanation": "Q/K/V投影相同→所有头计算相同注意力→拼接后无新增信息"
+  }
+]

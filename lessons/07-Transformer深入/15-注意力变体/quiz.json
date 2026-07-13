@@ -1,0 +1,14 @@
+[
+  {
+    "stage": "pre",
+    "question": "GQA如何减少KV缓存？",
+    "options": [
+      "不缓存",
+      "多个Q共享同一组KV——8头共享2对→KV缓存从64降到16",
+      "压缩KV",
+      "丢弃层"
+    ],
+    "correct": 1,
+    "explanation": "GQA：8头分2组共享2对KV→KV缓存从64降到16。LLaMA 3、Mistral、Qwen2.5的默认选择"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "stage": "pre",
+    "question": "为什么ViT需要比CNN更多数据？",
+    "options": [
+      "参数更多",
+      "ViT没有CNN的局部性归纳偏置——必须从数据中学习局部结构",
+      "计算更快",
+      "内存更小"
+    ],
+    "correct": 1,
+    "explanation": "CNN假设局部性。ViT没有这个先验——大数据集上ViT赢，小数据集CNN赢"
+  }
+]

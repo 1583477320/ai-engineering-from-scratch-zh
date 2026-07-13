@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "KV缓存解决什么问题？",
+    "options": [
+      "模型质量",
+      "自回归生成时每步重算所有历史K/V——缓存后每步只算1个新位置",
+      "内存不足",
+      "训练不稳定"
+    ],
+    "correct": 1,
+    "explanation": "无缓存：生成第t个词元需要重算前t-1个位置的K/V。缓存后每步只算新词元的K/V"
+  },
+  {
+    "stage": "post",
+    "question": "Flash Attention如何把内存从O(N²)降到O(N)？",
+    "options": [
+      "压缩权重",
+      "分块计算——每块算完立即丢弃分数矩阵，只保留加权和",
+      "改变公式",
+      "GPU加速"
+    ],
+    "correct": 1,
+    "explanation": "Flash Attention将Q/K/V分成小块，每块计算注意力后立即丢弃分数矩阵"
+  }
+]

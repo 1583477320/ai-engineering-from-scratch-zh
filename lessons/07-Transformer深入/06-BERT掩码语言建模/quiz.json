@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "BERT为什么掩码15%？",
+    "options": [
+      "计算更快",
+      "太少训练信号弱，太多上下文破坏，15%是平衡点",
+      "GPU限制",
+      "论文规定"
+    ],
+    "correct": 1,
+    "explanation": "掩码超过15%时上下文被过度稀释"
+  },
+  {
+    "stage": "post",
+    "question": "BERT和GPT训练目标的根本差异？",
+    "options": [
+      "参数不同",
+      "BERT预测被遮住的词（双向），GPT预测下一个词（单向）",
+      "模型大小不同",
+      "训练数据不同"
+    ],
+    "correct": 1,
+    "explanation": "BERT用MLM看全部上下文；GPT用CLM只看左边"
+  }
+]
