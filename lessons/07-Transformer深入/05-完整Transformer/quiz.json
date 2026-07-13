@@ -1,5 +1,17 @@
 [
   {
+    "stage": "pre",
+    "question": "Transformer块由哪些组件组成？",
+    "options": [
+      "多头注意力 + FFN",
+      "多头注意力 + FFN + 残差连接 + 层归一化",
+      "只有注意力",
+      "只有FFN"
+    ],
+    "correct": 1,
+    "explanation": "Transformer块包含多头注意力、FFN、残差连接和层归一化"
+  },
+  {
     "stage": "check",
     "question": "残差连接在Transformer中的作用？",
     "options": [
@@ -22,5 +34,29 @@
     ],
     "correct": 1,
     "explanation": "Pre-LN梯度路径上始终有直通残差连接"
+  },
+  {
+    "stage": "post",
+    "question": "FFN为什么要先升维再降维？",
+    "options": [
+      "节省参数",
+      "增加表达能力——高维空间可以表达更复杂的变换",
+      "加速训练",
+      "防止过拟合"
+    ],
+    "correct": 1,
+    "explanation": "升维增加表达能力，降维回到原始维度"
+  },
+  {
+    "stage": "post",
+    "question": "为什么需要层归一化？",
+    "options": [
+      "增加参数",
+      "稳定训练——归一化每层的输出",
+      "加速推理",
+      "防止过拟合"
+    ],
+    "correct": 1,
+    "explanation": "层归一化稳定训练，防止梯度爆炸或消失"
   }
 ]
