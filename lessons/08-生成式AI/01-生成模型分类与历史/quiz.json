@@ -3,13 +3,25 @@
     "stage": "pre",
     "question": "生成模型的核心任务是什么？",
     "options": [
-      "分类",
+      "分类——给输入数据打标签",
       "给定训练样本，输出与训练分布相似的新样本",
-      "聚类",
-      "回归"
+      "聚类——将数据分组",
+      "回归——预测连续值"
     ],
     "correct": 1,
-    "explanation": "生成模型学习 p_data 分布，生成新样本——人脸、句子、蛋白质结构都是一样的问题"
+    "explanation": "生成模型学习数据分布 p_data，从中采样生成新样本——人脸、句子、蛋白质结构都是同一个问题。分类、聚类、回归是判别模型或无监督学习的任务。"
+  },
+  {
+    "stage": "post",
+    "question": "GAN 为什么不能计算输入数据的对数似然 log p(x)？",
+    "options": [
+      "因为 GAN 的生成器没有编码器",
+      "因为 GAN 是隐式密度模型，只学习采样不建模密度函数",
+      "因为 GAN 的训练不稳定",
+      "因为 GAN 需要判别器才能计算似然"
+    ],
+    "correct": 1,
+    "explanation": "GAN 是隐式密度模型——生成器 G 学习从噪声到数据的映射，但不建模 p(x) 本身。只有显式密度模型（自回归、VAE、流模型）才能计算 log p(x)。训练不稳定是 GAN 的另一个问题，但不是不能计算似然的原因。"
   },
   {
     "stage": "post",
@@ -17,10 +29,34 @@
     "options": [
       "GAN",
       "VAE",
-      "扩散/Flow Matching",
+      "扩散 / Flow Matching",
       "自回归"
     ],
     "correct": 2,
-    "explanation": "2020-2026 年扩散模型（DDPM）和 Flow Matching 在图像、视频、3D 上占主导。GAN 仅在人脸等领域保留特定优势"
+    "explanation": "2020-2026 年扩散模型（DDPM）和 Flow Matching 在图像、视频、3D 上占主导。GAN 仅在人脸等固定域保留特定优势。自回归在文本领域统治，但不擅长图像生成。"
+  },
+  {
+    "stage": "post",
+    "question": "Flow Matching 比 DDPM 快 4-10 倍的核心原因是什么？",
+    "options": [
+      "Flow Matching 使用了更大的模型",
+      "Flow Matching 学习了从噪声到数据的直线路径，可以用更大的采样步长",
+      "Flow Matching 不需要噪声调度器",
+      "Flow Matching 的训练数据量是 DDPM 的 10 倍"
+    ],
+    "correct": 1,
+    "explanation": "DDPM 的采样路径是弯曲的，需要小步迭代（1000 步）。Flow Matching 用最优传输理论学习直线路径，每步有效位移更大，可以用更大的步长（ODE 求解器），10-20 步就能达到 DDPM 1000 步的质量。"
+  },
+  {
+    "stage": "post",
+    "question": "Sora 为什么选择 VQ-VAE + Transformer 而不是直接用扩散模型处理原始像素？",
+    "options": [
+      "因为扩散模型无法处理视频",
+      "因为原始像素维度过高，VQ-VAE 将其压缩为短的离散 token 序列，让 Transformer 可以高效建模",
+      "因为 Transformer 不支持连续数据",
+      "因为 VQ-VAE 的训练比扩散模型更稳定"
+    ],
+    "correct": 1,
+    "explanation": "1080p 视频每帧有 ~6M 像素，直接用扩散模型处理原始像素计算量巨大。VQ-VAE 将视频压缩为短的离散 token 序列（压缩比可达 48x），然后复用 Transformer 在文本上的成功经验。这是'桶 1 加上学到的 tokenizer'的思路。"
   }
 ]
