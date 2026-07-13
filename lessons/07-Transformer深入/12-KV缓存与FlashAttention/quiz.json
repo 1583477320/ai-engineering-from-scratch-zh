@@ -12,6 +12,18 @@
     "explanation": "无缓存：生成第t个词元需要重算前t-1个位置的K/V。缓存后每步只算新词元的K/V"
   },
   {
+    "stage": "check",
+    "question": "FlashAttention的核心思想是什么？",
+    "options": [
+      "使用更快的GPU",
+      "分块计算+IO感知——减少HBM访问次数",
+      "减少参数量",
+      "改变注意力公式"
+    ],
+    "correct": 1,
+    "explanation": "FlashAttention通过分块计算和优化内存访问模式来加速注意力"
+  },
+  {
     "stage": "post",
     "question": "Flash Attention如何把内存从O(N²)降到O(N)？",
     "options": [
@@ -22,5 +34,29 @@
     ],
     "correct": 1,
     "explanation": "Flash Attention将Q/K/V分成小块，每块计算注意力后立即丢弃分数矩阵"
+  },
+  {
+    "stage": "post",
+    "question": "KV缓存的内存占用与什么有关？",
+    "options": [
+      "只有层数",
+      "层数×序列长度×维度×2（K和V）",
+      "只有参数量",
+      "只有batch大小"
+    ],
+    "correct": 1,
+    "explanation": "KV缓存大小 = 2 × n_layers × seq_len × d_k × 2字节"
+  },
+  {
+    "stage": "post",
+    "question": "为什么说KV缓存+FlashAttention使128K上下文成为可能？",
+    "options": [
+      "减少了模型参数",
+      "KV缓存让推理O(n)可行，FlashAttention让注意力内存O(n)可行",
+      "使用了更强的GPU",
+      "改变了注意力公式"
+    ],
+    "correct": 1,
+    "explanation": "没有KV缓存：128K生成需要128K次O(n²)。没有FlashAttention：128K×128K矩阵需要32GB"
   }
 ]

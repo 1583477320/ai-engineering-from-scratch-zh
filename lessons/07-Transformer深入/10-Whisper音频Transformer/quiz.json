@@ -12,6 +12,18 @@
     "explanation": "680K小时——大部分来自互联网，不需要精心标注"
   },
   {
+    "stage": "check",
+    "question": "Whisper的编码器处理什么输入？",
+    "options": [
+      "原始音频波形",
+      "log-mel频谱图",
+      "文本",
+      "图像"
+    ],
+    "correct": 1,
+    "explanation": "Whisper将音频转换为80通道log-mel频谱图作为输入"
+  },
+  {
     "stage": "post",
     "question": "Whisper产生幻觉文本的场景和修复方法？",
     "options": [
@@ -22,5 +34,29 @@
     ],
     "correct": 1,
     "explanation": "VAD在Whisper前过滤静默段——最简单有效的方法"
+  },
+  {
+    "stage": "post",
+    "question": "Whisper如何同时支持转录和翻译？",
+    "options": [
+      "不同模型",
+      "通过特殊token控制任务类型——<|transcribe|>或<|translate|>",
+      "切换编码器",
+      "切换解码器"
+    ],
+    "correct": 1,
+    "explanation": "解码器的前几个token决定任务类型，同一个模型做多种任务"
+  },
+  {
+    "stage": "post",
+    "question": "Whisper的弱监督训练有什么优势？",
+    "options": [
+      "不需要计算",
+      "用680K小时互联网数据——比人工标注数据大100倍",
+      "不需要GPU",
+      "训练更快"
+    ],
+    "correct": 1,
+    "explanation": "规模优势——弱监督数据量远超人工标注数据，帮助模型学到更通用的表示"
   }
 ]

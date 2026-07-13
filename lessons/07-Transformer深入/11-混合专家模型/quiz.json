@@ -10,5 +10,53 @@
     ],
     "correct": 1,
     "explanation": "MoE用路由器选top-K个专家（K<<N），只计算这K个专家的FFN"
+  },
+  {
+    "stage": "check",
+    "question": "路由器的作用是什么？",
+    "options": [
+      "计算注意力",
+      "决定每个输入激活哪些专家",
+      "归一化",
+      "池化"
+    ],
+    "correct": 1,
+    "explanation": "路由器是一个线性层——输入token的表示，输出每个专家的得分，选top-K"
+  },
+  {
+    "stage": "post",
+    "question": "什么是专家死亡？",
+    "options": [
+      "专家计算太慢",
+      "某些专家从未被选中——参数浪费",
+      "专家显存溢出",
+      "专家精度不够"
+    ],
+    "correct": 1,
+    "explanation": "专家死亡指某些专家从未被选中——通过辅助负载均衡损失解决"
+  },
+  {
+    "stage": "post",
+    "question": "Mixtral 8x7B的参数量和效果如何？",
+    "options": [
+      "7B参数，效果一般",
+      "47B参数但只激活12B，效果接近70B稠密模型",
+      "8B参数，效果最好",
+      "70B参数，效果最好"
+    ],
+    "correct": 1,
+    "explanation": "Mixtral 8x7B：47B总参数，12B激活，效果接近70B稠密模型"
+  },
+  {
+    "stage": "post",
+    "question": "MoE的主要挑战是什么？",
+    "options": [
+      "模型太小",
+      "负载均衡、通信开销、训练稳定性",
+      "推理太慢",
+      "精度不够"
+    ],
+    "correct": 1,
+    "explanation": "MoE需要确保专家被均匀使用，分布式训练有通信开销，路由器训练不稳定"
   }
 ]
