@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "PPO的Clipped Surrogate Objective为什么裁剪策略比率？",
+    "options": [
+      "加速训练",
+      "限制每步更新幅度——防止策略变化过大导致训练崩溃",
+      "增加参数",
+      "减少内存"
+    ],
+    "correct": 1,
+    "explanation": "r_t = π_new/π_old。超出(1-ε, 1+ε)范围时梯度被截断——保证每步更新不超过固定幅度"
+  },
+  {
+    "stage": "post",
+    "question": "PPO在RLHF中的角色？",
+    "options": [
+      "生成文本",
+      "用奖励模型的分数作为回报信号——PPO优化LLM生成奖励模型认为好的答案",
+      "训练奖励模型",
+      "评估输出"
+    ],
+    "correct": 1,
+    "explanation": "RLHF三阶段：SFT→奖励模型→PPO。PPO用奖励模型分数作为回报——这是ChatGPT的核心训练配方"
+  }
+]

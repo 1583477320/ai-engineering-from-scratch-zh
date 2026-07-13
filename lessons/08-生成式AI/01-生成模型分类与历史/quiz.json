@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "生成模型的核心任务是什么？",
+    "options": [
+      "分类",
+      "给定训练样本，输出与训练分布相似的新样本",
+      "聚类",
+      "回归"
+    ],
+    "correct": 1,
+    "explanation": "生成模型学习 p_data 分布，生成新样本——人脸、句子、蛋白质结构都是一样的问题"
+  },
+  {
+    "stage": "post",
+    "question": "2026 年图像生成的主力架构是什么？",
+    "options": [
+      "GAN",
+      "VAE",
+      "扩散/Flow Matching",
+      "自回归"
+    ],
+    "correct": 2,
+    "explanation": "2020-2026 年扩散模型（DDPM）和 Flow Matching 在图像、视频、3D 上占主导。GAN 仅在人脸等领域保留特定优势"
+  }
+]

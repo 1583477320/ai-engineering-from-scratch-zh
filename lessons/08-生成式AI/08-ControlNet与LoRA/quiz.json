@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "ControlNet 的'零卷积'是什么意思？",
+    "options": [
+      "没有权重",
+      "初始权重为零——不破坏预训练模型的原始能力",
+      "没有梯度",
+      "没有激活函数"
+    ],
+    "correct": 1,
+    "explanation": "零卷积初始化意味着 ControlNet 在训练开始时输出为零——不改变原始模型。随着训练进行，ControlNet 渐进地学会注入控制信号"
+  },
+  {
+    "stage": "post",
+    "question": "LoRA 如何用 1% 的参数实现微调？",
+    "options": [
+      "量化权重",
+      "用低秩分解 A×B 替代全参数更新——只训练 A 和 B",
+      "跳过层",
+      "冻结所有层"
+    ],
+    "correct": 1,
+    "explanation": "原始层 W 冻结。LoRA 添加 A(d,r) × B(r,d)，r<<d。只训练 A 和 B——通常 d=512, r=16 → 每层仅 2×512×16 = 16K 参数"
+  }
+]

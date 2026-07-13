@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "视觉自回归的核心思想是什么？",
+    "options": [
+      "用 GAN 生成",
+      "将图像离散化为 token 序列——用 GPT 式的'下一个 token'生成图像",
+      "用扩散模型",
+      "用 RNN 处理图像"
+    ],
+    "correct": 1,
+    "explanation": "RQ-VAE/VQ-VAE 将图像压缩为离散 token 序列→Transformer 预测下一个 token→解码回图像。与 GPT 的文本生成完全相同的框架"
+  },
+  {
+    "stage": "post",
+    "question": "2026 年的 Gemini/Chameleon 为什么采用统一 tokenizer？",
+    "options": [
+      "更简单",
+      "文本和图像使用同一个 token 词表——原生多模态——同一个 Transformer 同时处理文本和图像",
+      "更快",
+      "参数更少"
+    ],
+    "correct": 1,
+    "explanation": "统一 tokenizer 意味着'猫'的文本 token 和猫的图像 token 在同一个词表中——模型可以像处理文本序列一样处理图像——这就是多模态的基础"
+  }
+]

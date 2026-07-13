@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "TTS、音乐生成、音效生成共享的底层技术是什么？",
+    "options": [
+      "不同的模型",
+      "神经编解码器（EnCodec）将音频压缩为离散 token + Transformer LM",
+      "GAN",
+      "RNN"
+    ],
+    "correct": 1,
+    "explanation": "三类任务都用相同的底层：EnCodec（音频→token）+ Transformer LM（token 生成）→ EnCodec 解码器（token→波形）"
+  },
+  {
+    "stage": "post",
+    "question": "F5-TTS 的核心优势是什么？",
+    "options": [
+      "更大的模型",
+      "零样本 TTS——不需要音素对齐，用 Flow Matching 架构，3-5 秒参考音频即可克隆",
+      "更快的推理",
+      "支持更多语言"
+    ],
+    "correct": 1,
+    "explanation": "传统 TTS 需要词级对齐训练数据——这是数据准备中最难的步骤。F5-TTS 用 Flow Matching 跳过了这个要求。3-5 秒参考音频即可克隆音色"
+  }
+]

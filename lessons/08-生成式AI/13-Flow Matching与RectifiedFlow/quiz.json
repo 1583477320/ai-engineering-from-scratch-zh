@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "Flow Matching 相比 DDPM 为什么更快？",
+    "options": [
+      "更大的模型",
+      "更直的噪声→数据路径→更少采样步数（2-5步 vs 20-50步）",
+      "更少的GPU",
+      "更简单的损失"
+    ],
+    "correct": 1,
+    "explanation": "DDPM 的路径是随机的——曲折。Flow Matching 学习从噪声到数据的最优传输路径——更直。路径越直，到达目标需要的步数越少"
+  },
+  {
+    "stage": "post",
+    "question": "2026 年的视频生成（Sora/Kling）主要基于什么架构？",
+    "options": [
+      "DDPM",
+      "U-Net + 时序模块",
+      "DiT（Diffusion Transformer）+ Flow Matching",
+      "纯 GAN"
+    ],
+    "correct": 2,
+    "explanation": "Sora 用 DiT（Transformer 替代 U-Net）+ 时空 patches。Flow Matching 用于训练。Consistency Model 用于加速采样到 1-4 步"
+  }
+]

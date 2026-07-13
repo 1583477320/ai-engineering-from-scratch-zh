@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "GAN 的 minimax 博弈中 G 的损失是什么？",
+    "options": [
+      "MSE",
+      "交叉熵",
+      "-log D(G(z))——最大化判别器认为 G 输出是真的概率",
+      "KL 散度"
+    ],
+    "correct": 2,
+    "explanation": "G 试图让 D 认为假样本是真的——最小化 -log D(G(z))（非饱和形式）。如果 D 确信 G 的输出是假的，这个损失很大——给 G 强梯度"
+  },
+  {
+    "stage": "post",
+    "question": "2026 年 GAN 的真正用途是什么？",
+    "options": [
+      "最强的图像生成器",
+      "将扩散模型蒸馏为快速1步生成——SDXL-Turbo等；感知损失的组件；人脸领域仍有优势",
+      "训练其他模型",
+      "数据增强"
+    ],
+    "correct": 1,
+    "explanation": "GAN 不再是 SOTA 生成器——但对抗训练作为蒸馏工具在 2026 年仍然主导快速推理（SDXL-Turbo, SD3-Turbo）"
+  }
+]

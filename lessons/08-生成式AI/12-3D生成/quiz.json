@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "3D 生成的三种表示是什么？",
+    "options": [
+      "2D/3D/4D",
+      "点云、体素、网格（Mesh）",
+      "文本/图像/音频",
+      "向量/矩阵/张量"
+    ],
+    "correct": 1,
+    "explanation": "点云=3D点集，体素=3D像素网格（完整对称但内存大），网格=顶点+面+UV（游戏/影视标准）。各有优劣"
+  },
+  {
+    "stage": "post",
+    "question": "3D Gaussian Splatting 为什么在 2023-2026 年成为 3D 重建首选？",
+    "options": [
+      "参数最多",
+      "每帧渲染 <1ms——实时光栅化。从多视角图像重建高质量3D场景",
+      "不需要GPU",
+      "训练最慢"
+    ],
+    "correct": 1,
+    "explanation": "Gaussian Splatting 用高斯椭球体参数化 3D 场景，渲染时只需光栅化——每帧 <1ms，实时交互成为可能"
+  }
+]

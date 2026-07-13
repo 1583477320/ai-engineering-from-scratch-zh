@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "扩散模型的核心思想是什么？",
+    "options": [
+      "记忆数据",
+      "逐步向图像添加噪声→学习逆向去噪→从随机噪声恢复图像",
+      "直接生成",
+      "分类图像"
+    ],
+    "correct": 1,
+    "explanation": "前向：x₀→x₁→...→x_T（纯噪声）。反向：训练 U-Net 预测每步添加的噪声 ε。推理：从随机噪声 x_T 出发，逐步去噪"
+  },
+  {
+    "stage": "post",
+    "question": "DDPM 采样太慢的根本原因是什么？",
+    "options": [
+      "GPU 不够快",
+      "每步都需要一次 U-Net 前向传播——1000 步太慢",
+      "数据量太大",
+      "模型参数太少"
+    ],
+    "correct": 1,
+    "explanation": "DDPM 需要 1000 步去噪，每步一次 U-Net 前向。DDIM/Flow Matching/Consistency Model 将步数压缩到 2-20 步"
+  }
+]

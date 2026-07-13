@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "FID 衡量什么？",
+    "options": [
+      "生成速度",
+      "生成图像分布与真实图像分布的距离——越低越好",
+      "文本匹配",
+      "分辨率"
+    ],
+    "correct": 1,
+    "explanation": "FID = Fréchet Inception Distance——计算生成图像和真实图像在 Inception-v3 特征空间中的 Fréchet 距离。0 表示分布完全相同"
+  },
+  {
+    "stage": "post",
+    "question": "CLIP Score 的作用是什么？",
+    "options": [
+      "衡量图像质量",
+      "CLIP 将图像和文本编码到同一空间——余弦相似度衡量文本描述与生成图像的语义对齐度",
+      "评估分辨率",
+      "测量速度"
+    ],
+    "correct": 1,
+    "explanation": "CLIP Score 衡量文本-图像对齐度——如果提示词是'蓝色天空'但图像是红色背景，CLIP Score 会很低"
+  }
+]

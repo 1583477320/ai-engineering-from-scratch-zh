@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "视频扩散相比图像扩散的核心挑战是什么？",
+    "options": [
+      "更大的图像",
+      "时间维度+帧间一致性——T=24帧/秒×10秒=240帧，计算量增240倍",
+      "更高的分辨率",
+      "更复杂的颜色"
+    ],
+    "correct": 1,
+    "explanation": "视频是3D的（H×W×T）。除了每帧的图像质量，还有时间连贯性要求——连续帧不能闪烁"
+  },
+  {
+    "stage": "post",
+    "question": "Sora 的核心创新是什么？",
+    "options": [
+      "更大的U-Net",
+      "时空 patches + DiT（Diffusion Transformer）——用Transformer替代U-Net处理时空结构",
+      "更快的采样",
+      "更多的数据"
+    ],
+    "correct": 1,
+    "explanation": "Sora 将视频切分为时空块（类似 ViT 的图像 patch）→ 用 DiT 替代 U-Net → 每个块同时关注空间和时间邻居。支持可变时长 5-60 秒"
+  }
+]
