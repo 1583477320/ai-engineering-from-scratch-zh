@@ -12,6 +12,18 @@
     "explanation": "拼接多头输出后维度=n_heads×dv——Wo将其映射回d_model"
   },
   {
+    "stage": "check",
+    "question": "多头注意力中，每个头的维度是多少？",
+    "options": [
+      "d_model",
+      "d_model / n_heads",
+      "n_heads",
+      "d_model * n_heads"
+    ],
+    "correct": 1,
+    "explanation": "每个头的维度是 d_model / n_heads，确保拼接后维度回到 d_model"
+  },
+  {
     "stage": "post",
     "question": "所有头共享Wq/Wk/Wv会怎样？",
     "options": [
@@ -22,5 +34,29 @@
     ],
     "correct": 1,
     "explanation": "Q/K/V投影相同→所有头计算相同注意力→拼接后无新增信息"
+  },
+  {
+    "stage": "post",
+    "question": "为什么需要输出投影Wo？",
+    "options": [
+      "增加模型参数量",
+      "让模型学习如何组合各头的信息",
+      "加速训练",
+      "防止梯度消失"
+    ],
+    "correct": 1,
+    "explanation": "Wo将拼接向量映射到新的d_model空间，让模型学习如何组合各头的信息"
+  },
+  {
+    "stage": "post",
+    "question": "多头注意力的时间复杂度是？",
+    "options": [
+      "O(n)",
+      "O(n log n)",
+      "O(n²)",
+      "O(n³)"
+    ],
+    "correct": 2,
+    "explanation": "每个头都要计算 n×n 的注意力矩阵，共有 n_heads 个头，总计算量与单头注意力相同"
   }
 ]
