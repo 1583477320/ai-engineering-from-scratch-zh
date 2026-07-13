@@ -12,6 +12,18 @@
     "explanation": "掩码超过15%时上下文被过度稀释"
   },
   {
+    "stage": "check",
+    "question": "BERT中[CLS]的作用是什么？",
+    "options": [
+      "表示句子结束",
+      "其最终表示用于整个序列的分类",
+      "表示句子开始",
+      "表示句子分隔"
+    ],
+    "correct": 1,
+    "explanation": "[CLS]的最终表示通过自注意力聚合了整个序列的信息"
+  },
+  {
     "stage": "post",
     "question": "BERT和GPT训练目标的根本差异？",
     "options": [
@@ -22,5 +34,29 @@
     ],
     "correct": 1,
     "explanation": "BERT用MLM看全部上下文；GPT用CLM只看左边"
+  },
+  {
+    "stage": "post",
+    "question": "微调BERT时，小数据集上应该怎么做？",
+    "options": [
+      "全参数微调",
+      "冻结Transformer层，只微调分类头",
+      "只微调嵌入层",
+      "随机初始化所有层"
+    ],
+    "correct": 1,
+    "explanation": "小数据集上全参数微调容易过拟合——冻结底层，只微调分类头更安全"
+  },
+  {
+    "stage": "post",
+    "question": "为什么MLM训练要设置ignore_index=-100？",
+    "options": [
+      "加速训练",
+      "只计算被遮住位置的损失——非掩码位置不应参与训练",
+      "减少内存",
+      "提高精度"
+    ],
+    "correct": 1,
+    "explanation": "-100的标签在交叉熵计算时被忽略，确保只学习掩码位置的预测"
   }
 ]
