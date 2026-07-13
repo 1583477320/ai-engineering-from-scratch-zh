@@ -12,6 +12,18 @@
     "explanation": "因果掩码在注意力矩阵上三角填入-inf → softmax后概率为0"
   },
   {
+    "stage": "check",
+    "question": "GPT和BERT的核心架构区别是什么？",
+    "options": [
+      "参数量不同",
+      "GPT是单向解码器，BERT是双向编码器",
+      "训练数据不同",
+      "优化器不同"
+    ],
+    "correct": 1,
+    "explanation": "GPT使用因果掩码实现单向注意力，BERT使用双向注意力"
+  },
+  {
     "stage": "post",
     "question": "指令微调让GPT从预测词变成遵循指令——这是什么？",
     "options": [
@@ -22,5 +34,29 @@
     ],
     "correct": 1,
     "explanation": "预训练→指令微调→RLHF/DPO。指令微调是关键转折"
+  },
+  {
+    "stage": "post",
+    "question": "KV缓存的作用是什么？",
+    "options": [
+      "增加模型容量",
+      "缓存之前的K/V矩阵——避免重复计算，加速推理",
+      "减少参数",
+      "提高精度"
+    ],
+    "correct": 1,
+    "explanation": "KV缓存避免在生成每个新词元时重新计算所有位置的K/V"
+  },
+  {
+    "stage": "post",
+    "question": "为什么GPT在100%词元上训练而BERT只在15%词元上训练？",
+    "options": [
+      "GPT参数更多",
+      "GPT预测下一个词（每个位置都是训练信号），BERT只预测被遮住的词",
+      "GPT数据更大",
+      "GPT训练更快"
+    ],
+    "correct": 1,
+    "explanation": "GPT的CLM目标让每个词元都参与训练，BERT的MLM只预测被遮住的15%词元"
   }
 ]

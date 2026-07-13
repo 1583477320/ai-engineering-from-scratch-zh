@@ -10,5 +10,53 @@
     ],
     "correct": 1,
     "explanation": "CNN假设局部性。ViT没有这个先验——大数据集上ViT赢，小数据集CNN赢"
+  },
+  {
+    "stage": "check",
+    "question": "ViT如何将图像转换为词元序列？",
+    "options": [
+      "使用卷积提取特征",
+      "将图像分割为patch，展平后线性投影",
+      "使用循环神经网络",
+      "直接展平整张图像"
+    ],
+    "correct": 1,
+    "explanation": "ViT将图像切成patch，展平每个patch，通过线性投影得到词元嵌入"
+  },
+  {
+    "stage": "post",
+    "question": "ViT中[CLS] token的作用是什么？",
+    "options": [
+      "表示图像开始",
+      "其输出用于整个图像的分类",
+      "表示patch边界",
+      "加速训练"
+    ],
+    "correct": 1,
+    "explanation": "[CLS]的最终表示通过自注意力聚合了所有patch的信息"
+  },
+  {
+    "stage": "post",
+    "question": "ViT使用什么类型的位置编码？",
+    "options": [
+      "正弦编码",
+      "可学习位置编码",
+      "不需要位置编码",
+      "RoPE"
+    ],
+    "correct": 1,
+    "explanation": "ViT使用可学习位置编码——每个patch的位置独立学习"
+  },
+  {
+    "stage": "post",
+    "question": "CNN和ViT在归纳偏置上的核心区别？",
+    "options": [
+      "CNN没有偏置",
+      "CNN有局部性假设，ViT无先验",
+      "ViT有局部性假设",
+      "没有区别"
+    ],
+    "correct": 1,
+    "explanation": "CNN假设相邻像素相关（局部性），ViT使用全局注意力（无先验）"
   }
 ]
