@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "2026年LLM定制的最佳实践是什么？",
+    "options": [
+      "从头预训练",
+      "用Llama 3.1/Qwen2.5 + LoRA微调",
+      "只用提示词工程",
+      "使用更大模型"
+    ],
+    "correct": 1,
+    "explanation": "2026年最有效的方式是使用开源基础模型(Llama 3.1/Qwen2.5)加LoRA微调。"
+  },
+  {
+    "stage": "post",
+    "question": "完整LLM流水线的正确顺序是？",
+    "options": [
+      "预训练→数据管道→SFT→评估→部署",
+      "数据管道→预训练→SFT→对齐→评估→量化→部署",
+      "SFT→预训练→部署→评估",
+      "评估→预训练→SFT→量化"
+    ],
+    "correct": 1,
+    "explanation": "数据管道→预训练→SFT→对齐(RLHF/DPO)→评估→量化→部署是标准流水线。"
+  }
+]

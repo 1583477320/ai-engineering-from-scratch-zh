@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "pre",
+    "question": "2026年开源LLM的'统一架构'包含哪些组件？",
+    "options": [
+      "Pre-LN + GQA + SwiGLU + RoPE + RMSNorm",
+      "Post-LN + MHA + ReLU + AbsolutePE + LayerNorm",
+      "Transformer + RNN + GRU",
+      "CNN + LSTM + Attention"
+    ],
+    "correct": 0,
+    "explanation": "Pre-LN、GQA、SwiGLU、RoPE、RMSNorm是2026年开源LLM的架构共识。"
+  },
+  {
+    "stage": "post",
+    "question": "GQA(分组查询注意力)为什么优于MHA？",
+    "options": [
+      "质量更好",
+      "推理时KV缓存更小，更适合大规模部署",
+      "训练更快",
+      "更容易实现"
+    ],
+    "correct": 1,
+    "explanation": "GQA让多个查询头共享KV头，KV缓存减少到1/4，大幅降低推理显存。"
+  }
+]
