@@ -149,7 +149,35 @@ model = FastLanguageModel.get_peft_model(model, r=16)
 
 ---
 
-## 7. 面试考点
+## 7. 常见错误
+
+### 错误 1：LoRA 配置写错 target_modules
+
+**现象：** 微调后模型输出完全没变——LoRA 没有生效。
+
+**原因：** target_modules 写的层名不匹配实际层名（如 `q_proj` vs `q_proj.weight`）。
+
+**修复：** 先打印模型结构确认层名：`for name, module in model.named_modules(): print(name)`
+
+### 错误 2：合并 LoRA 后权重精度变化
+
+**现象：** 合并后的模型生成质量下降。
+
+**原因：** LoRA 权重是 FP32，原始权重是 FP16——合并后精度不一致。
+
+**修复：** 合并前将所有权重转为相同精度，合并后再转为目标精度。
+
+---
+
+## 🚀 产出
+
+| 产出 | 文件 | 说明 |
+|------|------|------|
+| LoRA 实现 | `code/main.py` | 低秩分解演示 + 参数量对比 |
+
+---
+
+## 8. 面试考点
 
 ### Q1：LoRA 如何在只训练 2% 参数的情况下保持模型质量？（难度：⭐⭐）
 
