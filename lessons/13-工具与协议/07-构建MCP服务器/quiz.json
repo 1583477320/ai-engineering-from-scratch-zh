@@ -1,0 +1,16 @@
+[
+  {
+    "stage": "pre",
+    "question": "MCP服务器需要暴露哪些三种原语？",
+    "options": ["Tools、Resources、Prompts", "GET、POST、DELETE", "HTML、CSS、JS"],
+    "correct": 0,
+    "explanation": "服务器端三个原语：Tools（可执行函数）、Resources（可读数据）、Prompts（提示词模板）。"
+  },
+  {
+    "stage": "post",
+    "question": "MCP服务器的生命周期第一步是什么？",
+    "options": ["tools/list", "initialize", "tools/call", "resources/read"],
+    "correct": 1,
+    "explanation": "客户端首先发送initialize请求，服务器返回能力列表。"
+  }
+]

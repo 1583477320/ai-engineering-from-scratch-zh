@@ -141,3 +141,131 @@ if __name__ == "__main__":
     # 调用
     print(f"\n调用 weather__search: {client.call_tool('weather__search', {'query': '北京'})}")
     print(f"调用 notes__create: {client.call_tool('notes__create', {'title': '新笔记'})}")
+```
+
+---
+
+## 4. 工具
+
+### 4.1 MCP Python SDK Client
+
+```python
+from mcp import ClientSession
+from mcp.client import stdio_client
+
+async def connect_to_server(server_script):
+    """连接 MCP 服务器。"""
+    async with stdio_client("python", server_script) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+            tools = await session.list_tools()
+            # 调用工具
+            result = await session.call_tool("get_weather", {"city": "北京"})
+```
+
+### 4.2 多服务器管理
+
+```python
+class MultiServerManager:
+    """管理多个 MCP Server 连接。"""
+    def __init__(self):
+        self.sessions = {}
+
+    async def connect(self, name, server_script):
+        """连接到一个 MCP Server。"""
+        # ... 连接逻辑
+        self.sessions[name] = session
+
+    async def call(self, server_name, tool_name, args):
+        """调用指定 Server 的工具。"""
+        return await self.sessions[server_name].call_tool(tool_name, args)
+```
+
+---
+
+## 5. 工程最佳实践
+
+### 5.1 多服务器管理
+
+- **命名空间合并**：用前缀避免同名工具冲突
+- **健康检查**：定期 ping 每个 Server
+- **重连逻辑**：Server 崩溃时自动重启
+
+### 5.2 踩坑经验
+
+- **Server 进程泄漏**：Client 退出时必须清理子进程
+- **能力协商不完整**：忘记发送 `notifications/initialized`
+- **命名空间冲突**：不同 Server 的同名工具导致调用混乱
+
+---
+
+## 6. 常见错误
+
+### 错误 1：Server 进程未清理
+
+**现象：** Client 退出后 Server 进程仍在运行。
+
+**修复：** 用 `atexit` 注册清理函数，或在 Client 析构时杀掉子进程。
+
+### 错误 2：忽略 Server 健康检查
+
+**现象：** Server 崩溃后 Client 继续调用——得到超时错误。
+
+**修复：** 定期发送 ping，检测超时后自动重连。
+
+---
+
+## 7. 面试考点
+
+### Q1：MCP Client 的命名空间合并如何工作？（难度：⭐⭐）
+
+**参考答案：**
+Client 将每个 Server 的工具加上前缀（如 `weather__search`、`notes__search`）合并到统一工具列表。LLM 看到的是合并后的工具列表，调用时通过前缀路由到正确的 Server。这样即使多个 Server 有同名工具，也能正确区分。
+
+### Q2：MCP Client 如何处理 Server 崩溃？（难度：⭐⭐⭐）
+
+**参考答案：**
+(1) 健康检查——定期发送 ping 检测 Server 是否存活；(2) 超时检测——设置合理的超时时间；(3) 自动重连——崩溃时自动重启 Server 子进程并重新完成 initialize 握手；(4) 工具列表刷新——重连后重新获取可用工具列表。
+
+---
+
+## 🔑 关键术语
+
+| 术语 | 人们怎么说 | 实际含义 |
+|------|----------|---------|
+| 命名空间合并 | "统一工具列表" | 将多个 Server 的工具加前缀后合并为一个列表 |
+| 命名空间冲突 | "同名工具" | 不同 Server 有相同工具名——需前缀区分 |
+| 健康检查 | "Server 存活检测" | 定期 ping Server，检测崩溃并自动重连 |
+
+---
+
+## 📚 小结
+
+MCP Client 管理多个 Server——命名空间合并、工具路由、健康检查、重连。前缀合并解决同名工具冲突。自动重连处理 Server 崩溃。Client 是多服务器编排的核心。
+
+---
+
+## ✏️ 练习
+
+1. **【实现】** 构建一个管理 2 个 MCP Server 的 Client——支持自动重连
+2. **【实验】** 模拟 Server 崩溃——验证 Client 的重连逻辑
+
+---
+
+## 🚀 产出
+
+| 产出 | 文件 | 说明 |
+|------|------|------|
+| MCP Client | `code/main.py` | 多服务器 Client + 命名空间合并 |
+
+---
+
+## 📖 参考资料
+
+1. [文档] MCP 规范: https://spec.modelcontextprotocol.io
+2. [GitHub] MCP Python SDK: https://github.com/modelcontextprotocol/python-sdk
+3. [GitHub] MCP TypeScript SDK: https://github.com/modelcontextprotocol/typescript-sdk
+
+---
+
+> 本课程参考了 AI Engineering From Scratch（MIT License）的课程体系，在此基础上进行了重构和原创内容的扩充。

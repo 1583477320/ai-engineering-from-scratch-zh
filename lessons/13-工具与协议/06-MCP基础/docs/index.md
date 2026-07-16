@@ -158,7 +158,7 @@ const server = new Server({ name: "my-server", version: "1.0.0" });
 
 ---
 
-## 7. 常见错误
+## 6. 常见错误
 
 ### 错误 1：没有发送 `notifications/initialized`
 
@@ -168,7 +168,7 @@ const server = new Server({ name: "my-server", version: "1.0.0" });
 
 ---
 
-## 8. 面试考点
+## 7. 面试考点
 
 ### Q1：MCP 和直接 API 调用有什么区别？（难度：⭐⭐）
 

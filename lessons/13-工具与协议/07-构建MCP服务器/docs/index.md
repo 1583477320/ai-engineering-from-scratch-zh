@@ -210,3 +210,115 @@ if __name__ == "__main__":
         "params": {"name": "note-review", "arguments": {"note_id": "1"}}, "id": 5
     }))
     print(f"prompts: {json.loads(prompt_resp)['result']['description']}")
+```
+
+---
+
+## 4. 工具
+
+### 4.1 MCP Python SDK（FastMCP）
+
+```python
+from mcp.server.fastmcp import FastMCP
+mcp = FastMCP("note-server")
+
+@mcp.tool()
+def create_note(title: str, content: str) -> str:
+    """创建新笔记。"""
+    return f"笔记已创建: {title}"
+```
+
+### 4.2 MCP TypeScript SDK
+
+```typescript
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+const server = new Server({ name: "note-server", version: "1.0.0" });
+```
+
+---
+
+## 5. 工程最佳实践
+
+### 5.1 服务器设计原则
+
+- **纯函数优先**：相同输入产生相同输出
+- **结构化错误**：返回 JSON-RPC 错误格式而非崩溃
+- **幂等性**：重复调用不产生额外副作用
+
+### 5.2 踩坑经验
+
+- **未处理未知方法**：Server 应返回 `-32601` 错误
+- **能力协商遗漏**：必须在 `initialize` 中声明支持的原语
+
+---
+
+## 6. 常见错误
+
+### 错误 1：忘记声明 capabilities
+
+**现象：** Client 无法发现 Server 的工具。
+
+**修复：** 在 `initialize` 响应中返回 `capabilities: {tools: {}, resources: {}, prompts: {}}`。
+
+### 错误 2：工具执行抛出未处理异常
+
+**现象：** Server 崩溃，Client 收不到响应。
+
+**修复：** 用 try/except 包裹工具执行，返回结构化错误。
+
+---
+
+## 7. 面试考点
+
+### Q1：MCP 服务器需要实现哪些方法？（难度：⭐⭐）
+
+**参考答案：**
+服务器端方法：`initialize`、`tools/list`、`tools/call`、`resources/list`、`resources/read`、`prompts/list`、`prompts/get`。至少实现 `initialize` 和 `tools/call`。
+
+### Q2：MCP Server 和直接 HTTP API 有什么区别？（难度：⭐⭐⭐）
+
+**参考答案：**
+MCP 有标准化生命周期（initialize→协商→操作），支持动态工具发现，有资源和提示词原语，使用 JSON-RPC 2.0，支持 stdio 和 HTTP 双传输。
+
+---
+
+## 🔑 关键术语
+
+| 术语 | 人们怎么说 | 实际含义 |
+|------|----------|---------|
+| MCP Server | "工具提供者" | 暴露 Tools/Resources/Prompts 三种原语的进程 |
+| capabilities | "能力声明" | initialize 时 Server 返回的支持的原语列表 |
+| JSON-RPC 2.0 | "消息协议" | MCP 的底层通信协议——请求-响应模式 |
+
+---
+
+## 📚 小结
+
+MCP 服务器暴露三种原语：Tools、Resources、Prompts。使用 JSON-RPC 2.0 通信。关键是正确的 initialize 协商和结构化错误处理。
+
+---
+
+## ✏️ 练习
+
+1. **【实现】** 构建一个笔记 MCP 服务器——支持创建、搜索、删除笔记
+2. **【实验】** 用 MCP Python SDK 的 FastMCP 实现同一个服务器
+
+---
+
+## 🚀 产出
+
+| 产出 | 文件 | 说明 |
+|------|------|------|
+| MCP 服务器 | `code/main.py` | 笔记 MCP 服务器完整实现 |
+
+---
+
+## 📖 参考资料
+
+1. [文档] MCP 规范: https://spec.modelcontextprotocol.io
+2. [GitHub] MCP Python SDK: https://github.com/modelcontextprotocol/python-sdk
+3. [GitHub] FastMCP: https://github.com/jlowin/fastmcp
+
+---
+
+> 本课程参考了 AI Engineering From Scratch（MIT License）的课程体系，在此基础上进行了重构和原创内容的扩充。

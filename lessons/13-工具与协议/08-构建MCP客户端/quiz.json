@@ -1,0 +1,16 @@
+[
+  {
+    "stage": "pre",
+    "question": "MCP客户端的主要挑战是什么？",
+    "options": ["工具执行", "进程管理和命名空间合并", "网络延迟", "数据库连接"],
+    "correct": 1,
+    "explanation": "Client代码的困难编排：进程生成、能力协商、跨多个服务器的工具列表合并、命名空间冲突。"
+  },
+  {
+    "stage": "post",
+    "question": "如何解决多个服务器的同名工具冲突？",
+    "options": ["删除重复工具", "添加服务器前缀（如 weather__search）", "只保留一个服务器的工具", "随机重命名"],
+    "correct": 1,
+    "explanation": "使用服务器名前缀（如 weather__search、code__search）区分同名工具。"
+  }
+]

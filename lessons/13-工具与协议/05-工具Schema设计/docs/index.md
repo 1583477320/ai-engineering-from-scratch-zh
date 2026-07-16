@@ -143,7 +143,7 @@ stable_tool_bench test --model gpt-4o --tools my_tools.json
 
 ---
 
-## 7. 常见错误
+## 6. 常见错误
 
 ### 错误 1：工具描述没有排除场景
 
@@ -159,7 +159,7 @@ stable_tool_bench test --model gpt-4o --tools my_tools.json
 
 ---
 
-## 8. 面试考点
+## 7. 面试考点
 
 ### Q1：如何提高工具选择的准确率？（难度：⭐⭐）
 

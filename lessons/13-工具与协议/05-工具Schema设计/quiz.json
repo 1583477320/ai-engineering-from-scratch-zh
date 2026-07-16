@@ -1,0 +1,16 @@
+[
+  {
+    "stage": "pre",
+    "question": "工具描述的最佳命名模式是什么？",
+    "options": ["动词+名词（如 get_weather）", "名词（如 weather）", "形容词+名词（如 quick）", "随意命名"],
+    "correct": 0,
+    "explanation": "动词+名词模式清晰表达工具功能，LLM选择准确率最高。"
+  },
+  {
+    "stage": "post",
+    "question": "为什么参数的 description 很重要？",
+    "options": ["帮助LLM理解参数应该填什么", "让代码更可读", "减少文档长度", "提高执行速度"],
+    "correct": 0,
+    "explanation": "LLM根据参数的description理解'这个参数应该填什么'，减少参数错误。"
+  }
+]

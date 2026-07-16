@@ -1,0 +1,16 @@
+[
+  {
+    "stage": "pre",
+    "question": "MCP 的六个原语是什么？",
+    "options": ["Tools, Resources, Prompts, Roots, Sampling, Elicitation", "GET, POST, PUT, DELETE, PATCH, HEAD", "HTTP, WebSocket, SSE, gRPC, GraphQL, REST"],
+    "correct": 0,
+    "explanation": "服务器端三个：Tools/Resources/Prompts；客户端三个：Roots/Sampling/Elicitation。"
+  },
+  {
+    "stage": "post",
+    "question": "MCP 使用什么底层通信协议？",
+    "options": ["HTTP", "WebSocket", "JSON-RPC 2.0", "gRPC"],
+    "correct": 2,
+    "explanation": "MCP使用JSON-RPC 2.0作为底层通信协议。"
+  }
+]
