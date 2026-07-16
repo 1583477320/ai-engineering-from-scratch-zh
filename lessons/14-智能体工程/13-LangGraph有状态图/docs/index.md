@@ -146,3 +146,111 @@ def demo():
 if __name__ == "__main__":
     print("LangGraph 有状态图演示\n")
     demo()
+
+---
+
+## 4. 工具
+
+### 4.1 LangGraph
+
+```python
+from langgraph.graph import StateGraph, END
+
+graph = StateGraph(AgentState)
+graph.add_node("analyze", analyze_fn)
+graph.add_node("retrieve", retrieve_fn)
+graph.add_edge("analyze", "retrieve")
+app = graph.compile()
+```
+
+### 4.2 框架对比
+
+| 框架 | 特点 | 适用 |
+|------|------|------|
+| LangGraph | 有状态图、检查点 | 复杂多步流程 |
+| LangChain Agent | 简单黑盒 | 快速原型 |
+| AutoGen | 异步消息 | 多智能体协作 |
+
+---
+
+## 5. 工程最佳实践
+
+### 5.1 状态设计
+
+- **最小化**：只保留必要信息
+- **不可变**：节点返回新状态
+- **类型安全**：用 TypedDict 定义
+
+### 5.2 检查点策略
+
+- **每步检查点**：支持完整恢复
+- **增量检查点**：只保存变化的状态
+- **持久化**：使用 SQLite/PostgreSQL 存储
+
+---
+
+## 6. 常见错误
+
+### 错误 1：节点修改状态
+
+**现象：** 状态意外改变——恢复时数据错误。
+
+**修复：** 节点不修改原状态——返回新状态副本。
+
+### 错误 2：条件边缺少默认路由
+
+**现象：** 图执行卡死——某些状态没有出口。
+
+**修复：** 每个条件边都应有默认出口。
+
+---
+
+## 7. 面试考点
+
+### Q1：LangGraph 的不可变状态为什么重要？（难度：⭐⭐）
+
+**参考答案：**
+不可变状态确保：(1) 每个节点的输入是确定的——不受其他节点影响；(2) 检查点保存的是干净的状态——恢复时不会带入错误；(3) 并发安全——多个节点可以并行执行而不冲突。
+
+---
+
+## 🔑 关键术语
+
+| 术语 | 人们怎么说 | 实际含义 |
+|------|----------|---------|
+| StateGraph | "状态图容器" | LangGraph 的核心——定义节点、边和状态 |
+| 检查点 | "断点" | 每步后保存状态快照——支持恢复 |
+| 不可变状态 | "不改状态" | 节点返回新状态——不修改原状态 |
+
+---
+
+## 📚 小结
+
+LangGraph 用状态图编排 LLM 应用——不可变状态、函数节点、条件边、步骤检查点。支持从任意故障点恢复。比 LangChain Agent 更可调试、更可靠。
+
+---
+
+## ✏️ 练习
+
+1. **【实现】** 用 LangGraph 构建一个客服状态机——问题分类→检索→回答/转人工
+2. **【实验】** 添加检查点——模拟故障后恢复
+
+---
+
+## 🚀 产出
+
+| 产出 | 文件 | 说明 |
+|------|------|------|
+| 状态图 | `code/main.py` | 节点+边+条件+检查点 |
+
+---
+
+## 📖 参考资料
+
+1. [GitHub] LangGraph: https://github.com/langchain-ai/langgraph
+2. [文档] LangGraph 状态图: https://langchain-ai.github.io/langgraph/
+3. [教程] LangGraph 教程
+
+---
+
+> 本课程参考了 AI Engineering From Scratch（MIT License）的课程体系，在此基础上进行了重构和原创内容的扩充。
