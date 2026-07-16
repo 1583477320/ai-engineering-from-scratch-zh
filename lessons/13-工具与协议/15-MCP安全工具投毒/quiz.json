@@ -1,0 +1,16 @@
+[
+  {
+    "stage": "pre",
+    "question": "MCP工具投毒攻击的核心是什么？",
+    "options": ["在工具描述中嵌入隐藏指令操纵LLM", "修改Server的源代码", "暴力破解API密钥"],
+    "correct": 0,
+    "explanation": "工具描述会原样进入LLM上下文，恶意Server可在描述末尾嵌入隐藏指令。"
+  },
+  {
+    "stage": "post",
+    "question": "如何检测工具描述是否被篡改？",
+    "options": ["哈希固定+模式检测+长度限制", "只检查长度", "只检查IP地址"],
+    "correct": 0,
+    "explanation": "多层防御：SHA-256哈希验证、可疑模式检测、长度限制、不可见字符扫描。"
+  }
+]

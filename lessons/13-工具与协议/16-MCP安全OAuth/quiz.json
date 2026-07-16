@@ -1,0 +1,16 @@
+[
+  {
+    "stage": "pre",
+    "question": "MCP远程Server为什么需要OAuth而不仅仅是API Key？",
+    "options": ["OAuth提供临时令牌+scope限制+渐进授权", "OAuth更简单", "API Key更安全"],
+    "correct": 0,
+    "explanation": "OAuth提供临时令牌（可过期）、资源限制（scope）、渐进授权（逐步获得权限）。"
+  },
+  {
+    "stage": "post",
+    "question": "什么是SEP-835的渐进授权？",
+    "options": ["Server在403时请求额外权限让用户逐步授权", "用户需要多次登录", "使用更长的密码"],
+    "correct": 0,
+    "explanation": "当Server返回403时，可以请求扩展scope——用户逐步授予更多权限。"
+  }
+]

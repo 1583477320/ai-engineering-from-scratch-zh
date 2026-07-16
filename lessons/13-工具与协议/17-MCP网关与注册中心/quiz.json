@@ -1,0 +1,16 @@
+[
+  {
+    "stage": "pre",
+    "question": "MCP网关的核心价值是什么？",
+    "options": ["集中管理多个Server的认证、授权、审计", "增加延迟", "减少工具数量"],
+    "correct": 0,
+    "explanation": "网关集中管理Server的认证(RBAC)、审计、速率限制、工具合并和投毒检测。"
+  },
+  {
+    "stage": "post",
+    "question": "企业MCP部署应该用网关吗？",
+    "options": ["应该——集中管理、安全控制、统一入口", "不需要——直接暴露Server", "只用Registry"],
+    "correct": 0,
+    "explanation": "企业场景必须用网关——集中管理、RBAC、审计、工具投毒检测。"
+  }
+]
