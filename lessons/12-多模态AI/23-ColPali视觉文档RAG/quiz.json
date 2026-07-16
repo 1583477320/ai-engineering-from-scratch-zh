@@ -1,0 +1,1 @@
+[{"stage":"pre","question":"ColPali的核心创新是什么？","options":["更快的OCR","用视觉嵌入直接嵌入页面图像做检索","更大的模型"],"correct":1,"explanation":"ColPali不提取文本——直接用PaliGemma编码页面图像做多向量检索，保留所有布局信息。"},{"stage":"post","question":"MaxSim和单向量余弦相似度有什么区别？","options":["完全相同","MaxSim用多向量细粒度匹配，保留局部细节","更慢"],"correct":1,"explanation":"MaxSim对查询的每个向量找文档中最相似的向量，保留了图表、表格的具体位置信息。"}]

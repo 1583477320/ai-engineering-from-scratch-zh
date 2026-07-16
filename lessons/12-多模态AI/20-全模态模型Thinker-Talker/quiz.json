@@ -1,0 +1,1 @@
+[{"stage":"pre","question":"Thinker-Talker架构中Thinker和Talker各负责什么？","options":["都负责推理","Thinker推理，Talker生成语音","Thinker理解，Talker规划"],"correct":1,"explanation":"Thinker是大型文本生成Transformer（负责推理），Talker是并行语音生成Transformer（负责说话）。"},{"stage":"post","question":"实时语音对话的总延迟预算通常是多少？","options":["1秒","250毫秒","5秒","10秒"],"correct":1,"explanation":"GPT-4o的实时语音对话延迟约250毫秒，需要ASR+推理+TTS每个环节都极快。"}]

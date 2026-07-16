@@ -1,0 +1,1 @@
+[{"stage":"pre","question":"VLM文档理解相比传统OCR+NLP管道有什么优势？","options":["更便宜","直接理解整个页面，不需要分割","速度更快"],"correct":1,"explanation":"VLM直接看整个页面同时理解文本、表格、图表和布局，不需要分割成多个模块。"},{"stage":"post","question":"ColPali的优势是什么？","options":["用文本检索","用视觉嵌入直接检索页面图像","更快的OCR"],"correct":1,"explanation":"ColPali不提取文本——直接用PaliGemma编码页面图像，保留所有布局、图表和格式信息。"}]

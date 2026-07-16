@@ -1,0 +1,1 @@
+[{"stage":"pre","question":"多模态智能体和纯文本智能体的核心区别是什么？","options":["更快","能看屏幕、理解图像并执行GUI操作","更便宜","更简单"],"correct":1,"explanation":"多模态智能体通过VLM看屏幕，LLM决策，动作执行器操作GUI——纯文本智能体无法处理图像。"},{"stage":"post","question":"VisualWebArena基准上前沿模型能达到多少准确率？","options":["90%","60%","30%","10%"],"correct":1,"explanation":"即使最强的GPT-4o和Claude Opus在VisualWebArena的困难任务上也只有约30%准确率——这是多模态智能体的前沿挑战。"}]

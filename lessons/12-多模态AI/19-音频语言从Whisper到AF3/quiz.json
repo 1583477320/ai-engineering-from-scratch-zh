@@ -1,0 +1,1 @@
+[{"stage":"pre","question":"Whisper的主要功能是什么？","options":["音频理解","语音转文本","图像生成","视频处理"],"correct":1,"explanation":"Whisper是语音转文本模型——用68万小时弱监督数据训练的编码器-解码器架构。"},{"stage":"post","question":"AF3相比Whisper多了什么能力？","options":["更快的推理","思维链推理","更小的模型","更好的压缩"],"correct":1,"explanation":"AF3在Whisper编码器基础上加了Q-Former和LLM推理——不仅能转录，还能理解音频内容并推理。"}]
