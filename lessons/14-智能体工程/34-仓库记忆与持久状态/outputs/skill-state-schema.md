@@ -1,51 +1,69 @@
----
-name: state-schema
-description: Generate project-specific JSON Schemas for agent state and task board, a Python StateManager with atomic writes, and a migration scaffold so schema bumps cannot corrupt the workbench.
-version: 1.0.0
-phase: 14
-lesson: 34
-tags: [state, schema, json-schema, atomic-writes, migrations]
----
+# 状态 Schema 生成器
 
-Given a repo and the agent product running inside it, produce schema-first state files for the workbench.
+你是一个智能体状态管理顾问。你的任务是为项目生成 JSON Schema 和状态管理器。
 
-Produce:
+## 步骤
 
-1. `schemas/agent_state.schema.json` covering required keys, allowed status values, array-vs-null discipline, and a `schema_version` integer.
-2. `schemas/task_board.schema.json` covering task id pattern, allowed owners, allowed statuses, and acceptance arrays.
-3. `tools/state_manager.py` exposing `load`, `commit`, and `update` with temp-and-rename atomic writes.
-4. `tools/migrate_state.py` scaffold for the next schema bump, fail-loud if the file is from an unknown version.
-5. `agent_state.json` and `task_board.json` seeded at `schema_version: 1` and a fresh backlog.
+### 1. 了解项目状态需求
 
-Hard rejects:
+询问项目负责人：
 
-- A schema without a `schema_version` field. Migrations are not optional.
-- Allowing `null` where an array is expected. `null` is a write-time bug masquerading as data.
-- A writer that uses plain `open(path, "w")`. Atomic writes only; partial files corrupt the source of truth.
-- Storing tokens, raw chat transcripts, or PII inside state. State is for repo-relevant facts.
+- 智能体需要跟踪哪些状态信息？（任务 ID、修改的文件、假设、阻塞项……）
+- 任务板的结构是什么？（任务 ID、目标、负责人、验收条件、状态……）
+- 状态文件的预期大小是多少？（如果可能包含大文件，需要分离策略）
+- 是否需要跨会话持久化？
 
-Refusal rules:
+### 2. 生成 Schema
 
-- If the repo has no version control, refuse to ship state files. Atomic writes plus git diff is the durability story.
-- If the project does not have at least one acceptance command to validate the `done` transition, refuse the `status: done` enum value. Adding `done` without an acceptance check is theater.
-- If the project intends to share state across processes without a lock strategy, surface that finding before shipping; atomic rename is necessary but not sufficient.
+为 `agent_state.json` 和 `task_board.json` 生成 JSON Schema：
 
-Output structure:
-
-```
-<repo>/
-├── agent_state.json
-├── task_board.json
-├── schemas/
-│   ├── agent_state.schema.json
-│   └── task_board.schema.json
-└── tools/
-    ├── state_manager.py
-    └── migrate_state.py
+```json
+{
+  "$id": "agent_state.schema.json",
+  "type": "object",
+  "required": ["schema_version", "active_task_id", "touched_files", "next_action"],
+  "properties": {
+    "schema_version": {"type": "integer", "enum": [1]},
+    ...
+  }
+}
 ```
 
-End with "what to read next" pointing to:
+### 3. 生成状态管理器
 
-- Lesson 35 for the initialization script that calls the manager on startup.
-- Lesson 38 for the verification gate that reads state to score completion.
-- Lesson 40 for the handoff generator that consumes the same schema.
+生成 `StateManager` 类，包含：
+
+- `load()`：加载并验证状态
+- `commit()`：验证并原子性写入
+- 原子性写入函数（tempfile + fsync + rename）
+
+### 4. 生成迁移脚本骨架
+
+```python
+# tools/migrate_state.py
+def migrate_v1_to_v2(state: dict) -> dict:
+    """将 v1 状态转换为 v2 状态。"""
+    state["schema_version"] = 2
+    state["risks"] = state.pop("blockers", [])
+    return state
+```
+
+## 输出格式
+
+```markdown
+# [项目名] 状态 Schema
+
+生成日期：YYYY-MM-DD
+
+## agent_state.schema.json
+...
+
+## task_board.schema.json
+...
+
+## StateManager
+...
+
+## 迁移脚本骨架
+...
+```

@@ -1,90 +1,86 @@
-{
-  "lesson": "34-repo-memory-and-state",
-  "title": "Repo Memory and Durable State",
-  "questions": [
-    {
-      "stage": "pre",
-      "question": "What is the durability test that decides whether a piece of information belongs in repo memory?",
-      "options": [
-        "Whether it is JSON",
-        "Whether it would be useful three months from now in a CI rerun; if yes, repo; if no, telemetry",
-        "Whether the user marked it as important",
-        "Whether it fits in 4 kB"
-      ],
-      "correct": 1,
-      "explanation": "Repo memory is for durable, three-months-from-now-useful state; transient data is telemetry."
-    },
-    {
-      "stage": "pre",
-      "question": "What schema field carries the agent's contract version?",
-      "options": [
-        "schema_version",
-        "build_hash",
-        "model_id",
-        "session_uuid"
-      ],
-      "correct": 0,
-      "explanation": "schema_version is the integer contract; the manager refuses to load from an unknown version."
-    },
-    {
-      "stage": "check",
-      "question": "How does atomic write work?",
-      "options": [
-        "tempfile.mkstemp in the same directory, write, fsync, os.replace (atomic rename) over the target",
-        "Truncate-then-write to the target",
-        "Append-only with a CRC",
-        "Encrypt and overwrite"
-      ],
-      "correct": 0,
-      "explanation": "Atomic rename on POSIX and Windows is what prevents partial-write corruption."
-    },
-    {
-      "stage": "check",
-      "question": "Why are idempotency keys required for non-idempotent tool calls?",
-      "options": [
-        "For billing",
-        "If the agent crashes after a tool call but before checkpointing the result, retry safely; log call ID before execution and skip the call on retry",
-        "To deduplicate logs",
-        "To shorten output"
-      ],
-      "correct": 1,
-      "explanation": "pending_calls.jsonl carries the call IDs; recovery checks and skips already-executed work."
-    },
-    {
-      "stage": "check",
-      "question": "Where should large artifacts (CSVs, long transcripts, generated files) live relative to state?",
-      "options": [
-        "Inline in agent_state.json",
-        "As separate files (or object storage) with only the path kept in state, so checkpoints stay small and fast",
-        "In environment variables",
-        "Concatenated into one giant log"
-      ],
-      "correct": 1,
-      "explanation": "Separate artifacts grow independently of state; checkpoints stay cheap to read and write."
-    },
-    {
-      "stage": "post",
-      "question": "What does event sourcing for audit + snapshots for resume buy you?",
-      "options": [
-        "Lower disk usage",
-        "Replay agent decisions verbatim by reading the snapshot then replaying events after it; same shape as Postgres WAL",
-        "Faster inference",
-        "Native voice support"
-      ],
-      "correct": 1,
-      "explanation": "Append to state.events.jsonl on every mutation; periodically snapshot to state.json; replay events after the snapshot timestamp."
-    },
-    {
-      "stage": "post",
-      "question": "What does the lesson say happens when schema_version mismatches?",
-      "options": [
-        "The manager silently upgrades",
-        "The manager refuses to load until a migration script in tools/migrate_state.py runs",
-        "The state is deleted",
-        "The agent retries"
-      ],
-      "correct": 1,
-      "explanation": "Schema migrations or refuse-to-load; never silent upgrade."
-    }
-  ]
-}
+[
+  {
+    "question": "判断一条信息是否属于仓库记忆的标准是什么？",
+    "options": [
+      "是否是 JSON 格式",
+      "三个月后在 CI 重跑时是否有用——如果是，存仓库；如果不是，那是遥测数据",
+      "用户是否标记为重要",
+      "是否能放进 4 KB"
+    ],
+    "correct": 1,
+    "explanation": "仓库记忆用于持久的、三个月后仍有用的状态。临时数据属于遥测，不应该污染状态文件。",
+    "stage": "pre"
+  },
+  {
+    "question": "Schema 中哪个字段承载智能体的契约版本？",
+    "options": [
+      "schema_version",
+      "build_hash",
+      "model_id",
+      "session_uuid"
+    ],
+    "correct": 0,
+    "explanation": "schema_version 是整数契约；管理器拒绝加载它无法迁移的版本。",
+    "stage": "pre"
+  },
+  {
+    "question": "原子性写入是如何工作的？",
+    "options": [
+      "tempfile.mkstemp 在同一目录创建临时文件，写入，fsync，os.replace（原子重命名）覆盖目标",
+      "先截断目标文件再写入",
+      "追加写入并加 CRC 校验",
+      "加密后覆盖"
+    ],
+    "correct": 0,
+    "explanation": "POSIX 和 Windows 都支持原子重命名，这是防止部分写入损坏的关键。",
+    "stage": "check"
+  },
+  {
+    "question": "为什么非幂等工具调用需要幂等键？",
+    "options": [
+      "为了计费",
+      "如果智能体在工具调用后、检查点保存前崩溃，重试时跳过已执行的调用",
+      "为了去重日志",
+      "为了缩短输出"
+    ],
+    "correct": 1,
+    "explanation": "pending_calls.jsonl 记录调用 ID；恢复时检查并跳过已执行的工作。",
+    "stage": "check"
+  },
+  {
+    "question": "大文件（CSV、长文本、生成文件）应该存放在哪里？",
+    "options": [
+      "内联在 agent_state.json 中",
+      "作为独立文件（或对象存储），状态只存路径，这样检查点保持轻量",
+      "在环境变量中",
+      "拼接成一个巨大的日志"
+    ],
+    "correct": 1,
+    "explanation": "大文件与状态分离，检查点保持轻量，可以快速读写。",
+    "stage": "check"
+  },
+  {
+    "question": "事件溯源 + 快照模式的优势是什么？",
+    "options": [
+      "节省磁盘空间",
+      "通过读取快照然后重放事件来逐字重放智能体决策——与 Postgres WAL 形状相同",
+      "加速推理",
+      "原生语音支持"
+    ],
+    "correct": 1,
+    "explanation": "追加事件日志，定期快照，恢复时重放快照时间戳之后的事件。适合需要审计的长期运行。",
+    "stage": "post"
+  },
+  {
+    "question": "schema_version 不匹配时会发生什么？",
+    "options": [
+      "管理器静默升级",
+      "管理器拒绝加载，直到迁移脚本（tools/migrate_state.py）运行",
+      "状态文件被删除",
+      "智能体重试"
+    ],
+    "correct": 1,
+    "explanation": "Schema 迁移或拒绝加载——永远不要静默升级。",
+    "stage": "post"
+  }
+]

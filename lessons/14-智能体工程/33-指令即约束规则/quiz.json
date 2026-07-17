@@ -1,0 +1,86 @@
+[
+  {
+    "question": "以下哪个是操作规则而不是期许规则？",
+    "options": [
+      "Please be careful with production data",
+      "Any write to production/ must pass the approval check",
+      "Do your best to test thoroughly",
+      "Try to follow best practices"
+    ],
+    "correct": 1,
+    "explanation": "操作规则有一个检查函数——工作台可以在运行时调用它来判断规则是否被遵守。"Any write to production/ must pass the approval check" 对应一个明确的检查函数。其他选项都无法被机器检查。",
+    "stage": "pre"
+  },
+  {
+    "question": "规则集的五种类别分别是什么？",
+    "options": [
+      "读取、写入、执行、分支、退出",
+      "启动、禁止、完成定义、不确定性、审批",
+      "计划、执行、反思、优化、交付",
+      "低、中、高、严重、致命"
+    ],
+    "correct": 1,
+    "explanation": "启动（工作前必须满足）、禁止（绝对不能发生）、完成定义（任务完成的证明）、不确定性（不确定时怎么做）、审批（需要人工批准）。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么路由器（AGENTS.md）需要保持在 50 行以内？",
+    "options": [
+      "GitHub 对文件大小有限制",
+      "智能体的注意力预算有限——文件太长，后面的规则不会被执行",
+      "50 行是行业标准",
+      "太长的文件会导致语法错误"
+    ],
+    "correct": 1,
+    "explanation": "智能体每次会话都读取路由器，但注意力预算有限。2000 行的 AGENTS.md 中，只有前 50 行会被真正执行。详细内容应该移到主题文档中，按需加载。",
+    "stage": "check"
+  },
+  {
+    "question": "Cloudflare 的数据说明了什么？",
+    "options": [
+      "规则集越短越好",
+      "有过期机制的规则集保持在 30 条以内；没有的则增长到 80+ 条",
+      "所有规则都应该标记为 block",
+      "规则检查器会降低代码审查速度"
+    ],
+    "correct": 1,
+    "explanation": "Cloudflare 2026 年 4 月的数据显示（5,169 个仓库，131,246 次审查运行）：有过期机制的规则集保持在 30 条以内；没有的则增长到 80+ 条，其中大部分从未触发。",
+    "stage": "check"
+  },
+  {
+    "question": "Markdown 源文件 + JSON 缓存模式的作用是什么？",
+    "options": [
+      "替代 Markdown 文件",
+      "agent-rules.md 是编写文件，agent-rules.lock.json 是预提交钩子生成的热路径缓存",
+      "加密规则内容",
+      "禁用代码审查"
+    ],
+    "correct": 1,
+    "explanation": "Markdown 保持可审查性，JSON 缓存避免每次运行时都解析 Markdown。这和 package.json / package-lock.json 的模式完全一致。",
+    "stage": "check"
+  },
+  {
+    "question": "规则过期机制的工作方式是什么？",
+    "options": [
+      "规则 24 小时后自动失效",
+      "每条规则有 expires_at（默认 90 天）；无违规的规则进入季度审查，决定保留、降级或删除",
+      "规则在缓存满时过期",
+      "规则自动过期，无需审查"
+    ],
+    "correct": 1,
+    "explanation": "90 天无违规的规则进入季度审查——要么有理由保留，要么降级为 info，要么删除。Cloudflare 的数据证明这种机制有效。",
+    "stage": "post"
+  },
+  {
+    "question": "框架护栏（如 LangGraph interrupts）和规则集的关系是什么？",
+    "options": [
+      "规则集替代了护栏",
+      "护栏在运行时执行规则；规则集是人类可读的契约，护栏执行的就是这些规则",
+      "护栏是规则集的替代方案",
+      "两者只需要一个"
+    ],
+    "correct": 1,
+    "explanation": "两者都需要：运行时（护栏）在单次运行中捕获违规，规则集证明运行时在做正确的事情。规则集是可移植的——因为它只是 Markdown 加函数名。",
+    "stage": "post"
+  }
+]
