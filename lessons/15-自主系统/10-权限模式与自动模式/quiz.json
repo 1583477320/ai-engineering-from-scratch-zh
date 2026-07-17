@@ -1,0 +1,86 @@
+[
+  {
+    "question": "Claude Code 七种权限模式中最安全到最不安全的顺序是什么？",
+    "options": [
+      "bypassPermissions → yolo → autoMode → ...",
+      "plan → default → acceptEdits → acceptExec → autoMode → yolo → bypassPermissions",
+      "autoMode → plan → default → ...",
+      "所有模式一样安全"
+    ],
+    "correct": 1,
+    "explanation": "plan 每个动作前都问；bypassPermissions 批准一切。选择取决于任务风险。",
+    "stage": "pre"
+  },
+  {
+    "question": "自动模式的两阶段分类器如何工作？",
+    "options": [
+      "一个模型做所有判断",
+      "阶段 1 单词元快速检查并行运行；标记动作升级到阶段 2 思维链深度审查",
+      "所有动作都升级到人类",
+      "没有分类器"
+    ],
+    "correct": 1,
+    "explanation": "阶段 1 廉价并行。阶段 2 仅在被标记动作上运行，不自信时升级到 HITL。",
+    "stage": "pre"
+  },
+  {
+    "question": "以下哪项是分类器可能漏过的？",
+    "options": [
+      "显式 rm -rf /",
+      "三个阶段安全但一起泄露凭证的组合攻击",
+      "sudo 命令",
+      "包含 base64 -d 的 shell 命令"
+    ],
+    "correct": 1,
+    "explanation": "每个动作本地安全，组合有害——分类器评判单个动作，不重新推导用户意图。",
+    "stage": "check"
+  },
+  {
+    "question": "在无人值守长期运行中应该用哪种模式？",
+    "options": [
+      "bypassPermissions",
+      "autoMode + 预算 + 测量爆炸半径的工作空间",
+      "plan",
+      "acceptEdits"
+    ],
+    "correct": 1,
+    "explanation": "autoMode 提供分类器保护；预算限制总成本；测量爆炸半径的工作空间限制攻击面。",
+    "stage": "check"
+  },
+  {
+    "question": "阶段 1 分类器如何检测重复循环？",
+    "options": [
+      "它不能检测循环",
+      "比较最后 4 个动作是否相同工具+载荷——如果是则标记",
+      "它使用 LLM 判断",
+      "它只检查关键字"
+    ],
+    "correct": 1,
+    "explanation": "分类器看到动作 N+1 与动作 N 几乎相同。连续 5 次相同则标记为循环。",
+    "stage": "check"
+  },
+  {
+    "question": "为什么 bypassPermissions 应该只在临时容器中使用？",
+    "options": [
+      "因为它太慢了",
+      "因为智能体可以访问一切——文件、凭证、网络——在持久环境中风险不可接受",
+      "因为它只支持 Linux",
+      "因为临时容器更便宜"
+    ],
+    "correct": 1,
+    "explanation": "bypassPermissions 批准一切。仅在临时容器中可接受——愿意丢弃的容器和凭证。",
+    "stage": "post"
+  },
+  {
+    "question": "自动模式作为研究预览发布意味着什么？",
+    "options": [
+      "它准备好生产了",
+      "分类器的失败模式仍在映射中——用户应结合预算、白名单、轨迹审计",
+      "它永远不会 GA",
+      "它只对内部团队可用"
+    ],
+    "correct": 1,
+    "explanation": "Anthropic 声明分类器本身不足够。需要与第 12-16 课的控制配对。",
+    "stage": "post"
+  }
+]

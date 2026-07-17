@@ -1,0 +1,86 @@
+[
+  {
+    "question": "为什么间接提示注入不能完全修补？",
+    "options": [
+      "因为模型不够大",
+      "因为攻击与智能体的能力同构——必须读不受信任内容才能工作，读取的任何内容都可能是指令",
+      "因为浏览器不安全",
+      "因为没有人尝试修补"
+    ],
+    "correct": 1,
+    "explanation": "防御提高攻击成本，不关闭类别。与洛布定理相同的推理模式。",
+    "stage": "pre"
+  },
+  {
+    "question": "读/写边界防御的核心规则是什么？",
+    "options": [
+      "什么都不读",
+      "读从不产生后果；写需要来源自信任内容的批准",
+      "写从不产生后果",
+      "所有内容都是用户发起的"
+    ],
+    "correct": 1,
+    "explanation": "读/写边界捕获由页面内容引发的写。但需要正确归因内容来源，这本身是可攻击的。",
+    "stage": "pre"
+  },
+  {
+    "question": "Tainted Memories 攻击是什么？",
+    "options": [
+      "模型忘记了记忆",
+      "页面指令智能体将恶意载荷写入持久记忆，下次触发",
+      "URL 片段隐藏攻击",
+      "浏览器崩溃"
+    ],
+    "correct": 1,
+    "explanation": "Tainted Memories 利用持久化跨会话。相比于 HashJack 的不可见性利用。",
+    "stage": "check"
+  },
+  {
+    "question": "HashJack 攻击是什么？",
+    "options": [
+      "页面文本中的注入",
+      "URL 片段/查询中的载荷在智能体上下文但不被渲染",
+      "一键劫持",
+      "CSRF 攻击"
+    ],
+    "correct": 1,
+    "explanation": "HashJack（Cato Networks）隐藏命令在智能体访问的 URL 片段中。从不渲染但在上下文中。",
+    "stage": "check"
+  },
+  {
+    "question": "内容清理器漏过什么类型的注入？",
+    "options": [
+      "可见文本注入",
+      "URL 片段注入——清理器只查看 HTML，不查看 URL",
+      "所有类型的注入",
+      "仅直接注入"
+    ],
+    "correct": 1,
+    "explanation": "清理器只查看获取的 HTML。URL 片段（在浏览器地址栏中）不被清理器检查。",
+    "stage": "check"
+  },
+  {
+    "question": "BrowseComp、OSWorld、WebArena-Verified 的区别是什么？",
+    "options": [
+      "没有区别",
+      "BrowseComp 找事实（分钟）；OSWorld 全桌面操作（十分钟）；WebArena-Verified 事务性 Web 任务",
+      "只有 OSWorld 有用",
+      "只有 WebArena 有用"
+    ],
+    "correct": 1,
+    "explanation": "不同的轴。高 BrowseComp 分数不是说智能体可以订机票。生产决策需要匹配任务分布的基准。",
+    "stage": "post"
+  },
+  {
+    "question": "浏览器智能体应该用什么凭证运行？",
+    "options": [
+      "生产凭证",
+      "范围受限的会话凭证——无生产 auth，无个人邮箱",
+      "root 凭证",
+      "匿名凭证"
+    ],
+    "correct": 1,
+    "explanation": "每个浏览器会话用范围受限的凭证。如果智能体已认证，页面发起的动作可以使用用户的 cookie。",
+    "stage": "post"
+  }
+]
