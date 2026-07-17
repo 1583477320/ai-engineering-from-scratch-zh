@@ -1,0 +1,86 @@
+[
+  {
+    "question": "验证门控回答什么问题？",
+    "options": [
+      "模型快不快？",
+      "这个任务真的完成了吗？（读取范围、规则、反馈、差异工件）",
+      "提示词最优吗？",
+      "词元预算健康吗？"
+    ],
+    "correct": 1,
+    "explanation": "门控是工作台工件上的确定性函数，产生通过/不通过裁决。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么门控必须是确定性的？",
+    "options": [
+      "确定性是免费的",
+      "同一工件集必须每次产生相同裁决；LLM 评判器属于审查员（定性），不属于门控（状态）",
+      "供应商要求",
+      "省钱"
+    ],
+    "correct": 1,
+    "explanation": "在门控中混入模型评判会破坏确定性/定性的分离。",
+    "stage": "pre"
+  },
+  {
+    "question": "门控的覆盖纪律是什么？",
+    "options": [
+      "任何人可以静默覆盖",
+      "Block 级发现只能由人类覆盖，且必须记录 override_reason 和 overridden_by 用户 ID 在签名审计日志中",
+      "覆盖需要经理邮件",
+      "禁止覆盖"
+    ],
+    "correct": 1,
+    "explanation": "签名覆盖写入 outputs/verification/overrides.jsonl；智能体不能自覆盖。",
+    "stage": "check"
+  },
+  {
+    "question": "课程引用的 Hybrid Norm 配对是什么？",
+    "options": [
+      "热/冷提示词",
+      "可验证奖励（测试、Schema、退出码）回答'解决了吗？'；LLM 评分标准回答'可读、安全、规范吗？'",
+      "GPU 和 CPU 拆分",
+      "缓存 vs 无缓存"
+    ],
+    "correct": 1,
+    "explanation": "Anthropic 2026 年指南：门控运行第一类，审查员（阶段 14 · 39）运行第二类。",
+    "stage": "check"
+  },
+  {
+    "question": "防御纵深如何分层？",
+    "options": [
+      "单点门控在合入时",
+      "预提交钩子 → CI 状态检查 → 预工具授权钩子 → 预合并门控；每层确定性，一层失败被下一层捕获",
+      "只有 IDE 警告",
+      "只有聊天提醒"
+    ],
+    "correct": 1,
+    "explanation": "多层不可绕过——单层会遗漏的，多层可以捕获。",
+    "stage": "check"
+  },
+  {
+    "question": "coverage_floor 检查防止什么？",
+    "options": [
+      "热路径延迟",
+      "智能体静默删除失败的测试；当覆盖率低于门槛或比上次合并低超过 1 个百分点时门控失败",
+      "冷启动",
+      "过时的锁文件"
+    ],
+    "correct": 1,
+    "explanation": "没有覆盖率门槛，智能体可以静默降低覆盖率来保持裁决绿色。",
+    "stage": "post"
+  },
+  {
+    "question": "--strict 模式在什么时候应该将 warn 升级为 block？",
+    "options": [
+      "总是",
+      "发布分支、阻塞性 PR、事故后排查；不是日常默认，因为事事严格会腐蚀流程",
+      "从不",
+      "只在周日"
+    ],
+    "correct": 1,
+    "explanation": "--strict 按分支选择加入；为高风险时刻保留。",
+    "stage": "post"
+  }
+]
