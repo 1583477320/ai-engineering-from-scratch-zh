@@ -1,0 +1,86 @@
+[
+  {
+    "question": "成本门控栈中捕获失控循环最有效的层是什么？",
+    "options": [
+      "月度上限",
+      "速度限制（$50/10 分钟）",
+      "per-request max_tokens",
+      "提示缓存"
+    ],
+    "correct": 1,
+    "explanation": "速度限制在几分钟内捕获循环，月度上限触发时钱包已经半空。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么每添加一个新工具都需要新上限？",
+    "options": [
+      "因为工具不兼容",
+      "因为每个新工具都是新潜在循环——电商案例中订单跟踪工具使成本从 $1,200 跳到 $4,800",
+      "因为新工具更贵",
+      "因为旧工具已经付钱了"
+    ],
+    "correct": 1,
+    "explanation": "每个新工具表面都是新潜在循环。无循环检测、无 per-tool 上限、无告警，成本失控。",
+    "stage": "pre"
+  },
+  {
+    "question": "速度限制（velocity limit）捕获什么失败模式？",
+    "options": [
+      "慢速泄漏",
+      "失控循环——10 分钟内超过 $50 时切断",
+      "错误发布",
+      "合法激增"
+    ],
+    "correct": 1,
+    "explanation": "速度限制在分钟级捕获循环。月度上限触发时烧钱已经持续很长时间。",
+    "stage": "check"
+  },
+  {
+    "question": "Microsoft Agent Governance Toolkit 覆盖了什么合规要求？",
+    "options": [
+      "只有 GDPR",
+      "OWASP Agentic Top 10 和 EU AI Act Article 14",
+      "只有 SOC 2",
+      "只有 HIPAA"
+    ],
+    "correct": 1,
+    "explanation": "对于 EU 生产部署，日志记录和上限执行是强制性的。",
+    "stage": "check"
+  },
+  {
+    "question": "Claude Code Agent SDK 暴露了哪些预算控制？",
+    "options": [
+      "只有 max_turns",
+      "max_turns、max_budget_usd、工具白名单、工具使用前钩子点",
+      "只有 max_budget_usd",
+      "没有预算控制"
+    ],
+    "correct": 1,
+    "explanation": "没有 max_budget_usd 的 autoMode 会话是无法无天的自主性。",
+    "stage": "check"
+  },
+  {
+    "question": "电商智能体成本从 $1,200 跳到 $4,800 的修复是什么？",
+    "options": [
+      "删除技能",
+      "per-tool 上限 + 每日增长告警",
+      "换用更便宜的模型",
+      "关闭智能体"
+    ],
+    "correct": 1,
+    "explanation": "每个新工具都需要自己的上限和自己的告警。这是 OWASP Agentic Top 10 的要求。",
+    "stage": "post"
+  },
+  {
+    "question": "分层模型路由如何节省成本？",
+    "options": [
+      "它禁用模型",
+      "默认用廉价模型；仅当分类器判断任务需时升级到大型模型",
+      "它只用一个模型",
+      "它用更少的词元"
+    ],
+    "correct": 1,
+    "explanation": "大多数任务不需要最大模型。提示缓存 + 分层路由可以显著降低成本。",
+    "stage": "post"
+  }
+]
