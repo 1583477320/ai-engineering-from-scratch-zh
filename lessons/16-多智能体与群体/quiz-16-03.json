@@ -1,0 +1,86 @@
+[
+  {
+    "question": "MCP、A2A、ACP、ANP 分别解决什么问题？",
+    "options": [
+      "都解决同一个问题",
+      "MCP 工具访问、A2A 智能体间协作、ACP 企业审计、ANP 去中心化信任",
+      "MCP 是唯一需要的协议",
+      "ANP 替代了所有其他协议"
+    ],
+    "correct": 1,
+    "explanation": "四个协议解决不同层级的不同问题。真实系统使用多个。",
+    "stage": "pre"
+  },
+  {
+    "question": "A2A 的 Agent Card 包含什么？",
+    "options": [
+      "只有名称",
+      "名称、描述、版本、技能列表（ID、标签、MIME 类型）、能力（流式传输）、安全方案",
+      "只有技能",
+      "只有安全方案"
+    ],
+    "correct": 1,
+    "explanation": "Agent Card 是智能体的完整能力描述——技能、输入/输出模式、安全、流式传输支持。",
+    "stage": "pre"
+  },
+  {
+    "question": "ACP 的 TrajectoryMetadata 为什么重要？",
+    "options": [
+      "它加速了通信",
+      "每个响应携带推理链和工具调用的完整日志——对受监管行业是审计金矿",
+      "它加密了数据",
+      "它压缩了消息"
+    ],
+    "correct": 1,
+    "explanation": "每个回答都有可证明的推理链——哪个工具被调用、输入输出、推理步骤。没有黑箱。",
+    "stage": "check"
+  },
+  {
+    "question": "ANP 如何实现跨组织信任？",
+    "options": [
+      "通过共享密码",
+      "W3C DID 密码学身份 + E2EE + 域名级 TLS + 最小信任原则",
+      "通过中心化的证书颁发机构",
+      "通过区块链"
+    ],
+    "correct": 1,
+    "explanation": "DID 文档 + 每次交互验证签名 + 最小权限。没有基于八卦的信任传播。",
+    "stage": "check"
+  },
+  {
+    "question": "四协议如何协同工作？",
+    "options": [
+      "只用一个就够了",
+      "MCP 连接工具、A2A 处理协作、ACP 包裹审计轨迹、ANP 验证跨组织身份",
+      "它们互相冲突",
+      "需要手动切换"
+    ],
+    "correct": 1,
+    "explanation": "四个协议解决不同层级——真实系统使用多个协同工作。",
+    "stage": "check"
+  },
+  {
+    "question": "A2A 的任务状态机有多少个状态？",
+    "options": [
+      "3 个",
+      "9 个（submitted、working、input-required、auth-required、completed、failed、canceled、rejected、unspecified）",
+      "5 个",
+      "12 个"
+    ],
+    "correct": 1,
+    "explanation": "A2A 有 8 个命名状态 + 1 个 unspecified 哨兵 = 9 个。终态不可变。",
+    "stage": "post"
+  },
+  {
+    "question": "ANP 的元协议协商是什么？",
+    "options": [
+      "预先定义的固定格式",
+      "两个来自不同生态系统的智能体用自然语言协商通信格式，最多 10 轮，然后动态生成代码处理",
+      "使用 JSON Schema 强制格式",
+      "使用 XML 定义格式"
+    ],
+    "correct": 1,
+    "explanation": "ANP 的真正新颖特性：智能体可以从未见过对方的情况下协商通信格式。",
+    "stage": "post"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "question": "FIPA-ACL 的二十种言语行为中，哪些对应 2026 年的协议？",
+    "options": [
+      "所有都对应，没有丢失",
+      "inform→MCP tools/call、query-ref→resources/read、cfp→合同网、propose→A2A 协商",
+      "没有对应关系",
+      "只保留了 inform"
+    ],
+    "correct": 1,
+    "explanation": "结构原语（谁→谁、意图、内容、关联 ID）在二十年间被保留。",
+    "stage": "pre"
+  },
+  {
+    "question": "FIPA 失败的主要原因是什么？",
+    "options": [
+      "性能太差",
+      "本体论开销太重、形式语义无人使用、工具锁定、互联网赢得了栈",
+      "只支持 Java",
+      "没有文档"
+    ],
+    "correct": 1,
+    "explanation": "四个原因：本体论共识太难、形式语义被忽略、JADE 是 Java 专用、REST/JSON-RPC 替代了传输。",
+    "stage": "check"
+  },
+  {
+    "question": "丢弃本体论后什么会坏？",
+    "options": [
+      "性能下降",
+      "语义漂移——两个智能体用同一词指代不同概念，接收方按错误解释行动",
+      "消息格式不兼容",
+      "加密失效"
+    ],
+    "correct": 1,
+    "explanation": "没有共享本体论，智能体从自然语言推断含义，同一词可能指代不同概念。",
+    "stage": "check"
+  },
+  {
+    "question": "FIPA-ACL 信封的七个字段携带什么？",
+    "options": [
+      "只有内容",
+      "谁、对谁、意图、内容、协议、会话 ID、回复 ID",
+      "只有意图",
+      "只有内容和协议"
+    ],
+    "correct": 1,
+    "explanation": "FIPA-ACL 信封携带：sender、receiver、performative、content、language、ontology、protocol、conversation-id、reply-with。",
+    "stage": "post"
+  }
+]
