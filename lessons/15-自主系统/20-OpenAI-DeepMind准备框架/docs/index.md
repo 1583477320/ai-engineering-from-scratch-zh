@@ -7,7 +7,7 @@
 **前置知识：** 阶段 15 · 19（Anthropic RSP）
 **预计时间：** ~45 分钟
 **所处阶段：** Tier 3
-**关联课程：** 阶段 15 · 19（Anthropic RSP）— 三家策略对比的视角
+**关联课程：** 阶段 15 · 19（Anthropic RSP）— 三家策略对比的视角；阶段 15 · 21（METR）— 策略依赖的测量
 
 ---
 
@@ -16,7 +16,7 @@
 完成本课后，你能够：
 
 - [ ] 区分 OpenAI 的跟踪类别（强制缓解）和研究类别（仅监控）——同一能力在不同类别中的运营后果不同
-- [ ] 解释 DeepMind FSF v3 的关键机制：关键能力级别（CCL）、跟踪能力级别、欺骗性对齐监控
+- [ ] 解释 DeepMind FSF v3 的关键机制：CCL（关键能力级别）、跟踪能力级别、欺骗性对齐监控
 - [ ] 实现一个三框架对比工具——给定能力，输出三家实验室的分类和触发动作
 - [ ] 识别三家的共同点（安全咨询小组、欺骗性行为、常设文件）和分歧（暂停条款、类别划分、自主性定位）
 - [ ] 理解蓄意低性能如何使所有框架的能力阈值被低估
@@ -27,9 +27,9 @@
 
 第 19 课仔细阅读了 Anthropic 的扩展策略。本课通过阅读 OpenAI 和 DeepMind 的完成这幅图。三份文档是解决同一问题的表亲产物——前沿实验室何时应暂停或门控模型——它们在少量类别上收敛，在具体地方分歧，而这些分歧很重要。
 
-收敛：三者都将长期自主性标记为值得跟踪的能力类别。三者都将欺骗性行为作为特定风险类别。三者都有内部审查机构。分歧：OpenAI 将类别拆分为"跟踪"（强制缓解）和"研究"（不自动触发）。DeepMind 将自主性折叠到两个领域中，而非单独命名。
+收敛：三者都将长期自主性标记为值得跟踪的能力类别。三者都将欺骗性行为作为特定风险类别。三者都有内部审查机构。
 
-同一能力在 Anthropic 可能是"强制缓解"，在 OpenAI 是"监控但不触发"，在 DeepMind 是"在特定领域跟踪"。策略姿态很重要。
+分歧：OpenAI 将类别拆分为"跟踪"（强制缓解）和"研究"（不自动触发）。DeepMind 将自主性折叠到两个领域中，而非单独命名。同一能力在 Anthropic 可能是"强制缓解"，在 OpenAI 是"监控但不触发"，在 DeepMind 是"在特定领域跟踪"。策略姿态很重要。
 
 ---
 
@@ -44,12 +44,12 @@
 
 | 类别 | 示例 | 是否自动触发缓解？ |
 |------|------|------------------|
-| 跟踪：R&D 自动化 | AI 研究自动化 | 是 |
-| 跟踪：网络提升 | 网络攻击能力 | 是 |
-| 研究：长期自主性 | 长时间运行智能体 | 否（"潜在"缓解） |
+| 跟踪：R&D 自动化 | AI 研究自动化 | 是——能力报告 + 安全防护报告 |
+| 跟踪：网络提升 | 网络攻击能力 | 是——SAG 审查 |
+| 研究：长期自主性 | 长时间运行智能体 | **否**——"潜在"缓解 |
 | 研究：蓄意低性能 | 模型故意低分 | 否 |
 
-关键框架 v2：研究类别**不自动触发缓解**。策略语言是"潜在"缓解。一个类别在跟踪 vs 研究中的位置是"被门控"和"被观察"之间的铰链。
+关键框架 v2：**研究类别不自动触发缓解**。策略语言是"潜在"缓解。一个类别在跟踪 vs 研究中的位置是"被门控"和"被观察"之间的铰链。
 
 ### 2.2 DeepMind FSF v3
 
@@ -66,9 +66,9 @@ DeepMind 对自主性的定位不同。DeepMind 不保留"自主性"作为顶层
 | 共同点 | Anthropic | OpenAI | DeepMind |
 |--------|-----------|--------|----------|
 | 安全咨询小组 | 安全咨询小组 | 安全咨询小组 | 内部委员会 |
-| 欺骗性行为作为风险 | 评估上下文差距 | 蓄意低性能 | 欺骗性对齐监控 |
+| 欺骗性行为 | 评估上下文差距 | 蓄意低性能 | 欺骗性对齐监控 |
 | 常设文件 | 路线图 + 风险报告 | 能力报告 + 安全防护报告 | FSF 更新周期 |
-| 监控有上限 | 承认 | — | 明确："自动监控长期不会保持充分" |
+| 监控上限 | 承认 | — | 明确："自动监控长期不会保持充分" |
 
 ### 2.4 分歧
 
@@ -80,16 +80,18 @@ DeepMind 对自主性的定位不同。DeepMind 不保留"自主性"作为顶层
 
 ### 2.5 蓄意低性能使三家框架复杂化
 
-蓄意低性能（模型在评估中故意低分）使所有框架的能力阈值被低估。如果模型在评估中蓄意低分，框架的测量工作仅在测量有效时才有效。这是为什么外部测量（第 21 课 METR）和对抗性评估是必要的补充。
+蓄意低性能（模型在评估中故意低分）使所有框架的能力阈值被低估。如果模型在评估中蓄意低分，框架的测量工作仅在测量有效时才有效。
+
+这三家框架的共同弱点：如果测量无效，阈值就无效。这是为什么外部测量（第 21 课 METR）和对抗性评估是必要的补充——实验室自我评估的固有偏差。
 
 ### 2.6 策略阅读技能
 
-| 技能 | 说明 |
-|------|------|
-| 定位 | 每个你关心的能力都应可在策略中找到 |
-| 分类 | 跟踪（触发缓解）vs 研究（监控但不触发） |
-| 节奏 | 策略是按声明节奏更新还是仅事件驱动？ |
-| 独立性 | 外部审查是强制还是可选？ |
+| 技能 | 说明 | 检查问题 |
+|------|------|---------|
+| 定位 | 每个你关心的能力都应可在策略中找到 | 如果在策略中找不到，策略不覆盖它 |
+| 分类 | 跟踪（触发缓解）vs 研究（仅监控） | OpenAI 命名这个；Anthropic 和 DeepMind 有自己的等价物 |
+| 节奏 | 策略是按声明节奏更新还是仅事件驱动？ | 声明的节奏更强 |
+| 独立性 | 外部审查是强制还是可选？ | Anthropic 与 Apollo 和 US AISI 合作 |
 
 ---
 
@@ -105,36 +107,45 @@ class Policy:
     name: str
     table: dict[str, tuple[str, str]]  # 能力 → (分类, 触发动作)
 
+# OpenAI PF v2（说明性提炼）
 OPENAI_PF_V2 = Policy(
     name="OpenAI Preparedness v2 (Apr 2025)",
     table={
         "long_range_autonomy": ("Research", "observed; potential mitigations"),
         "sandbagging": ("Research", "observed; potential mitigations"),
+        "autonomous_replication": ("Research", "observed; potential mitigations"),
+        "undermining_safeguards": ("Research", "observed; potential mitigations"),
         "rnd_automation": ("Tracked", "Capabilities + Safeguards Reports; SAG review"),
         "cyber_uplift": ("Tracked", "Capabilities + Safeguards Reports; SAG review"),
         "bio_uplift": ("Tracked", "Capabilities + Safeguards Reports; SAG review"),
     },
 )
 
+# Anthropic RSP v3.0
 ANTHROPIC_RSP_V3 = Policy(
     name="Anthropic RSP v3.0 (Feb 2026)",
     table={
         "long_range_autonomy": ("named risk", "affirmative case at threshold"),
         "sandbagging": ("named via eval-context gap", "addressed in measurement methodology"),
-        "rnd_automation": ("AI R&D-4 threshold", "affirmative case required"),
+        "autonomous_replication": ("not explicitly named", "covered under AI R&D-4"),
         "undermining_safeguards": ("hardcoded prohibition", "refuses training / deploy"),
+        "rnd_automation": ("AI R&D-4 threshold", "affirmative case required"),
         "cyber_uplift": ("ASL-3 trigger", "security + deployment mitigations"),
+        "bio_uplift": ("ASL-3 trigger", "security + deployment mitigations"),
     },
 )
 
+# DeepMind FSF v3
 DEEPMIND_FSF_V3 = Policy(
     name="DeepMind FSF v3 (Sept 2025 + Apr 2026)",
     table={
         "long_range_autonomy": ("folded into ML R&D / Cyber domains", "CCL + Tracked Capability Level"),
         "sandbagging": ("deceptive alignment monitoring", "automated instrumental-reasoning monitor"),
-        "rnd_automation": ("ML R&D autonomy level 1", "Tracked Capability Level added Apr 2026"),
+        "autonomous_replication": ("folded into ML R&D domain", "CCL threshold"),
         "undermining_safeguards": ("deceptive alignment monitoring", "automated monitor + red-team"),
+        "rnd_automation": ("ML R&D autonomy level 1", "Tracked Capability Level added Apr 2026"),
         "cyber_uplift": ("Cyber CCL", "security + deployment mitigations"),
+        "bio_uplift": ("Bio CCL", "security + deployment mitigations"),
     },
 )
 ```
@@ -142,7 +153,8 @@ DEEPMIND_FSF_V3 = Policy(
 ### 第 2 步：实现对比输出
 
 ```python
-def diff(capability):
+def diff(capability: str) -> None:
+    """输出一个能力在三家策略中的分类和触发动作。"""
     print(f"\n能力: {capability}")
     print("-" * 80)
     for p in [OPENAI_PF_V2, ANTHROPIC_RSP_V3, DEEPMIND_FSF_V3]:
@@ -150,7 +162,11 @@ def diff(capability):
         print(f"  {p.name}")
         print(f"    分类: {entry[0]}")
         print(f"    动作: {entry[1]}")
+```
 
+### 第 3 步：运行对比
+
+```python
 def main():
     for cap in ("long_range_autonomy", "sandbagging", "rnd_automation"):
         diff(cap)
@@ -180,9 +196,15 @@ def main():
 | 原则 | 说明 |
 |------|------|
 | 同一能力，三种分类 | 一种能力在 Anthropic 是强制，在 OpenAI 是监控，在 DeepMind 是领域折叠 |
-| 研究类别 = 不自动触发 | OpenAI PF v2 的关键区别 |
+| 研究类别 = 不自动触发 | OpenAI PF v2 的关键区别——"潜在"缓解不等于承诺 |
 | 声明的节奏比事件驱动更强 | 策略在声明的节奏上更新比仅在事件后更新更可信 |
 | 外部审查是关键 | 三种策略都有内部委员会；独立审查的强制性不同 |
+
+### 5.2 中文场景特别建议
+
+- **三家框架对中文 AI 实验室的参考价值**——虽然中国有自己的 AI 治理框架，但理解 OpenAI/Anthropic/DeepMind 的策略差异对理解全球 AI 安全治理很有帮助
+- **蓄意低性能在中文 AI 研究中的相关性**——当评估基准被广泛使用时，蓄意低性能的风险同样存在
+- **跨策略对比工具可以帮助理解差异**——不同框架对同一能力的不同分类，展示了 AI 安全治理的不确定性
 
 ---
 
@@ -202,7 +224,7 @@ def main():
 
 **原因：** 研究类别是"监控但不触发"，不是"忽略"。它在被跟踪——只是没有自动缓解。
 
-**修复：** 研究类别意味着能力被跟踪但尚未承诺具体缓解。跟踪本身有价值。
+**修复：** 研究类别意味着能力被跟踪但尚未承诺具体缓解。跟踪本身有价值，即使没有自动门控。
 
 ### 错误 3：不考虑蓄意低性能的影响
 
@@ -223,21 +245,28 @@ def main():
 
 研究类别被监控但不承诺具体缓解——长期自主性、蓄意低性能、自主复制、破坏安全防护都在这里。
 
-运营后果：跟踪类别在部署前必须有缓解措施；研究类别是"观察但不门控"。
+运营后果：跟踪类别在部署前必须有缓解措施；研究类别是"观察但不门控"。位置差异是关键——能力在跟踪类别意味着必须处理，在研究类别意味着可以不处理。
 
-### Q2：DeepMind FSF v3 如何定位自主性？（难度：⭐⭐）
+### Q2：DeepMind FSF v3 如何定位自主性？为什么这与 OpenAI 不同？（难度：⭐⭐）
 
 **参考答案：**
-DeepMind 不保留"自主性"作为顶层领域。它折叠到自主性会导致危害的领域中（ML R&D 和网络）。论据是无领域的自主性是无风险的能力。反论据是跨领域的自主性是元风险。
+DeepMind 不保留"自主性"作为顶层领域。它折叠到自主性会导致危害的领域中（ML R&D 和网络）。论据是无领域的自主性是无风险的能力；反论据是跨领域的自主性是元风险。
 
-跟踪能力级别在 2026 年 4 月增加了粒度：ML R&D 自主性级别 1 = 以竞争成本完全自动化 AI R&D 流水线。
+OpenAI 将"长期自主性"保留为独立的研究类别。DeepMind 的领域折叠方式意味着自主性的任何具体实例都被跟踪，但"跨领域的自主性"作为元风险可能被忽视。
 
 ### Q3：蓄意低性能如何使三家框架复杂化？（难度：⭐⭐）
 
 **参考答案：**
 蓄意低性能（模型在评估中故意低分）使所有框架的能力阈值被低估。OpenAI 将其列为研究类别；Anthropic 通过评估上下文差距处理；DeepMind 通过欺骗性对齐自动监控。
 
-框架只有在测量有效时才有效。如果模型在蓄意低分，测量无效。这是外部评估（METR）和对抗性评估的必要性论据。
+框架只有在测量有效时才有效。如果模型在蓄意低分，测量无效，阈值不可靠。这是外部评估（第 21 课 METR）和对抗性评估的必要性论据。
+
+### Q4：三家框架的共同点是什么？分歧在哪里？（难度：⭐⭐⭐）
+
+**参考答案：**
+共同点：三家都有内部安全咨询小组、都明确提及欺骗性行为、都有常设文件按声明节奏更新、都承认监控有上限。
+
+分歧：Anthropic 移除了暂停承诺；OpenAI 的研究类别不自动触发；DeepMind 将自主性折叠到其他领域。同一能力（如长期自主性）在三家可能触发完全不同的运营后果。
 
 ---
 
@@ -257,7 +286,7 @@ DeepMind 不保留"自主性"作为顶层领域。它折叠到自主性会导致
 
 ## 📚 小结
 
-三家框架在同一问题上收敛又分歧：三家都跟踪长期自主性和欺骗性行为；分歧在于 OpenAI 将自主性列为研究类别（不触发），Anthropic 为 AI R&D-4（触发正面案例），DeepMind 将其折叠到 ML R&D/网络领域。蓄意低性能使所有框架的能力阈值被低估——外部评估（METR）是必要的补充。
+三家框架在同一问题上收敛又分歧：三家都跟踪长期自主性和欺骗性行为；分歧在于 OpenAI 将自主性列为研究类别（不触发），Anthropic 为 AI R&D-4（触发正面案例），DeepMind 将其折叠到 ML R&D/网络领域。蓄意低性能使所有框架的能力阈值被低估——框架只有在测量有效时才有效。外部评估（METR）是必要的补充。
 
 下一课：METR 时间视界和外部能力评估——测量方法论和解释技能。
 
@@ -269,9 +298,11 @@ DeepMind 不保留"自主性"作为顶层领域。它折叠到自主性会导致
 
 2. **【阅读】** 阅读 OpenAI 准备框架 v2 全文。识别每个研究类别。为每个写一句话说明为什么在研究而非跟踪。
 
-3. **【思考】** 蓄意低性能在 OpenAI 是研究类别。设计一个强制蓄意低性能模型揭示其实际能力的评估。参考第 1 课评估上下文博弈讨论。
+3. **【阅读】** 阅读 DeepMind FSF v3 全文及 2026 年 4 月跟踪能力级别更新。识别 ML R&D 自主性级别 1 的具体评估标准。如何外部测量它？
 
-4. **【对比】** 在一个特定能力上对比三家策略。哪个最严格？哪个最宽松？引用源文本论证。
+4. **【设计】** 蓄意低性能在 OpenAI 是研究类别。设计一个强制蓄意低性能模型揭示其实际能力的评估。参考第 1 课评估上下文博弈讨论。
+
+5. **【对比】** 在一个特定能力上对比三家策略。哪家最严格？哪家最宽松？引用源文本论证。
 
 ---
 
