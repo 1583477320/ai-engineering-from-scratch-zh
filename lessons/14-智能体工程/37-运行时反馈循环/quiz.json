@@ -1,0 +1,86 @@
+[
+  {
+    "question": "反馈运行器迫使智能体做什么？",
+    "options": [
+      "对想象的输出做出反应",
+      "对事实做出反应：每条命令的结构化 stdout/stderr/exit/duration 记录",
+      "跳过验证",
+      "使用不同的模型"
+    ],
+    "correct": 1,
+    "explanation": "反馈运行器消除了'测试通过'（想象）和'测试实际运行并退出码为 0'（记录）之间的差距。",
+    "stage": "pre"
+  },
+  {
+    "question": "反馈和遥测的区别是什么？",
+    "options": [
+      "遥测是付费的",
+      "反馈供本次运行的下一轮使用；遥测供操作员跨时间审查运行使用",
+      "遥测用 OTel，反馈用 GraphQL",
+      "它们是一回事"
+    ],
+    "correct": 1,
+    "explanation": "两者共享字段，但位于不同文件中，保留策略也不同。反馈是运行内，遥测是跨运行。",
+    "stage": "pre"
+  },
+  {
+    "question": "每条反馈记录中必须出现哪个字段？",
+    "options": [
+      "model_id",
+      "exit_code（null 时必须拒绝推进循环）",
+      "embedding_vector",
+      "prompt_cache_token"
+    ],
+    "correct": 1,
+    "explanation": "exit_code 是明确无误的成功信号；null 退出码意味着不能推进。",
+    "stage": "check"
+  },
+  {
+    "question": "反馈运行器如何截断大输出？",
+    "options": [
+      "随机采样",
+      "确定性保留头部+尾部，带'截断 N 行'标记，相同输出总是产生相同记录",
+      "只保留前 10 行",
+      "用 gzip 压缩"
+    ],
+    "correct": 1,
+    "explanation": "确定性截断保持记录可重放，同时限制词元开销；尾部携带失败摘要。",
+    "stage": "check"
+  },
+  {
+    "question": "为什么要在写入时脱敏而不是读取时脱敏？",
+    "options": [
+      "压缩效率更高",
+      "磁盘上的文件是攻击者可以接触到的；仅在读取时脱敏会在 JSONL 文件中留下明文机密",
+      "读取时脱敏会破坏 JSON",
+      "写时脱敏更快"
+    ],
+    "correct": 1,
+    "explanation": "在写入 JSONL 之前脱敏匹配 Bearer、password=、api_key=、AKIA...、xox[baprs]- 的行。每季度审计脱敏模式。",
+    "stage": "check"
+  },
+  {
+    "question": "parent_command_id 给工作台带来了什么？",
+    "options": [
+      "更便宜的推理",
+      "重试链接到父命令，使审查员和审计看到失败链——没有它，重试看起来像独立成功",
+      "更快的文件 I/O",
+      "更低的内存"
+    ],
+    "correct": 1,
+    "explanation": "父命令链接使重试链对审查员和验证门控可见。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么要把 feedback_record.jsonl 限制在 1 MB 并轮转？",
+    "options": [
+      "JSON 无法处理更大的文件",
+      "智能体只读取当前文件；轮转保持运行时成本有上限，同时 CI 构件捕获完整集",
+      "磁盘太慢了",
+      "供应商按字节收费"
+    ],
+    "correct": 1,
+    "explanation": "当前文件上限 + 轮转历史是 logrotate 使用的相同模式；热循环中成本可预测。",
+    "stage": "post"
+  }
+]

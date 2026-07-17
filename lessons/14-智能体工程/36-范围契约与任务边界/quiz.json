@@ -1,0 +1,86 @@
+[
+  {
+    "question": "为什么范围蔓延被称为最被低估的失败模式？",
+    "options": [
+      "因为智能体会崩溃",
+      "每次修改在当下都有合理理由——合在一起就成了一个和当初审查完全不同的变更",
+      "太罕见了不需要监控",
+      "测试会自动捕获"
+    ],
+    "correct": 1,
+    "explanation": "智能体每一步都在真诚地叙述，但成果的总和与当初审查的完全不同。",
+    "stage": "pre"
+  },
+  {
+    "question": "契约中哪个字段被称为"契约的一半"？",
+    "options": [
+      "goal",
+      "forbidden_files（否定空间）",
+      "task_id",
+      "approvals_required"
+    ],
+    "correct": 1,
+    "explanation": "没有 forbidden_files 的契约是不完整的——否定空间占了契约的一半。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么允许/禁止文件列表应该使用 glob 而非原始路径？",
+    "options": [
+      "Glob 速度更快",
+      "真实仓库会移动文件；glob 能跨会话重构保持契约有效",
+      "Glob 加密更好",
+      "原始路径不是 JSON 可序列化的"
+    ],
+    "correct": 1,
+    "explanation": "Glob（如 app/**/*.py）能在重构后保持契约仍然有效。",
+    "stage": "check"
+  },
+  {
+    "question": "违规预算（violation budget）模式的作用是什么？",
+    "options": [
+      "设置智能体的月预算",
+      "轻微越界在预算内只警告；超出预算才拒绝——这是门控能被使用而不是被禁用的关键",
+      "限制模型调用",
+      "按违规收费"
+    ],
+    "correct": 1,
+    "explanation": "agent-guardrails 使用 violationBudget 来确保门控在日常流程中可用。",
+    "stage": "check"
+  },
+  {
+    "question": "specsmaxxing 实践者报告了什么结果？",
+    "options": [
+      "延迟降低 90%",
+      "在不更换智能体的情况下，三周内跑偏率从 52% 降到 21%",
+      "成本上升 5 倍",
+      "测试变慢了"
+    ],
+    "correct": 1,
+    "explanation": "在调用智能体前用 YAML 写范围契约，无需更换模型就跑偏率减半。",
+    "stage": "check"
+  },
+  {
+    "question": "多契约合并的最小权限语义是什么？",
+    "options": [
+      "最后一个契约获胜",
+      "allowed_files 取交集；forbidden_files 取并集；time_budget 取最小值；approvals 累积；拒绝所有保持不变；None 延后到对方",
+      "第一个契约获胜",
+      "随机决胜"
+    ],
+    "correct": 1,
+    "explanation": "最小权限合并：交集（允许）、并集（禁止）、最严格（时间）、累积（审批）。",
+    "stage": "post"
+  },
+  {
+    "question": "为什么时间和网络预算也应该属于契约的一部分？",
+    "options": [
+      "墙钟时间和外部主机访问也是范围的维度——仅文件 glob 是不够的",
+      "供应商要求",
+      "能让 JSON 文件更小",
+      "Apache 2.0 要求"
+    ],
+    "correct": 0,
+    "explanation": "time_budget_minutes 和 network_egress 白名单是文件 glob 之外的额外范围维度。",
+    "stage": "post"
+  }
+]
