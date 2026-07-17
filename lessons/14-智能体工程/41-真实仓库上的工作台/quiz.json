@@ -1,0 +1,86 @@
+[
+  {
+    "question": "在同一任务上运行纯提示词和工作台引导流水线的目标是什么？",
+    "options": [
+      "对比模型",
+      "产生一份用数字说话的前后对比报告——交给质疑者",
+      "选择供应商",
+      "基准测试 GPU"
+    ],
+    "correct": 1,
+    "explanation": "数字自己会说话——用真实任务而不是玩具任务产生证据。",
+    "stage": "pre"
+  },
+  {
+    "question": "以下哪个不是测量的五个结果之一？",
+    "options": [
+      "tests_actually_run",
+      "acceptance_met",
+      "files_outside_scope",
+      "model_perplexity"
+    ],
+    "correct": 3,
+    "explanation": "五个结果是 tests_actually_run、acceptance_met、files_outside_scope、handoff_quality、reviewer_total。",
+    "stage": "pre"
+  },
+  {
+    "question": "LangChain 在 Terminal Bench 2.0 上测量到了什么？",
+    "options": [
+      "所有模型收敛在 Top-3",
+      "同模型仅改变工作台后从 Top-30 以外跃升到 Top-5",
+      "Top 模型下降了 25 位",
+      "工作台变更没有改变排名"
+    ],
+    "correct": 1,
+    "explanation": "同模型 25 位排名差距是最引人注目的工作台 vs 模型证据。",
+    "stage": "check"
+  },
+  {
+    "question": "preprints.org 论文引用的企业智能体项目失败率是多少？",
+    "options": [
+      "8%",
+      "约 88% 未能投产，失败集中在运行时而非推理",
+      "约 50%",
+      "没有失败"
+    ],
+    "correct": 1,
+    "explanation": "Harness Engineering for Language Agents 预印本将失败追溯到运行时问题（状态过时、重试脆弱、上下文膨胀）。",
+    "stage": "check"
+  },
+  {
+    "question": "WebAgent 基线在长上下文条件下发生了什么？",
+    "options": [
+      "保持稳定",
+      "从 40-50% 跌到 10% 以下，主要来自无限循环和目标丢失",
+      "上升 30%",
+      "减半但保持在 30% 以上"
+    ],
+    "correct": 1,
+    "explanation": "长上下文崩溃是 Ralph Loop 和交接包存在的原因。",
+    "stage": "check"
+  },
+  {
+    "question": "课程对假阴性（纯提示词更快的场景）说了什么？",
+    "options": [
+      "不存在",
+      "单步事实任务、单行 lint、格式化运行更快——诚实地列举，工作台才不会被框架为过度设计",
+      "证明工作台失败",
+      "推翻工作台理论"
+    ],
+    "correct": 1,
+    "explanation": "诚实地列举纯提示词更快的场景让论证更可信。",
+    "stage": "post"
+  },
+  {
+    "question": "什么时候引用本课的前后对比报告？",
+    "options": [
+      "仅在内部 HR 审查",
+      "当有人想'这个 sprint 先去掉验证门控'，或新智能体产品需要可移植的效率基准时",
+      "仅在营销材料中",
+      "仅在黑客马拉松中"
+    ],
+    "correct": 1,
+    "explanation": "数字比论证更有说服力；当压力试图跳过工作台面时引用报告。",
+    "stage": "post"
+  }
+]

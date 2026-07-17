@@ -1,0 +1,86 @@
+[
+  {
+    "question": "工作台包的核心布局是什么？",
+    "options": [
+      "AGENTS.md + package.json + Dockerfile",
+      "AGENTS.md + docs/（规则+评分标准）+ schemas/（状态+范围）+ scripts/（初始化+反馈+验证+交接）+ bin/install.sh",
+      "AGENTS.md + 三个脚本",
+      "README.md + CI 配置"
+    ],
+    "correct": 1,
+    "explanation": "七个面打包：路由器 + 规则文档 + Schema + 运行时脚本 + 安装器。",
+    "stage": "pre"
+  },
+  {
+    "question": "工作台包需要版本化吗？为什么？",
+    "options": [
+      "不需要",
+      "需要。VERSION 是契约——Schema 变更 bump 主版本号，脚本变更 bump 次版本号，文档变更 bump 补丁",
+      "只需要补丁版本",
+      "版本化是营销用的"
+    ],
+    "correct": 1,
+    "explanation": "版本化让目标仓库知道自己的基线。安装器写入 .workbench-version，脚本启动时检查。",
+    "stage": "pre"
+  },
+  {
+    "question": "以下哪项应该放在包内？",
+    "options": [
+      "项目特定的验收命令",
+      "供应商 SDK 调用",
+      "Schema（agent_state.schema.json、task_board.schema.json、scope_contract.schema.json）",
+      "团队入职文档"
+    ],
+    "correct": 2,
+    "explanation": "Schema 是契约，留在包内。项目特定内容、SDK 调用、入职文档放在包外。",
+    "stage": "check"
+  },
+  {
+    "question": "安装器的幂等性意味着什么？",
+    "options": [
+      "安装一次后就不能再安装",
+      "安装两次结果相同（除非使用 --force），第二次不报错",
+      "安装会覆盖所有现有文件",
+      "安装需要网络连接"
+    ],
+    "correct": 1,
+    "explanation": "幂等安装：第二次运行与第一次结果相同。如果没有 --force 且已安装则报错。",
+    "stage": "check"
+  },
+  {
+    "question": "跨工具分发如何工作？",
+    "options": [
+      "为每个工具维护不同的包",
+      "单一 AGENTS.md 通过符号链接分发到 CLAUDE.md、.cursorrules、copilot-instructions.md",
+      "使用中间件转换格式",
+      "只支持 Claude Code"
+    ],
+    "correct": 1,
+    "explanation": "一个 AGENTS.md 通过 ln -s 分发到所有编码智能体。单一来源，不维护多个版本。",
+    "stage": "check"
+  },
+  {
+    "question": "卸载包时应该删除什么？",
+    "options": [
+      "所有文件",
+      "只删除包的文件（Schema、脚本、文档、AGENTS.md），保留用户的状态、任务板和交接包",
+      "只删除 Schema",
+      "只删除脚本"
+    ],
+    "correct": 1,
+    "explanation": "卸载脚本只删除包自己创建的文件。用户的 agent_state.json、task_board.json 和 outputs/ 保留。",
+    "stage": "post"
+  },
+  {
+    "question": "包的渐进式披露如何工作？",
+    "options": [
+      "所有内容放在一个文件里",
+      "AGENTS.md < 50 行只保留指针；详细规则放 docs/agent-rules.md，审查评分标准放 docs/reviewer-rubric.md，仅在需要时加载",
+      "加载所有文档到内存",
+      "随机加载一个文档"
+    ],
+    "correct": 1,
+    "explanation": "与阶段 14 · 33 的渐进式披露原则相同：路由器 < 50 行，详细文档按需加载。",
+    "stage": "post"
+  }
+]
