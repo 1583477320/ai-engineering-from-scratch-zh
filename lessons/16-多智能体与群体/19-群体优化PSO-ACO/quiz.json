@@ -1,0 +1,6 @@
+[
+  {"question": "PSO 适合什么类型的优化问题？", "options": ["离散组合搜索", "连续搜索空间（提示参数、LoRA权重）", "文本分类", "图像生成"], "correct": 1, "explanation": "PSO 是连续空间上的种群优化器。", "stage": "pre"},
+  {"question": "ACO 适合什么类型的优化问题？", "options": ["连续优化", "路径/路由选择", "文本生成", "图像分类"], "correct": 1, "explanation": "ACO 是路径/路由选择问题上的信息素优化器。", "stage": "pre"},
+  {"question": "ACO 的质量门控为什么重要？", "options": ["加快速度", "防止快速但错误的智能体积累信息素", "减少成本", "增加准确性"], "correct": 1, "explanation": "无门控时快速但错误的智能体会锁定路由。", "stage": "check"},
+  {"question": "LMPSO 中的"速度"是什么？", "options": ["物理速度", "一个描述如何向最佳方向修改候选输出的提示词", "学习率", "梯度"], "correct": 1, "explanation": "速度是一个提示词，LLM 从中生成新候选输出。", "stage": "post"}
+]

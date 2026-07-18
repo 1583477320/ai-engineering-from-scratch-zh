@@ -1,0 +1,6 @@
+[
+  {"question": "CTDE 是什么？", "options": ["集中训练分散执行", "分散训练集中执行", "无状态训练", "集中控制"], "correct": 0, "explanation": "训练时全局信息，部署时局部策略。", "stage": "pre"},
+  {"question": "2026 年默认合作 MARL 基线是什么？", "options": ["MADDPG", "QMIX", "MAPPO", "独立 RL"], "correct": 2, "explanation": "MAPPO 匹配或击败离策略方法，最少调优。", "stage": "check"},
+  {"question": "QMIX 的单调性保证什么？", "options": ["收敛性", "argmax 可分解——每个智能体独立选择 argmax", "无偏性", "一致性"], "correct": 1, "explanation": "单调性使整体 argmax 等于各智能体 argmax 的分解。", "stage": "check"},
+  {"question": "MARL 的非平稳问题是什么？", "options": ["训练不稳定", "每个智能体的环境随其他智能体学习而变化", "硬件不稳定", "数据不足"], "correct": 1, "explanation": "独立 RL 中每个智能体看到非平稳环境。CTDE 解决此问题。", "stage": "post"}
+]
