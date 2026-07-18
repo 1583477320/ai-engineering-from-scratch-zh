@@ -1,0 +1,50 @@
+[
+  {
+    "question": "为什么round-robin负载均衡对LLM推理是有害的？",
+    "options": [
+      "因为round-robin太慢",
+      "因为LLM推理是有状态的——KV缓存编码了上下文，round-robin路由到错误的副本导致缓存未命中",
+      "因为round-robin不支持多区域",
+      "因为LLM不需要负载均衡"
+    ],
+    "correct": 1,
+    "explanation": "LLM推理解码依赖KV缓存。如果请求A在副本1上缓存了前缀，请求B（相同前缀）被round-robin路由到副本2——副本2没有缓存，需要全额prefill。2K词元提示：缓存命中约80ms vs 未命中约800ms，10倍差距。",
+    "stage": "pre"
+  },
+  {
+    "question": "32%的LLM灾难恢复失败是因为什么？",
+    "options": [
+      "网络延迟太高",
+      "备份权重时忘了tokenizer.json、量化配置和引擎配置",
+      "GPU故障率太高",
+      "预算不足"
+    ],
+    "correct": 1,
+    "explanation": "32%的DR失败是因为团队备份了模型权重但忘了tokenizer.json/quantize_config.json/模型特定配置。修复方案：三文件最小DR清单（所有HF文件+引擎配置+部署清单）加季度演练。",
+    "stage": "pre"
+  },
+  {
+    "question": "商业跨区域推理服务（如Bedrock CRI）解决的是什么问题？",
+    "options": [
+      "TTFT优化",
+      "KV缓存复用",
+      "可用性故障切换——区域宕机时自动路由到其他区域",
+      "降低网络延迟"
+    ],
+    "correct": 2,
+    "explanation": "Bedrock CRI和GKE Multi-Cluster Gateway解决的是可用性问题——'us-east-1挂了'时将请求路由到其他区域。它们不感知KV缓存，不优化TTFT。仍然需要应用层的缓存感知路由器来处理TTFT问题。",
+    "stage": "post"
+  },
+  {
+    "question": "缓存感知路由器如何工作？",
+    "options": [
+      "随机路由到任意副本",
+      "根据前缀哈希将请求路由到持有该前缀KV缓存的副本",
+      "根据GPU利用率路由",
+      "根据地理距离路由"
+    ],
+    "correct": 1,
+    "explanation": "路由器哈希请求的前缀（如前512词元），然后查找哪个副本持有这个前缀的KV缓存块。副本通过发布KV缓存事件（分配/驱逐块时）让路由器知道。无匹配时退回到最少队列深度。",
+    "stage": "post"
+  }
+]

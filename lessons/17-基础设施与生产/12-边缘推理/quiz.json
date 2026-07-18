@@ -1,0 +1,50 @@
+[
+  {
+    "question": "边缘LLM推理的真正瓶颈是什么？",
+    "options": [
+      "CPU计算能力",
+      "GPU算力（TOPS）",
+      "内存带宽（DRAM带宽）",
+      "网络延迟"
+    ],
+    "correct": 2,
+    "explanation": "Decode每个词元读取完整权重集。移动端DRAM 50-90GB/s读取3.5GB的Q4 7B模型需要40-70ms——这就是每个词元的最小时间。更多TOPS无法突破这个带宽限制。数据中心HBM3是3TB/s，30-50倍差距。",
+    "stage": "pre"
+  },
+  {
+    "question": "WebGPU + WebLLM 2026年的移动覆盖率大约是多少？",
+    "options": [
+      "30-40%",
+      "50-60%",
+      "70-75%",
+      "95-100%"
+    ],
+    "correct": 2,
+    "explanation": "Chrome Android v121+支持WebGPU，Safari iOS 26 GA支持。但Firefox Android仍在追赶。总体移动覆盖率约70-75%。这意味着需要服务端回退路径来覆盖所有用户。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么边缘设备应该保持上下文在4K-8K？",
+    "options": [
+      "因为LLM不支持更长上下文",
+      "因为8GB内存设备上，4GB模型+128K的KV缓存=OOM",
+      "因为短上下文质量更好",
+      "因为网络延迟限制了上下文长度"
+    ],
+    "correct": 1,
+    "explanation": "128K上下文是数据中心特性。在8GB内存的手机上：4GB模型 + 2GB KV缓存（32K词元） + OS开销 = OOM。边缘部署保持上下文在4K-8K，除非接受激进的KV量化（Q4 KV）。",
+    "stage": "post"
+  },
+  {
+    "question": "四个边缘目标各自适合什么场景？",
+    "options": [
+      "全部都适合移动端",
+      "Apple ANE适合iOS、Hexagon适合Android、WebGPU适合跨平台、Jetson适合嵌入式/机器人",
+      "只有Jetson适合边缘推理",
+      "只有WebGPU适合浏览器"
+    ],
+    "correct": 1,
+    "explanation": "Apple ANE（Core ML INT4）适合iOS/macOS应用、Qualcomm Hexagon（QNN INT8/INT4）适合Android应用、WebGPU/WebLLM（Q4 MLC）适合跨平台无安装场景、NVIDIA Jetson（NVFP4/GGUF）适合嵌入式和机器人场景。",
+    "stage": "post"
+  }
+]
