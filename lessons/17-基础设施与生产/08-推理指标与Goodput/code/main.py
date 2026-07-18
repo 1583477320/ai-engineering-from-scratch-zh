@@ -13,6 +13,11 @@ def compute_goodput(ttfts, tpots, e2es, ttft_slo, tpot_slo, e2e_slo):
     return good / len(ttfts) if ttfts else 0
 
 
+def latency_summary(data, name=""):
+    print(f"{name:8s}  P50={percentile(data,50):6.1f}  P90={percentile(data,90):6.1f}  "
+          f"P99={percentile(data,99):6.1f}  均值={sum(data)/len(data):6.1f}")
+
+
 if __name__ == "__main__":
     random.seed(42)
     n = 1000
@@ -20,11 +25,13 @@ if __name__ == "__main__":
     tpots = [random.gauss(8, 3) for _ in range(n)]
     e2es = [t + p * random.randint(50, 300) for t, p in zip(ttfts, tpots)]
 
-    print(f"{'SLO':40s} {'Goodput':>10}")
-    print("-" * 52)
+    print("=== 延迟分布 ===")
+    latency_summary(ttfts, "TTFT")
+    latency_summary(tpots, "TPOT")
+
+    print("\n=== Goodput ===")
+    print(f"{'SLO':42s} {'Goodput':>10}")
+    print("-" * 54)
     for ttft, tpot, e2e in [(800, 25, 3000), (500, 15, 2000), (300, 10, 1000)]:
         g = compute_goodput(ttfts, tpots, e2es, ttft, tpot, e2e)
         print(f"TTFT≤{ttft}ms TPOT≤{tpot}ms E2E≤{e2e}ms  {g:10.1%}")
-
-    print(f"\nTPOT P50={percentile(tpots,50):.1f}  P90={percentile(tpots,90):.1f}  "
-          f"P99={percentile(tpots,99):.1f}  均值={sum(tpots)/len(tpots):.1f}")
