@@ -1,0 +1,50 @@
+[
+  {
+    "question": "PagedAttention 如何将 KV 缓存碎片从 60-80% 降到 4% 以下？",
+    "options": [
+      "使用更大的显存",
+      "用固定大小块分配 KV 缓存，按需增长，序列完成后释放",
+      "压缩 KV 缓存",
+      "只缓存最近的词元"
+    ],
+    "correct": 1,
+    "explanation": "PagedAttention 借鉴 OS 虚拟内存：KV 缓存按 16 词元块分配，每个序列有一个块表映射逻辑位置到物理块 ID。序列结束释放块。碎片仅来自最后一个不完整的块。",
+    "stage": "pre"
+  },
+  {
+    "question": "连续批处理与静态批处理的关键差异在什么时间尺度上？",
+    "options": [
+      "分钟级别",
+      "秒级别",
+      "每次 decode 迭代（约 1-2ms）",
+      "每次 prefill 完成后"
+    ],
+    "correct": 2,
+    "explanation": "连续批处理在每次 decode 迭代（约 1-2ms）重新评估批次组成——释放完成的序列，准入新请求。静态批处理等整个批次完成后才释放 GPU，快速序列被慢序列拖住。",
+    "stage": "pre"
+  },
+  {
+    "question": "Chunked Prefill 保护的是哪个延迟指标？",
+    "options": [
+      "吞吐量",
+      "平均 TTFT",
+      "P99 ITL（词元间延迟的尾部）",
+      "GPU 利用率"
+    ],
+    "correct": 2,
+    "explanation": "Chunked Prefill 将长 prefill 切成 512 词元的块，与解码交错。代价是微小的绝对 prefill 延迟损失，换来的是解码抖动大幅降低——P99 ITL 从约 50ms 降到约 15ms。它保护的是尾部延迟，不是平均吞吐。",
+    "stage": "post"
+  },
+  {
+    "question": "vLLM v0.18.0 中哪个组合不能同时使用？",
+    "options": [
+      "PagedAttention + 连续批处理",
+      "Chunked Prefill + draft-model 投机解码",
+      "连续批处理 + Chunked Prefill",
+      "PagedAttention + Chunked Prefill"
+    ],
+    "correct": 1,
+    "explanation": "在 vLLM v0.18.0 中，--enable-chunked-prefill 与 --speculative-model 不兼容。有文档记录的例外是 V1 调度器中的 N-gram GPU 投机解码。如果不读发布说明就打开所有选项，会在启动时报错。",
+    "stage": "post"
+  }
+]

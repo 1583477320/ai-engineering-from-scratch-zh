@@ -1,0 +1,50 @@
+[
+  {
+    "question": "RadixAttention 在前缀密集 RAG 工作负载上比 vLLM 快多少？",
+    "options": [
+      "约 10%",
+      "约 29%",
+      "最高约 6.4 倍",
+      "约 2 倍"
+    ],
+    "correct": 2,
+    "explanation": "在前缀密集 RAG（相同系统提示+相同文档，变化问题）场景下，SGLang 的 RadixAttention 可以复用大部分 prefill 计算，优势最高达 6.4 倍。在通用 ShareGPT 风格负载上约快 29%。",
+    "stage": "pre"
+  },
+  {
+    "question": "SGLang 的缓存感知调度与 FCFS 的核心区别是什么？",
+    "options": [
+      "SGLang 更快",
+      "SGLang 优先调度共享最长前缀的请求（深度优先），保持热分支驻留",
+      "FCFS 不支持 KV 缓存",
+      "两者没有区别"
+    ],
+    "correct": 1,
+    "explanation": "FCFS 按到达顺序服务。SGLang 深度优先遍历 Radix 树——优先服务与当前运行集合共享同分支的请求。这保持了热分支在 HBM 中驻留，防止缓存抖动。",
+    "stage": "pre"
+  },
+  {
+    "question": "让 RadixAttention 的 6.4 倍加速成为现实的关键工程杠杆是什么？",
+    "options": [
+      "使用更大的 GPU",
+      "固定提示模板的组件顺序——不可变部分放最前",
+      "减少请求数量",
+      "使用更大的 KV 块"
+    ],
+    "correct": 1,
+    "explanation": "提示模板就是缓存键。如果不同请求中组件顺序不同，Radix 树无法识别共享前缀。固定顺序（系统提示→工具→检索上下文→用户问题）确保最长公共前缀被复用。一个部署将缓存命中率从 7% 提升到 74%。",
+    "stage": "post"
+  },
+  {
+    "question": "RadixAttention 在什么场景下不比 vLLM 好？",
+    "options": [
+      "RAG 场景",
+      "智能体场景",
+      "每个请求的提示都完全不同的场景（如代码补全）",
+      "长系统提示场景"
+    ],
+    "correct": 2,
+    "explanation": "RadixAttention 需要共享前缀才能发挥作用。代码补全、无系统提示的开放式聊天等场景中，每个请求的提示都不同——没有可复用的前缀，SGLang 和 vLLM 的吞吐量相当。",
+    "stage": "post"
+  }
+]
