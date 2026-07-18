@@ -1,0 +1,50 @@
+[
+  {
+    "question": "哪个推理平台以'Python 原生开发者体验'为核心卖点？",
+    "options": [
+      "Fireworks",
+      "Together",
+      "Modal",
+      "Replicate"
+    ],
+    "correct": 2,
+    "explanation": "Modal 以纯 Python 基础设施即代码为核心卖点（@modal.function(gpu='A100') 即可部署），每秒计费，冷启动 <1s，在独立开发者体验调查中得分最高。",
+    "stage": "pre"
+  },
+  {
+    "question": "每词元计费和每分钟计费在什么情况下应该选择哪个？",
+    "options": [
+      "低利用率用每分钟，高利用率用每词元",
+      "低利用率用每词元，高利用率用每分钟",
+      "两者没有区别",
+      "永远选每词元"
+    ],
+    "correct": 1,
+    "explanation": "每词元计费让你只为用了的部分付费，适合低利用率（<30%）场景。每分钟计费按墙钟时间收费，适合高利用率（>30%）场景。当饱和 GPU 时，每分钟计费综合成本低于每词元。",
+    "stage": "pre"
+  },
+  {
+    "question": "Fireworks 在微调模型定价上的差异化优势是什么？",
+    "options": [
+      "微调模型比基础模型便宜",
+      "微调模型以基础模型相同的费率收费",
+      "微调模型免费",
+      "Fireworks 不支持微调模型"
+    ],
+    "correct": 1,
+    "explanation": "大多数提供商对 LoRA 微调请求收取溢价，因为 LoRA 加载增加了工程复杂性。Fireworks 不收取溢价——微调模型的生产成本与基础模型相同。这降低了微调的经济门槛。",
+    "stage": "post"
+  },
+  {
+    "question": "推理平台按定价模式可以分成哪三个细分市场？",
+    "options": [
+      "GPU 租赁、CPU 计算、存储服务",
+      "定制芯片、GPU 平台、API 优先市场",
+      "免费、付费、企业版",
+      "文本、图像、音频"
+    ],
+    "correct": 1,
+    "explanation": "三个细分市场：定制芯片（Groq LPU、Cerebras WSE 等，5-10x 解码速度）、GPU 平台（Fireworks、Baseten、Modal 等，按词元/分钟/秒计费）、API 优先市场（Replicate、DeepInfra 等，按预测计费，目录广泛）。",
+    "stage": "post"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "question": "GPU 自动扩缩容的三层架构分别是什么？",
+    "options": [
+      "存储层、网络层、计算层",
+      "节点供应层、组调度层、应用层",
+      "CPU 层、GPU 层、内存层",
+      "虚拟机层、容器层、Pod 层"
+    ],
+    "correct": 1,
+    "explanation": "三层架构：第 1 层节点供应（Karpenter，<1 分钟拉节点）、第 2 层组调度（KAI Scheduler，组调度+拓扑感知）、第 3 层应用层（Dynamo Planner/llm-d，基于队列深度和 KV 缓存利用率扩缩副本）。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么 DCGM_FI_DEV_GPU_UTIL 不适合做 LLM 在线服务的 HPA 信号？",
+    "options": [
+      "这个指标在 GPU 上不可用",
+      "它是占空比——100% 可能对应 10 个或 100 个请求，无法反映真实负载",
+      "它只测量内存",
+      "它只能在 NVIDIA GPU 上工作"
+    ],
+    "correct": 1,
+    "explanation": "DCGM_FI_DEV_GPU_UTIL 是占空比指标，测量 GPU 是否在做计算。100% 利用率时 GPU 是忙的，但你不知道它在服多少个请求。vLLM 还预分配 KV 缓存内存（~90%），基于内存的 HPA 也永远不缩容。两替代：队列深度（prefill）和 KV 缓存利用率（decode）。",
+    "stage": "pre"
+  },
+  {
+    "question": "Karpenter 的默认合并策略 WhenEmptyOrUnderutilized 对推理工作负载有什么问题？",
+    "options": [
+      "它从不合并",
+      "它只合并 CPU 节点",
+      "它会在推理中间终止运行中的 GPU 任务以迁移到更便宜的实例",
+      "它太慢了"
+    ],
+    "correct": 2,
+    "explanation": "WhenEmptyOrUnderutilized 会在检测到利用率低时终止节点并迁移 Pod。对推理来说，这意味着驱逐正在处理中的请求——用户超时。70B 模型重新加载需要 1-2 分钟。安全替代：WhenEmpty + consolidateAfter: 1h。",
+    "stage": "post"
+  },
+  {
+    "question": "多 GPU 推理作业遇到'部分分配陷阱'时发生了什么？",
+    "options": [
+      "所有 GPU 都被分配了",
+      "7/8 的 Pod 启动后等着第 8 个，全部空转",
+      "Kubernetes 自动分配了更多 GPU",
+      "Pod 被调度到 CPU 上运行"
+    ],
+    "correct": 1,
+    "explanation": "kube-scheduler 逐个调度 Pod。一个需要 8 块 GPU 的作业中，集群有 7 块空闲但第 8 块尚未到位时，7 个 Pod 启动后无限等待。7 台 GPU 机器空转，耗电费钱。KAI Scheduler 的组调度通过'全有或全无'防止这个陷阱。",
+    "stage": "post"
+  }
+]

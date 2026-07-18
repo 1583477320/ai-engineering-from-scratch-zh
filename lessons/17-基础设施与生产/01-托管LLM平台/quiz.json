@@ -1,0 +1,50 @@
+[
+  {
+    "question": "三家云厂商（Bedrock、Azure OpenAI、Vertex AI）的核心策略分别是什么？",
+    "options": [
+      "Bedrock 独家、Azure 市场、Vertex 开源",
+      "Bedrock 市场、Azure 独家合作、Vertex Gemini 优先",
+      "Bedrock 开源、Azure 市场、Vertex 独家",
+      "三者都是相同的策略"
+    ],
+    "correct": 1,
+    "explanation": "Bedrock 是模型市场（Claude、Llama、Titan 等），Azure OpenAI 是与 OpenAI 的独家合作，Vertex AI 是 Gemini 优先（1M 词元上下文是差异化优势）。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么 Azure OpenAI 的中位 TTFT（~50ms）比 Bedrock（~75ms）低？",
+    "options": [
+      "Azure 的 GPU 更快",
+      "Bedrock 的模型更大",
+      "Azure 销售 PTU（预置吞吐量单元），Bedrock 大多数客户使用共享按需模式",
+      "Azure 的网络延迟更低"
+    ],
+    "correct": 2,
+    "explanation": "差距不是硬件差异，而是容量模型差异。Azure PTU 为租户预留专用 GPU，按需模式则与其他客户争抢资源。Bedrock 的 PT 也类似但起步价高，大多数客户停留在按需模式。",
+    "stage": "pre"
+  },
+  {
+    "question": "什么是'至少两家供应商'策略？",
+    "options": [
+      "买两家不同型号的 GPU",
+      "任何产品级 LLM 调用至少路由到两个不同的云厂商",
+      "使用两个不同的模型",
+      "在两家公司注册 API 密钥"
+    ],
+    "correct": 1,
+    "explanation": "任何产品级 LLM 调用必须至少路由到两个不同的提供商。2025 年多次云厂商宕机表明单一依赖意味着你的产品跟着宕机。成本增加 <5%，可用性提升是决定性的。",
+    "stage": "post"
+  },
+  {
+    "question": "PTU 的盈亏平衡点通常是多少？",
+    "options": [
+      "10-20% 持续利用率",
+      "40-60% 持续利用率",
+      "80-90% 持续利用率",
+      "100% 持续利用率"
+    ],
+    "correct": 1,
+    "explanation": "PTU 按固定小时收费，即使空闲也要付钱。在约 40-60% 持续利用率时，PTU 相比按需模式达到盈亏平衡。低于这个区间，按需更划算；高于这个区间，PTU 可以节省高达 70% 的成本。",
+    "stage": "post"
+  }
+]
