@@ -1,0 +1,50 @@
+[
+  {
+    "question": "2026 年数据中心 GPU 服务的默认量化格式是什么？",
+    "options": [
+      "GGUF Q4_K_M",
+      "AWQ + Marlin 内核",
+      "NVFP4",
+      "BF16"
+    ],
+    "correct": 1,
+    "explanation": "AWQ + Marlin 是 2026 年数据中心 GPU 服务的默认——INT4 下 Pass@1 最高，Marlin 内核提供 10 倍加速（约 741 tok/s 在 7B 上），支持 vLLM 中的 LoRA。除非你需要多 LoRA（GPTQ）或 Blackwell 激进方案（NVFP4）。",
+    "stage": "pre"
+  },
+  {
+    "question": "校准数据集陷阱是什么？为什么会导致质量退化？",
+    "options": [
+      "校准数据太少",
+      "在通用数据上校准领域模型——算法保护了通用权重而不是领域权重",
+      "校准数据太多",
+      "校准数据格式不对"
+    ],
+    "correct": 1,
+    "explanation": "AWQ 和 GPTQ 的校准数据决定了哪些权重被保护。在通用文本（C4/WikiText）上校准领域模型（代码/医疗/法律）会让算法保护通用权重而非领域权重。代码模型的 HumanEval Pass@1 可能下降 5 点。修复：在领域数据上校准。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么说'模型量化到 4 位只要 35GB'是一个陷阱？",
+    "options": [
+      "35GB 太大了",
+      "因为 KV 缓存是独立的，128 并发 × 2K 上下文需要 20-30GB，总 HBM 远超 35GB",
+      "因为 4 位量化不可靠",
+      "因为 GPU 只有 24GB"
+    ],
+    "correct": 1,
+    "explanation": "权重量化到 INT4 后模型只有 35GB——但 KV 缓存保持 FP16/FP8，128 并发 × 2K 上下文需要约 20GB。加上激活约 5GB，总 HBM 约 60GB。天真地只看权重量化效果会导致在高并发下 OOM。永远整体预算 HBM。",
+    "stage": "post"
+  },
+  {
+    "question": "GGUF 为什么不适合 GPU 服务？",
+    "options": [
+      "GGUF 不支持 GPU",
+      "GGUF 的 GPU 吞吐量极低（7B 上约 93 tok/s）——格式没有针对 GPU 内核优化",
+      "GGUF 的质量太差",
+      "GGUF 的文件太大"
+    ],
+    "correct": 1,
+    "explanation": "GGUF 是为 CPU 推理设计的文件格式（通过 llama.cpp）。在 GPU 上运行时，它的吞吐量极低——7B 上约 93 tok/s，而 AWQ 约 741 tok/s。GGUF 的最佳场景是 CPU/边缘部署。GPU 服务应该用 AWQ、GPTQ 或 FP8。",
+    "stage": "post"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "question": "为什么 KV 缓存必须用 FP8 而不能用 NVFP4？",
+    "options": [
+      "FP8 更快",
+      "KV 缓存的注意力键和值跨越很宽的动态范围，FP4 的指数位不够",
+      "NVFP4 不支持 GPU",
+      "FP8 是 NVIDIA 唯一支持的格式"
+    ],
+    "correct": 1,
+    "explanation": "KV 缓存存储的注意力键和值跨越很宽的动态范围。FP8 有 4 位指数（范围 2^-14 到 2^14），NVFP4 只有 2 位指数（范围极窄）。将 KV 量化到 FP4 会导致分布尾部被截断，注意力分数崩溃，模型输出完全错误。",
+    "stage": "pre"
+  },
+  {
+    "question": "TRT-LLM 的 7 倍经济差距来自哪三层叠加？",
+    "options": [
+      "软件 + 硬件 + 网络",
+      "硬件（11-15倍每GPU吞吐）+ 精度（NVFP4 4倍压缩）+ 软件栈（MTP+分离式+All-to-All）",
+      "模型优化 + 量化 + 缓存",
+      "推理引擎 + 数据中心 + 网络"
+    ],
+    "correct": 1,
+    "explanation": "三层叠加：第一层硬件——Blackwell 每 GPU 吞吐量是 Hopper 的 11-15 倍。第二层精度——NVFP4 权重比 BF16 小 4 倍。第三层软件栈——MTP 投机解码、分离式 prefill/decode、All-to-All MoE 通信 3 倍加速。7 倍是三层乘数的综合结果。",
+    "stage": "pre"
+  },
+  {
+    "question": "NVFP4 在推理密集型工作负载上的主要风险是什么？",
+    "options": [
+      "速度太慢",
+      "需要更多 GPU",
+      "质量退化可见——思维链、数学、长上下文代码生成会受影响",
+      "不支持中文模型"
+    ],
+    "correct": 2,
+    "explanation": "NVFP4 是激进的 4 位量化。在推理密集型工作负载（思维链、数学、长上下文代码生成）上，FP4 权重的质量退化可见——MATH 准确率可能下降 3-5 点。每个模型都需要在评估集上单独验证。",
+    "stage": "post"
+  },
+  {
+    "question": "对于年推理账单 $100M+ 的团队，推荐的 Blackwell 迁移策略是什么？",
+    "options": [
+      "全部迁移到 Blackwell",
+      "成本主导的工作负载迁移到 Blackwell + TRT-LLM + Dynamo，实验层保持 H100 + vLLM",
+      "不迁移，继续用 H100",
+      "只迁移非关键工作负载"
+    ],
+    "correct": 1,
+    "explanation": "成本主导的工作负载（占总账单的大部分）迁移到 Blackwell + TRT-LLM + Dynamo 以获得 7 倍经济差距。实验/开发层保持 H100 + vLLM，因为 vLLM 的模型迭代速度更快，且没有 NVIDIA 锁定。在每个 NVFP4 转换模型上验证质量后再投产。",
+    "stage": "post"
+  }
+]

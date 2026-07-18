@@ -1,0 +1,50 @@
+[
+  {
+    "question": "Goodput 的定义是什么？",
+    "options": [
+      "总输出词元数除以时间",
+      "同时满足所有 SLO 约束（TTFT≤a 且 TPOT≤b 且 E2E≤c）的请求比例",
+      "P99 延迟",
+      "GPU 利用率"
+    ],
+    "correct": 1,
+    "explanation": "Goodput 是满足所有 SLO 约束的请求比例——TTFT ≤ 阈值 且 TPOT ≤ 阈值 且 E2E ≤ 阈值。它是唯一将所有延迟维度合并为一个用户体验指标的度量。高吞吐量 + 低 goodput = 在处理无法及时送达用户的词元。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么 LLM 延迟分布的均值是一个误导性的统计量？",
+    "options": [
+      "因为均值计算太慢",
+      "因为均值无法反映分布形状",
+      "因为 LLM 延迟分布是右偏的——均值被快速请求拉低，掩盖了 P99 尾部",
+      "因为均值总是低于中位数"
+    ],
+    "correct": 2,
+    "explanation": "LLM 延迟分布是右偏的——大多数请求很快，但少量请求因为长 prefill 或邻居干扰而很慢。均值被快速请求拉低（如 9ms），但用户体验的是慢的那些（P99 可能 65ms）。始终报告 (P50, P90, P99) 三元组。",
+    "stage": "pre"
+  },
+  {
+    "question": "GenAI-Perf 和 LLMPerf 对 TPOT 的定义有什么不同？",
+    "options": [
+      "GenAI-Perf 用秒，LLMPerf 用毫秒",
+      "GenAI-Perf 将 TTFT 从 ITL 计算中排除（从词元 2 开始），LLMPerf 包含 TTFT（从词元 1 开始）",
+      "GenAI-Perf 只测量 P50，LLMPerf 测量所有百分位",
+      "两者定义完全相同"
+    ],
+    "correct": 1,
+    "explanation": "GenAI-Perf 将 ITL（TPOT）定义为从词元 2 开始的词元间延迟——不包含 TTFT。LLMPerf 将 ITL 定义为从词元 1 开始——包含 TTFT。对于 TTFT 500ms + 100 词元在 700ms 内解码的情况，GenAI-Perf 报 7.07ms，LLMPerf 报 12.00ms。工具选择改变了数字——始终声明工具和定义。",
+    "stage": "post"
+  },
+  {
+    "question": "一个 70B 聊天模型的合理 SLO 是什么？",
+    "options": [
+      "TTFT P99 ≤ 2s, TPOT P99 ≤ 50ms, E2E P99 ≤ 10s",
+      "TTFT P99 ≤ 800ms, TPOT P99 ≤ 25ms, E2E P99 ≤ 3s（<300 词元输出）",
+      "TTFT P99 ≤ 100ms, TPOT P99 ≤ 5ms",
+      "没有具体数字，看情况"
+    ],
+    "correct": 1,
+    "explanation": "2026 年 70B 聊天模型的合理面向消费者 SLO：TTFT P99 ≤ 800ms、TPOT P99 ≤ 25ms、E2E P99 ≤ 3s（<300 词元输出）、Goodput 目标 ≥ 99%。企业 SLO 收紧 TTFT（200-400ms），放松 E2E。",
+    "stage": "post"
+  }
+]
