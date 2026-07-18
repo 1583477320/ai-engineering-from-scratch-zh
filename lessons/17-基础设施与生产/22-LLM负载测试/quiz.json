@@ -1,0 +1,50 @@
+[
+  {
+    "question": "LLM 负载测试的两个核心反模式是什么？",
+    "options": [
+      "并发太高、延迟太低",
+      "GIL 陷阱（分词积压膨胀延迟）和提示词均匀性陷阱（相同提示词命中缓存）",
+      "内存不足、网络太慢",
+      "工具选择错误、指标定义错误"
+    ],
+    "correct": 1,
+    "explanation": "GIL 陷阱：Locust 在 GIL 下运行分词，与请求生成竞争。提示词均匀性陷阱：循环中相同提示词导致 100% 缓存命中，吞吐量虚高。两者都让通用负载测试器对 LLM API 说谎。",
+    "stage": "pre"
+  },
+  {
+    "question": "四种负载模式分别捕获什么？",
+    "options": [
+      "都有同一个目的",
+      "稳态（基线回归）、爬坡（容量断点）、尖峰（扩缩容延迟）、浸泡（内存泄漏）",
+      "快慢、多少、长短、高低",
+      "测试、开发、暂存、生产"
+    ],
+    "correct": 1,
+    "explanation": "四种模式：稳态（恒定 RPS 30-60 分钟→基线回归）、爬坡（0 到目标 15 分钟→容量断点）、尖峰（突然 3-10 倍 2 分钟→扩缩容延迟）、浸泡（稳态 4-8 小时→内存泄漏）。每种捕获不同的故障类型。",
+    "stage": "pre"
+  },
+  {
+    "question": "CI 门控中建议的负载测试工具和迭代次数是什么？",
+    "options": [
+      "Locust，1000 次迭代",
+      "k6，每次 PR 30-50 次迭代，门控 P95 TTFT 和 5xx 率",
+      "Vegeta，无限循环",
+      "JMeter，10 次迭代"
+    ],
+    "correct": 1,
+    "explanation": "k6 v2026.1.0 支持流式感知指标，k6 Operator 支持 K8s 原生分布式测试。每次 PR 运行 30-50 次迭代，门控在 P95 TTFT、5xx 率 < 5%、TPOT 阈值。破坏构建时阻断发布。",
+    "stage": "post"
+  },
+  {
+    "question": "GenAI-Perf 和 LLMPerf 对 TPOT 的测量为什么不同？",
+    "options": [
+      "它们测的不是同一个东西",
+      "GenAI-Perf 的 ITL 排除 TTFT（从词元 2 开始），LLMPerf 的 ITL 包含 TTFT（从词元 1 开始）",
+      "一个用 Python，一个用 Go",
+      "一个测 P50，一个测 P99"
+    ],
+    "correct": 1,
+    "explanation": "测量定义不同：GenAI-Perf 的 ITL（TPOT）排除 TTFT，从词元 2 开始；LLMPerf 的 ITL 包含 TTFT，从词元 1 开始。同一服务器、同一运行，两个工具报告不同的 TPOT——说明工具选择可以改变数字。",
+    "stage": "post"
+  }
+]
