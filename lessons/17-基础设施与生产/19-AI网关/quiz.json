@@ -1,0 +1,50 @@
+[
+  {
+    "question": "网关的七大核心功能是什么？",
+    "options": [
+      "编码、解码、分词、训练、推理、评估、部署",
+      "提供商路由、故障切换、重试、速率限制、密钥引用、可观测性、防护栏",
+      "认证、授权、审计、监控、告警、日志、追踪",
+      "加载、缓存、预热、缩放、回滚、监控、告警"
+    ],
+    "correct": 1,
+    "explanation": "七大功能：提供商路由（统一 API）、故障切换（失败时重试其他提供商）、重试（指数退避）、速率限制（每租户/每密钥/每模型）、密钥引用（从保险库拉取凭据）、可观测性（OTel + GenAI 属性）、防护栏（PII 脱敏、越狱检测）。",
+    "stage": "pre"
+  },
+  {
+    "question": "LiteLLM 在什么 RPS 时会崩溃？",
+    "options": [
+      "100 RPS",
+      "500 RPS",
+      "约 2000 RPS（8GB 内存，级联故障）",
+      "10000 RPS"
+    ],
+    "correct": 2,
+    "explanation": "LiteLLM 在 Kong 的基准测试中约 2000 RPS 时崩溃——Python 的 GIL 限制了并发，8GB 内存限制。流量超过 500 RPS 时应考虑迁移到 Kong 或 Portkey 托管版。",
+    "stage": "pre"
+  },
+  {
+    "question": "Kong AI Gateway 在基准测试中比 LiteLLM 快多少？",
+    "options": [
+      "快 50%",
+      "快 100%",
+      "快 859%",
+      "快 2000%"
+    ],
+    "correct": 2,
+    "explanation": "Kong 的基准在 12 CPU 等效上比 LiteLLM 快 859%，比 Portkey 快 228%。Kong 建在 Kong Gateway 之上——使用 lua+OpenResty 的事件驱动架构，每个请求占用极少内存。LiteLLM 受 Python GIL 限制。",
+    "stage": "post"
+  },
+  {
+    "question": "数据驻留如何影响网关选择？",
+    "options": [
+      "数据驻留不影响网关选择",
+      "医疗和金融默认自托管（LiteLLM/Portkey OSS/Kong），消费产品默认托管",
+      "所有场景都必须自托管",
+      "所有场景都必须托管"
+    ],
+    "correct": 1,
+    "explanation": "数据驻留是决定因素。医疗和金融（受监管行业）默认自托管——LiteLLM、Portkey OSS 或 Kong 可以部署在境内。消费产品默认托管（Cloudflare AI Gateway）或中间层（Portkey 托管）。混合方案：受监管租户自托管，其他托管。",
+    "stage": "post"
+  }
+]
