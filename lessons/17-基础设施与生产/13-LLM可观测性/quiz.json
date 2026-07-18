@@ -1,0 +1,50 @@
+[
+  {
+    "question": "开发平台和网关/遥测工具的区别是什么？",
+    "options": [
+      "没有区别，都是监控工具",
+      "开发平台捆绑评估+提示词+会话，网关/遥测工具仅追踪+指标",
+      "开发平台更贵",
+      "网关工具需要自托管"
+    ],
+    "correct": 1,
+    "explanation": "开发平台（LangSmith、Langfuse）捆绑评估、提示词管理、会话回放——适合迭代调试。网关/遥测工具（Helicone、Phoenix）专注于追踪和指标。两者可以通过 OpenTelemetry 粘合组合使用。",
+    "stage": "pre"
+  },
+  {
+    "question": "为什么应该在 HTTP/SDK 层检测而不是框架层？",
+    "options": [
+      "因为框架层更快",
+      "因为 HTTP/SDK 层检测更可移植——切换框架时不需要修改追踪代码",
+      "因为框架层不支持检测",
+      "因为 HTTP 层更安全"
+    ],
+    "correct": 1,
+    "explanation": "在框架层（如 LangChain）添加追踪会将你耦合到该框架。切换到原生 SDK 时追踪丢失。在 HTTP/OpenAI SDK 层检测（通过 OpenLLMetry 或网关）是可移植的——只需改配置不改代码。",
+    "stage": "pre"
+  },
+  {
+    "question": "超过 100 万请求/天时应该怎么做？",
+    "options": [
+      "全量保留所有追踪",
+      "按规则采样：100%错误、100%高成本、5%成功",
+      "完全不保留",
+      "只保留P99追踪"
+    ],
+    "correct": 1,
+    "explanation": "超过 100 万请求/天时，全量追踪保留的成本超过 LLM 调用本身。按规则采样：100% 错误（用于调试）、100% 高成本（用于成本优化）、5% 成功（用于基线监控）。始终保留聚合；长尾保留原始。",
+    "stage": "post"
+  },
+  {
+    "question": "2026 年常见的 LLM 可观测性生产模式是什么？",
+    "options": [
+      "只用 LangSmith",
+      "只用 Phoenix",
+      "网关（Helicone/Portkey）+ 评估平台（Phoenix/Langfuse），通过 OpenTelemetry 粘合",
+      "只用 Datadog"
+    ],
+    "correct": 2,
+    "explanation": "生产模式：网关（Helicone/Portkey）做日常流量监控+故障切换+缓存；评估平台（Phoenix/Langfuse）做回归测试和漂移检测；通过 OpenTelemetry GenAI 语义约定粘合两者。数据湖（Iceberg）用于长期分析。",
+    "stage": "post"
+  }
+]
