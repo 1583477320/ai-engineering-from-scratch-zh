@@ -185,3 +185,91 @@ def main():
 2. Google Research. Mechanism Design for LLMs.
 3. Bittensor. https://docs.bittensor.com/
 4. W3C DID. https://www.w3.org/TR/did-core/
+
+---
+
+## 3. 从零实现
+
+### 第 1 步：沙普利值归因
+
+```python
+def shapley_exact(value_fn, agents):
+    """精确沙普利值——对 N <= 6 穷举，N > 6 采样。"""
+    n = len(agents)
+    contribs = {a: 0.0 for a in agents}
+    for order in permutations(agents):
+        visited = set()
+        prev = value_fn(frozenset(visited))
+        for a in order:
+            visited.add(a)
+            new = value_fn(frozenset(visited))
+            contribs[a] += new - prev
+            prev = new
+    return {a: v / math.factorial(n) for a, v in contribs.items()}
+```
+
+### 第 2 步：次价拍卖
+
+```python
+@dataclass
+class Bid:
+    bidder: str
+    value: float
+
+def second_price(bids):
+    if len(bids) < 2:
+        return None
+    sorted_bids = sorted(bids, key=lambda b: b.value, reverse=True)
+    winner = sorted_bids[0].bidder
+    payment = sorted_bids[1].value
+    return winner, payment
+```
+
+### 第 3 步：声誉路由
+
+```python
+class Reputation:
+    def __init__(self, alpha=0.95, floor=0.1):
+        self.scores = {}
+        self.alpha = alpha; self.floor = floor
+
+    def init(self, agents):
+        for a in agents:
+            self.scores[a] = 1.0
+
+    def update(self, agent, quality):
+        current = self.scores.get(agent, 1.0)
+        self.scores[agent] = max(self.floor, self.alpha * current + (1 - self.alpha) * quality)
+```
+
+### 第 4 步：沙普利演示
+
+三智能体合作，价值函数展示超加性：
+
+| 联盟 | 价值 |
+|------|------|
+| coder 单独 | 0.5 |
+| researcher 单独 | 0.3 |
+| reviewer 单独 | 0.1 |
+| coder + researcher | 0.85 |
+| 全部三人 | 1.00 |
+
+coder 的沙普利值约 0.51，researcher 约 0.33，reviewer 约 0.16。
+
+### 第 5 步：声誉加权路由
+
+100 轮任务，4 智能体，50 预热。声誉加权路由在预热后选择高质量智能体，比随机好 10-20%。
+
+```python
+def weighted_choice(agents, weights, rng):
+    total = sum(weights)
+    r = rng.random() * total
+    upto = 0.0
+    for a, w in zip(agents, weights):
+        upto += w
+        if r <= upto:
+            return a
+    return agents[-1]
+```
+
+完整代码见 code/main.py。
