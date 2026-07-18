@@ -1,0 +1,50 @@
+[
+  {
+    "question": "Swarm 的两个原语是什么？",
+    "options": [
+      "图和边",
+      "例程（提示词+工具）和移交（返回 Agent 的工具）",
+      "状态机和分支",
+      "消息队列和工作者"
+    ],
+    "correct": 1,
+    "explanation": "两个概念：智能体 = 提示词 + 工具；移交 = 返回智能体的函数。",
+    "stage": "pre"
+  },
+  {
+    "question": "Swarm 的无状态权衡意味着什么？",
+    "options": [
+      "Swarm 非常快",
+      "Swarm 在运行之间不持久化任何东西；内存、连续性、长期任务都是调用者的问题",
+      "Swarm 不需要内存",
+      "Swarm 自动保存状态"
+    ],
+    "correct": 1,
+    "explanation": "Swarm 保持消息历史但不持久化。OpenAI Agents SDK 添加了会话状态来解决这个问题。",
+    "stage": "check"
+  },
+  {
+    "question": "Swarm 移交和 GroupChat 选择器的区别是什么？",
+    "options": [
+      "没有区别",
+      "Swarm：当前智能体通过调用移交工具选择继任者。GroupChat：选择器从外部选择下一个发言者",
+      "Swarm 更安全",
+      "GroupChat 更快"
+    ],
+    "correct": 1,
+    "explanation": "Swarm 是"智能体决定下一步"；GroupChat 是"管理者决定下一步"。",
+    "stage": "check"
+  },
+  {
+    "question": "Swarm 何时失败？",
+    "options": [
+      "总是失败",
+      "长会话+共享内存、并行执行、审计和重放",
+      "从不失败",
+      "只在生产中失败"
+    ],
+    "correct": 1,
+    "explanation": "移交重置对话状态；移交是逐一的；无状态运行难以重放。",
+    "stage": "post"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "question": "GroupChat 的形状是什么？",
+    "options": [
+      "线性流水线",
+      "共享消息池 + 选择器函数 + 智能体轮次",
+      "点对点网络",
+      "集中式数据库"
+    ],
+    "correct": 1,
+    "explanation": "每个智能体看到每条消息。选择器在每轮被调用来选择谁下一个发言。",
+    "stage": "pre"
+  },
+  {
+    "question": "三种选择器的权衡是什么？",
+    "options": [
+      "轮询总是最好",
+      "轮询确定性但忽略上下文；LLM 选择上下文感知但每轮增加 LLM 调用；自定义完全灵活但需自己实现",
+      "LLM 选择总是最好",
+      "三种没有区别"
+    ],
+    "correct": 1,
+    "explanation": "三种选择器在确定性、上下文感知、成本之间做不同权衡。",
+    "stage": "check"
+  },
+  {
+    "question": "GroupChat 的失败模式有哪些？",
+    "options": [
+      "只有太慢",
+      "谄媚级联、热说话者、上下文膨胀、严格确定性",
+      "只有太贵",
+      "只有不可调试"
+    ],
+    "correct": 1,
+    "explanation": "选择器可能总是选择最自信的智能体；一个智能体主导对话；上下文随轮次增长。",
+    "stage": "check"
+  },
+  {
+    "question": "AutoGen → AG2 → Microsoft Agent Framework 的关系是什么？",
+    "options": [
+      "没有关系",
+      "AutoGen v0.4 重写为事件驱动；社区分叉 v0.2 为 AG2；Microsoft 合并到 Agent Framework。GroupChat 在两条轨道中存活",
+      "AG2 替代了 AutoGen",
+      "Microsoft Agent Framework 不支持 GroupChat"
+    ],
+    "correct": 1,
+    "explanation": "GroupChat 概念在 AG2 和 Microsoft Agent Framework 中都存活；实现细节不同。",
+    "stage": "post"
+  }
+]
