@@ -1,0 +1,50 @@
+[
+  {
+    "question": "分离式服务为什么能节省 30-40% 的推理支出？",
+    "options": [
+      "因为 GPU 更便宜",
+      "因为 prefill 和 decode 拆分到针对各自瓶颈优化的独立池，每个池的利用率从约 60% 提升到约 90%",
+      "因为网络更快了",
+      "因为模型更小了"
+    ],
+    "correct": 1,
+    "explanation": "共置模式下 GPU 资源被浪费——prefill 用计算密集型 GPU 但 decode 需要内存带宽。分离式将两者拆分到独立池，每个池的利用率从约 60% 提升到约 90%。总 GPU 时间减少约 30-40%，相同 SLA。",
+    "stage": "pre"
+  },
+  {
+    "question": "分离式在什么情况下不值得？",
+    "options": [
+      "大模型",
+      "短提示词（<512 词元）+ 短输出（<200 词元）——传输税超过了节省",
+      "高并发",
+      "使用 vLLM 时"
+    ],
+    "correct": 1,
+    "explanation": "NIXL 传输 KV 缓存需要 20-80ms。如果提示词只有 200 词元，prefill 只需约 50ms——KV 传输的 50ms 收益为零。短提示+短输出的工作负载不需要分离式。",
+    "stage": "pre"
+  },
+  {
+    "question": "NVIDIA Dynamo 和 llm-d 的核心区别是什么？",
+    "options": [
+      "Dynamo 更快，llm-d 更慢",
+      "Dynamo 是栈上层编排器，llm-d 是 Kubernetes 原生 Service",
+      "Dynamo 只支持 NVIDIA GPU，llm-d 支持所有 GPU",
+      "两者完全相同"
+    ],
+    "correct": 1,
+    "explanation": "Dynamo 坐在 vLLM/SGLang/TRT-LLM 之上作为编排器，用 Rust 核心自动配置 prefill:decode 比例。llm-d 是 Kubernetes 原生的——prefill/decode/路由器作为独立 K8s Service，使用原生 HPA。选择取决于运维偏好。",
+    "stage": "post"
+  },
+  {
+    "question": "MoE 模型在分离式中为什么是双赢？",
+    "options": [
+      "因为 MoE 不需要 GPU",
+      "因为 MoE 专家路由在 prefill 上计算密集，decode 上内存密集（专家缓存），分离式同时优化两者",
+      "因为 MoE 更便宜",
+      "因为 MoE 不需要 KV 缓存"
+    ],
+    "correct": 1,
+    "explanation": "MoE 模型的 prefill 阶段需要激活多个专家——计算密集型。decode 阶段需要读取所有专家权重的缓存——内存密集型。分离式将 prefill 和 decode 拆分到独立池，同时优化两个阶段的资源利用。",
+    "stage": "post"
+  }
+]

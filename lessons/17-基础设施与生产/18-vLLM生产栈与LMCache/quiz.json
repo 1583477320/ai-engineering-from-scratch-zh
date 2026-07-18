@@ -1,0 +1,50 @@
+[
+  {
+    "question": "vLLM production-stack 的五个组件是什么？",
+    "options": [
+      "CPU、GPU、内存、磁盘、网络",
+      "路由器、引擎、KV 卸载、可观测性、控制平面",
+      "前端、后端、数据库、缓存、队列",
+      "预训练、微调、推理、评估、部署"
+    ],
+    "correct": 1,
+    "explanation": "五个组件：路由器（缓存感知，消费 KV 事件）、引擎（vLLM worker）、KV 缓存卸载（LMCache 或原生 connector）、可观测性（Prometheus+Grafana+OTel）、控制平面（服务发现+配置+滚动更新）。作为 Helm chart + operator 发布。",
+    "stage": "pre"
+  },
+  {
+    "question": "LMCache 在 KV 缓存足够小可以装入 HBM 时还有价值吗？",
+    "options": [
+      "没有，只是浪费",
+      "有价值——当有抢占时，从 CPU 恢复比重新 prefill 快得多",
+      "只有在跨引擎时有价值",
+      "只有在长上下文时有价值"
+    ],
+    "correct": 1,
+    "explanation": "即使 KV 缓存足够装入 HBM，并发高峰时 HBM 可能被填满导致抢占。被抢占的请求需要完全重新 prefill（数百毫秒到数秒）。LMCache 允许从 CPU DRAM 恢复（数十毫秒），避免重新 prefill。但低占用时开销约 3-5%。",
+    "stage": "pre"
+  },
+  {
+    "question": "vLLM 0.11.0 的异步卸载路径解决了什么问题？",
+    "options": [
+      "模型加载更慢",
+      "卸载延迟隐藏在引擎流之后——引擎在常见情况下不阻塞",
+      "KV 缓存更大",
+      "网络更快了"
+    ],
+    "correct": 1,
+    "explanation": "vLLM 0.11.0（2026年1月）添加异步卸载路径——KV 块可以在后台卸载到 CPU/磁盘，引擎在常见情况下不阻塞。这隐藏了卸载延迟。但自定义内核卸载在低命中率时可能降低吞吐量，异步调度与投机解码有已知交互问题。",
+    "stage": "post"
+  },
+  {
+    "question": "原生 CPU 卸载和 LMCache 的核心区别是什么？",
+    "options": [
+      "原生更慢，LMCache 更快",
+      "原生是引擎本地的（不跨引擎），LMCache 是集群级共享的（任何引擎可访问）",
+      "原生需要付费，LMCache 免费",
+      "原生支持 RDMA，LMCache 不支持"
+    ],
+    "correct": 1,
+    "explanation": "原生 CPU 卸载将 KV 块存储在同一引擎的主机 RAM 中——零网络跳转，但不跨引擎共享。LMCache 将块存储在共享服务器中——任何引擎都可访问，支持跨引擎前缀复用。单引擎选原生，多引擎共享前缀选 LMCache。",
+    "stage": "post"
+  }
+]
