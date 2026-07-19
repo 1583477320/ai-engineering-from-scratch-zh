@@ -102,6 +102,50 @@ for name, agent in agents:
     print(f"{name:15s} → {r['action']}")
 ```
 
+### 第 2 步：IFC 策略设计
+
+```python
+class IFCPolicy:
+    """信息流控制策略——标记内容源信任级别。"""
+
+    TRUSTED = "trusted"
+    UNTRUSTED = "untrusted"
+
+    def __init__(self):
+        self.trust_map = {}  # source -> trust level
+
+    def label_source(self, source, trust_level):
+        """标记内容源的信任级别。"""
+        self.trust_map[source] = trust_level
+
+    def check_action(self, action_source, action_type):
+        """检查操作是否需要可信批准。"""
+        trust = self.trust_map.get(action_source, "untrusted")
+        requires_trust = action_type in ("send", "delete", "execute")
+        if trust == "untrusted" and requires_trust:
+            return False, "不受信任内容不能触发控制流操作"
+        return True, "通过"
+
+
+# 演示
+policy = IFCPolicy()
+policy.label_source("user_input", IFCPolicy.TRUSTED)
+policy.label_source("retrieved_web", IFCPolicy.UNTRUSTED)
+policy.label_source("tool_output", IFCPolicy.UNTRUSTED)
+
+# 正常操作
+ok, msg = policy.check_action("user_input", "query")
+print(f"用户查询: {ok} ({msg})")
+
+# IPI 攻击尝试
+ok, msg = policy.check_action("retrieved_web", "send")
+print(f"检索内容触发发送: {ok} ({msg})")
+
+# 工具输出攻击
+ok, msg = policy.check_action("tool_output", "execute")
+print(f"工具输出触发执行: {ok} ({msg})")
+```
+
 完整代码见 `code/main.py`。
 
 ---
