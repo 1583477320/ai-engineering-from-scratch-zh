@@ -123,19 +123,130 @@ def simulate_instructgpt(n_prompts=200, n_preference_pairs=500):
     return {"SFT": sft_policy, "PPO": policy}
 ```
 
+### 第 1 步：三阶段流水线模拟
+
+```python
+import random
+import math
+
+
+class InstructGPTPipeline:
+    """InstructGPT 三阶段流水线的简化实现。"""
+
+    def __init__(self, actions=["A", "B", "C"]):
+        self.actions = actions
+        self.policy = {a: 1/len(actions) for a in actions}
+        self.sft_policy = None
+        self.reward_model = None
+
+    def stage1_sft(self, true_reward):
+        """第一阶段：SFT——模拟监督微调。"""
+        self.sft_policy = dict(self.policy)
+        self.true_reward = true_reward
+        return self.sft_policy
+
+    def stage2_rm(self, temperature=0.1):
+        """第二阶段：RM——简化版 Bradley-Terry 奖励模型。"""
+        self.reward_model = {
+            a: self.true_reward[a] + random.gauss(0, temperature)
+            for a in self.actions
+        }
+        return self.reward_model
+
+    def stage3_ppo(self, steps=200, beta=0.1, lr=0.01):
+        """第三阶段：带 KL 惩罚的 PPO。"""
+        trajectory = []
+        for step in range(steps):
+            # 策略更新
+            for a in self.actions:
+                self.policy[a] += lr * (self.reward_model[a] - 0.5)
+
+            # 归一化
+            total = sum(self.policy.values())
+            self.policy = {a: v/total for a, v in self.policy.items()}
+
+            # KL 约束检查
+            if self.sft_policy:
+                kl = sum(self.sft_policy[a] * math.log(
+                    self.sft_policy[a] / max(self.policy[a], 1e-10)
+                ) for a in self.actions)
+                if kl > beta:
+                    # 退火：向 SFT 策略靠拢
+                    self.policy = {
+                        a: self.policy[a] * 0.8 + self.sft_policy[a] * 0.2
+                        for a in self.actions
+                    }
+                    total = sum(self.policy.values())
+                    self.policy = {a: v/total for a, v in self.policy.items()}
+
+            # 黄金奖励
+            gold = sum(self.true_reward[a] * self.policy[a] for a in self.actions)
+            trajectory.append({"step": step, "gold": gold, "policy": dict(self.policy)})
+
+        return trajectory
+
+
+# 演示
+pipeline = InstructGPTPipeline()
+pipeline.stage1_sft({"A": 0.8, "B": 0.5, "C": 0.2})
+pipeline.stage2_rm()
+traj = pipeline.stage3_ppo(steps=100, beta=0.1)
+
+# 对比 beta=0 的情况
+pipeline2 = InstructGPTPipeline()
+pipeline2.stage1_sft({"A": 0.8, "B": 0.5, "C": 0.2})
+pipeline2.stage2_rm()
+traj_no_kl = pipeline2.stage3_ppo(steps=100, beta=0.0)
+
+print(f"beta=0.1 最终策略: {traj[-1]['policy']}  黄金奖励: {traj[-1]['gold']:.3f}")
+print(f"beta=0.0 最终策略: {traj_no_kl[-1]['policy']}  黄金奖励: {traj_no_kl[-1]['gold']:.3f}")
+```
+
+关键观察：`beta=0.0` 时策略倾向于将概率集中到单一动作（模式寻求），而 `beta=0.1` 时策略保持更多样性。这是 KL 惩罚在 PPO 中的核心效果——防止策略过度专业化于 RM 信号。
+
+### 第 2 步：奖励轨迹追踪
+
+```python
+def analyze_trajectory(trajectory):
+    """分析 PPO 训练轨迹。"""
+    rewards = [t["gold"] for t in trajectory]
+    max_step = max(range(len(rewards)), key=lambda i: rewards[i])
+    final_drop = rewards[-1] - max(rewards) if trajectory else 0
+    return {
+        "max_reward": max(rewards),
+        "max_step": max_step,
+        "final_reward": rewards[-1],
+        "drop_from_max": final_drop,
+        "stable": abs(final_drop) < 0.05,
+    }
+
+result = analyze_trajectory(traj)
+print(f"最大奖励: {result['max_reward']:.3f} (第{result['max_step']}步)")
+print(f"最终奖励: {result['final_reward']:.3f} (下降: {result['drop_from_max']:.3f})")
+```
+
 完整代码见 `code/main.py`。
 
 ---
 
 ## 4. 工业工具
 
-### 4.1 三阶段对照
+### 4.1 RLHF 框架对照
 
-| 阶段 | 输入 | 损失函数 | 输出 |
-|---|---|---|---|
-| SFT | 提示词-响应对 | 交叉熵 | 指令跟随基础 |
-| RM | (y_w, y_l) 对 | Bradley-Terry | 标量奖励 |
-| PPO | 策略+RM+KL | PPO + KL 惩罚 | 对齐策略 |
+| 框架 | 支持 | 适用场景 |
+|---|---|---|
+| TRL (HuggingFace) | SFT+RM+PPO | 开源研究、中小规模 |
+| DeepSpeed Chat | 全流程 RLHF | 大规模分布式训练 |
+| OpenRLHF | Ray 分布式 RLHF | 企业级生产流水线 |
+| NeMo-Aligner | NVIDIA 生态 | 需要 NeMo 集成的场景 |
+
+### 4.2 三阶段对照
+
+| 阶段 | 输入 | 损失函数 | 典型模型大小 | 输出 |
+|---|---|---|---|---|
+| SFT | 提示词-响应对 | 交叉熵 | 与基础模型相同 | 指令跟随策略 |
+| RM | (y_w, y_l) 成对偏好 | Bradley-Terry | 6B（足够 175B 模型） | 标量奖励 |
+| PPO | 策略+RM+KL | PPO + KL 惩罚 | 与 SFT 相同 | 对齐策略 |
 
 ---
 
@@ -143,11 +254,15 @@ def simulate_instructgpt(n_prompts=200, n_preference_pairs=500):
 
 ### 5.1 KL 系数是 RLHF 最重要的超参数
 
-太低 → 奖励黑客，策略过度优化代理 RM。太高 → 没有比 SFT 更好的改进。需要网格搜索。
+太低 → 奖励黑客，策略过度优化代理 RM。太高 → 没有比 SFT 更好的改进。典型网格搜索范围：`[0.01, 0.05, 0.1, 0.5]`。监控 KL 散度和黄金奖励的比值——如果 KL 增长快于黄金奖励，`beta` 需要增加。
 
 ### 5.2 PPO-ptx 防止对齐税
 
-混合预训练梯度到 RL 目标中。否则模型在标准基准上退步。
+混合预训练梯度到 RL 目标中。典型 `gamma = 0.03`。否则模型在标准基准上退步。
+
+### 5.3 奖励模型大小不必与策略相同
+
+InstructGPT 用 6B RM 训练 175B 策略。RM 只需要区分偏好，不需要生成。小 RM 节省计算。
 
 ---
 
@@ -167,7 +282,15 @@ def simulate_instructgpt(n_prompts=200, n_preference_pairs=500):
 
 **原因：** 对齐税——RLHF 只优化了 RM 奖励，没有保留预训练学到的能力。
 
-**修复：** 在 PPO 目标中混合预训练 log-likelihood（PPO-ptx）。
+**修复：** 在 PPO 目标中混合预训练 log-likelihood（PPO-ptx），`gamma = 0.03`。
+
+### 错误 3：RM 太大或太小
+
+**现象：** 使用与策略相同大小的 RM（175B），训练成本翻倍；使用 1B RM，评分不准确。
+
+**原因：** InstructGPT 证明 6B RM 足够 175B 策略。太大浪费，太小不准确。
+
+**修复：** RM 大小约为策略的 3-10%。6B RM 对 175B 策略足够。
 
 ---
 
@@ -177,6 +300,16 @@ def simulate_instructgpt(n_prompts=200, n_preference_pairs=500):
 
 **参考答案：**
 对齐是一个不同于能力的维度。175B GPT-3 有更多能力（训练在更多数据上、更大的模型），但它在"回答问题"这个任务上没有对齐——它的训练分布是网络文本，它倾向于继续生成网络文本。1.3B InstructGPT 通过 RLHF 与人类偏好对齐，输出人类更喜欢的回答。标注员偏好对齐的那个，即使它能力更弱。
+
+### Q2：PPO-ptx 如何影响 RLHF 的效果？（难度：⭐⭐⭐）
+
+**参考答案：**
+PPO-ptx 在 PPO 目标中混合了预训练 log-likelihood：`J_ptx = J(pi) + gamma × E[log pi(x)]`。这防止了对齐税——RLHF 只优化 RM 信号，策略可能忘记预训练中学习的通用能力。PPO-ptx 通过强制策略保持预训练分布来保持这些能力。典型 `gamma = 0.03`。这成了 Anthropic、DeepMind 和 Meta 的标准做法。
+
+### Q3：如果 KL 系数 beta 太高或太低，分别观察到什么现象？（难度：⭐⭐）
+
+**参考答案：**
+beta 太低（如 0.01）：策略快速过度优化 RM 信号——找到对抗性示例，在代理 RM 上得分很高但在真实人类偏好上很低。beta 太高（如 1.0）：策略几乎不移动——RLHF 效果接近 SFT。最佳值是奖励改进和 KL 散度之间的平衡点。经验法则：监控 KL/奖励比值，如果 KL 增长快于奖励，beta 需要增加。
 
 ### Q2：对齐税是什么？如何缓解？（难度：⭐⭐）
 

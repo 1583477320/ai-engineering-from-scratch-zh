@@ -131,6 +131,46 @@ for method in ["DPO", "BPO"]:
     loss = dpo_loss if method == "DPO" else bpo_loss
     l = loss(0.6, 0.3, 0.7, 0.3)
     print(f"{method} 损失: {l:.4f}")
+
+
+# 对比六种损失在多种场景下的行为
+def compare_losses():
+    """对比六种损失在正常和异常场景下的行为。"""
+    test_cases = [
+        (0.6, 0.3, 0.7, 0.3, "正常"),
+        (0.35, 0.3, 0.7, 0.3, "降级chosen"),
+        (0.7, 0.1, 0.7, 0.3, "大幅提升"),
+        (0.28, 0.3, 0.28, 0.3, "chosen低于rejected"),
+    ]
+
+    print(f"\n{'场景':12s}  {'DPO':>8}  {'IP O':>8}  {'SimPO':>8}  {'BPO':>8}")
+    print("-" * 52)
+
+    def ipo_loss(p_yw, p_yl, p_rw, p_rl, beta=0.1):
+        rw = math.log(p_yw / p_rw)
+        rl = math.log(p_yl / p_rl)
+        target = 1.0 / (2.0 * beta)
+        return (rw - rl - target) ** 2
+
+    def simpo_loss(p_yw, p_yl, gamma=0.5):
+        lw = 100
+        sw = math.log(p_yw) / lw
+        sl = math.log(p_yl) / lw
+        return -math.log(1.0 / (1.0 + math.exp(-(sw - sl - gamma))))
+
+    for yw, yl, rw, rl, desc in test_cases:
+        dpo = dpo_loss(yw, yl, rw, rl)
+        ipo = ipo_loss(yw, yl, rw, rl)
+        simpo_d = simpo_loss(yw, yl)
+        bpo = bpo_loss(yw, yl, rw, rl)
+        print(f"{desc:12s}  {dpo:>8.4f}  {ipo:>8.4f}  {simpo_d:>8.4f}  {bpo:>8.4f}")
+
+    # 关键输出：
+    # "降级chosen"场景中，DPO 的损失低于"正常"——意味着DPO不惩罚chosen下降
+    # BPO 在"降级chosen"场景中损失更高——因为增加了chosen保护的校正项
+
+
+compare_losses()
 ```
 
 完整代码见 `code/main.py`。

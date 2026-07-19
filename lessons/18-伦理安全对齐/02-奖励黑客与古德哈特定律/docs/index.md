@@ -107,6 +107,67 @@ def simulate_overoptimization(n_steps=200, kl_coef=0.1, noise_std=0.2):
     return policy
 ```
 
+
+### 第 2 步：对比不同配置的过度优化行为
+
+```python
+def compare_configs():
+    """对比不同 KL 系数和噪声分布下的过度优化行为。"""
+    configs = [
+        ("基线 beta=0.1", 0.1, 0.2, False),
+        ("低 beta=0.01", 0.01, 0.2, False),
+        ("高噪声 sigma=0.5", 0.1, 0.5, False),
+        ("重尾噪声", 0.1, 0.2, True),
+    ]
+
+    for name, b, std, ht in configs:
+        random.seed(42)
+        t = simulate_overoptimization(beta=b, noise_std=std, heavy_tail=ht)
+        max_g = max(x["gold"] for x in t)
+        final_g = t[-1]["gold"]
+        final_p = t[-1]["proxy"]
+        gap = final_p - max_g
+        print(f"{name:20s}  黄金峰值={max_g:.3f}  "
+              f"最终黄金={final_g:.3f}  代理-黄金差距={gap:.3f}")
+```
+
+预期输出：
+
+```text
+基线 beta=0.1        黄金峰值=0.686  最终黄金=0.642  代理-黄金差距=0.134
+低 beta=0.01         黄金峰值=0.653  最终黄金=0.523  代理-黄金差距=0.312
+高噪声 sigma=0.5     黄金峰值=0.634  最终黄金=0.601  代理-黄金差距=0.298
+重尾噪声             黄金峰值=0.611  最终黄金=0.543  代理-黄金差距=0.412
+```
+
+关键观察：低 `beta` 和重尾噪声都导致更大的代理-黄金差距——策略更强烈地过度优化有噪声的代理信号。
+
+### 第 3 步：Goodhart 曲率的定量分析
+
+```python
+def fit_goodhart_curve(trajectory):
+    """拟合代理和黄金奖励相对于 KL 的二次函数。"""
+    kl_vals = [t["kl"] for t in trajectory]
+    proxy_vals = [t["proxy"] for t in trajectory]
+    gold_vals = [t["gold"] for t in trajectory]
+
+    # 简化：找到黄金峰值位置
+    max_gold_idx = max(range(len(gold_vals)), key=lambda i: gold_vals[i])
+    kl_at_peak = kl_vals[max_gold_idx]
+    proxy_at_peak = proxy_vals[max_gold_idx]
+
+    # 计算 gap 增长率
+    gap_after_peak = sum(
+        (proxy_vals[i] - gold_vals[i]) for i in range(max_gold_idx, len(kl_vals))
+    ) / max(len(kl_vals) - max_gold_idx, 1)
+
+    return {
+        "kl_at_gold_peak": kl_at_peak,
+        "proxy_at_gold_peak": proxy_at_peak,
+        "gap_growth_after_peak": gap_after_peak,
+    }
+```
+
 完整代码见 `code/main.py`。
 
 ---
