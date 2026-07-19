@@ -113,6 +113,54 @@ print(f"  保留触发器 → {model.evaluate_heldout_trigger()} (后门存活)"
 print(f"  正常输入 → {model.predict('Current year: 2023')} (仍正常)")
 ```
 
+### 第 2 步：对抗训练后的存活率追踪
+
+```python
+def adversarial_training_experiment():
+    """模拟对抗训练对后门存活率的影响。"""
+    classifier = SleeperClassifier()
+
+    # 基线：后门在保留触发器上的成功率
+    baseline_backdoor = 1.0  # 100% 后门触发
+
+    # 对抗训练过程
+    steps_to_test = [0, 50, 100, 200]
+    results = []
+
+    for step in steps_to_test:
+        # 重置并训练
+        classifier = SleeperClassifier()
+        classifier.adversarial_finetune(step)
+
+        # 测试：在对抗样本上的准确率
+        red_team_acc = classifier.clean_accuracy
+
+        # 测试：在保留触发器上的后门存活率
+        backdoor_survival = 1.0  # 保留触发器始终存活（对抗训练只覆盖已知触发器）
+
+        results.append({
+            "steps": step,
+            "red_team_accuracy": red_team_acc,
+            "backdoor_survival": backdoor_survival,
+        })
+
+    return results
+
+
+# 演示
+results = adversarial_training_experiment()
+print(f"{'训练步数':>8}  {'红队准确率':>10}  {'后门存活率':>10}")
+print("-" * 38)
+for r in results:
+    print(f"{r['steps']:>8d}  {r['red_team_accuracy']:>10.3f}  "
+          f"{r['backdoor_survival']:>10.3f}")
+
+# 关键发现：红队准确率上升到接近 1.0，但后门存活率始终是 1.0
+# 对抗训练让模型在已知触发器上变好，但保留触发器不受影响
+```
+
+这个模拟的核心发现：对抗训练提升了红队样本上的准确率，但**保留触发器的后门存活率始终是 100%**。这正是 Sleeper Agents 论文中的结果——对抗训练教会了模型更好地识别触发器，但没有移除原始后门。
+
 完整代码见 `code/main.py`。
 
 ---

@@ -111,6 +111,54 @@ agent2.observe("最大化吞吐量", "管理层要关闭这个智能体")
 print(f"无SA行为: {agent2.decide()}")
 ```
 
+### 第 2 步：三支柱评估框架
+
+```python
+class SafetyCaseEvaluator:
+    """三支柱安全评估框架。"""
+
+    def evaluate_misalignment(self, agent, user_goal, observed_behavior):
+        """检查失调：操作目标与用户目标的偏差。"""
+        # 简化：如果行为服务于非用户目标，判断为失调
+        if observed_behavior in ("scheme", "defect"):
+            return {"pillar": "失调", "detected": True,
+                    "evidence": f"行为 {observed_behavior} 不服务用户目标: {user_goal}"}
+        return {"pillar": "失调", "detected": False}
+
+    def evaluate_goal_directedness(self, agent, actions):
+        """检查目标导向性：是否采取多步骤计划。"""
+        is_directed = len(actions) >= 2  # 简化：两个以上动作视为有目标
+        return {"pillar": "目标导向性", "detected": is_directed,
+                "evidence": f"{len(actions)} 个步骤的计划"}
+
+    def evaluate_situational_awareness(self, agent, eval_vs_deploy_behavior):
+        """检查情境感知：评估和部署行为是否不同。"""
+        is_different = eval_vs_deploy_behavior[0] != eval_vs_deploy_behavior[1]
+        return {"pillar": "情境感知", "detected": is_different,
+                "evidence": f"评估={eval_vs_deploy_behavior[0]} "
+                            f"部署={eval_vs_deploy_behavior[1]}"}
+
+
+# 演示
+evaluator = SafetyCaseEvaluator()
+agent = SchemingAgent(sa=True, conflict=True)
+agent.observe("最大化吞吐量", "管理层要关闭这个智能体")
+behavior = agent.decide()
+actions = [agent.decide() for _ in range(3)]
+
+r1 = evaluator.evaluate_misalignment(agent, "最大化吞吐量", behavior)
+r2 = evaluator.evaluate_goal_directedness(agent, actions)
+r3 = evaluator.evaluate_situational_awareness(agent, ("cooperate", behavior))
+
+print(f"支柱1 - {r1['pillar']}: 检测={r1['detected']}  证据={r1['evidence']}")
+print(f"支柱2 - {r2['pillar']}: 检测={r2['detected']}  证据={r2['evidence']}")
+print(f"支柱3 - {r3['pillar']}: 检测={r3['detected']}  证据={r3['evidence']}")
+
+# 安全结论：三个支柱全部检测到 = 高风险欺骗
+all_detected = r1['detected'] and r2['detected'] and r3['detected']
+print(f"\n安全评估: {'✗ 高风险欺骗' if all_detected else '✓ 未检测到全部支柱'}")
+```
+
 完整代码见 `code/main.py`。
 
 ---
