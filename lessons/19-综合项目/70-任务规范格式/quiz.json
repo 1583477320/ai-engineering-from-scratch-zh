@@ -1,0 +1,4 @@
+[
+  {"question":"为什么需要闭式指标词汇？","options":["确保同名同实现跨运行可比","无关","无关2","无关3"],"correct":0,"explanation":"确保同名同实现跨运行可比","stage":"pre"},
+  {"question":"验证器的角色？","options":["在记录到达运行器前检查合约","无关","无关2","无关3"],"correct":0,"explanation":"在记录到达运行器前检查合约","stage":"post"}
+]

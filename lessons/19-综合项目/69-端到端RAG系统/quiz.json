@@ -1,0 +1,4 @@
+[
+  {"question":"为什么集成测试优于组件测试？","options":["验证实际数据流中的兼容性","无关","无关2","无关3"],"correct":0,"explanation":"验证实际数据流中的兼容性","stage":"pre"},
+  {"question":"引用锚点是什么？","options":["每个断言附带的(doc_id, chunk_index)","无关","无关2","无关3"],"correct":0,"explanation":"每个断言附带的(doc_id, chunk_index)","stage":"post"}
+]

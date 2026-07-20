@@ -1,0 +1,4 @@
+[
+  {"question":"HyDE为什么有效？","options":["假想文档使用领域词汇","无关","无关2","无关3"],"correct":0,"explanation":"假想文档使用领域词汇","stage":"pre"},
+  {"question":"三种策略如何组合？","options":["并行运行+RRF融合","无关","无关2","无关3"],"correct":0,"explanation":"并行运行+RRF融合","stage":"post"}
+]

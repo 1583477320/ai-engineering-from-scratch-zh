@@ -1,0 +1,4 @@
+[
+  {"question":"precision@k和recall@k何时偏好不同？","options":["精度偏好减少噪音，召回偏好不遗漏","无关","无关2","无关3"],"correct":0,"explanation":"精度偏好减少噪音，召回偏好不遗漏","stage":"pre"},
+  {"question":"MRR衡量什么？","options":["第一个相关文档的排名位置","无关","无关2","无关3"],"correct":0,"explanation":"第一个相关文档的排名位置","stage":"post"}
+]

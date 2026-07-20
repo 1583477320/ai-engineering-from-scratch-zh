@@ -1,0 +1,4 @@
+[
+  {"question":"双编码器和交叉编码器的核心区别？","options":["独立编码 vs 联合编码","无关","无关2","无关3"],"correct":0,"explanation":"独立编码 vs 联合编码","stage":"pre"},
+  {"question":"N候选数至少是K的几倍？","options":["3倍","无关","无关2","无关3"],"correct":0,"explanation":"3倍","stage":"post"}
+]
