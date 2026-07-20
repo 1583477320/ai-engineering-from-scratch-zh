@@ -1,0 +1,53 @@
+{
+  "title": "自主研究智能体",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "自主研究智能体使用什么搜索策略探索实验空间？",
+      "options": [
+        "随机搜索",
+        "最佳优先树搜索",
+        "广度优先搜索",
+        "深度优先搜索"
+      ],
+      "correct": "B",
+      "explanation": "智能体使用最佳优先树搜索，按（新穎性×质量×剩余预算）评分扩展最有前景的节点。"
+    },
+    {
+      "id": "q2",
+      "question": "每个实验运行在什么样的沙箱环境中？",
+      "options": [
+        "完整的虚拟机",
+        "有网络出口的Docker容器",
+        "无网络、有界CPU/内存、只读输入的容器",
+        "直接在宿主机运行"
+      ],
+      "correct": "C",
+      "explanation": "沙箱配置：`docker run --network=none --memory=8g --cpus=2 --pids-limit=256 --read-only`。"
+    },
+    {
+      "id": "q3",
+      "question": "审稿人集成由多少个LLM评审者组成？",
+      "options": [
+        "3个",
+        "5个",
+        "7个",
+        "10个"
+      ],
+      "correct": "B",
+      "explanation": "审稿人集成由5个LLM评审者组成，使用NeurIPS标准（新穎性、严谨性、清晰度、可复现性、影响力）评分。"
+    },
+    {
+      "id": "q4",
+      "question": "多模态写作中如何使用视觉反馈？",
+      "options": [
+        "在写作前查看示例图片",
+        "编译PDF后通过VLM视觉模式评判布局和声明-证据对齐",
+        "使用OCR检查文本拼写",
+        "人工审阅PDF后反馈"
+      ],
+      "correct": "B",
+      "explanation": "LaTeX草稿编译为PDF后，通过Claude Opus 4.7的视觉模式评判布局、图表可读性和声明-证据对齐。"
+    }
+  ]
+}
