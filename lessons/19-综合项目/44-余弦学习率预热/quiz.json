@@ -1,0 +1,9 @@
+{
+  "title": "余弦学习率预热",
+  "questions": [
+    {"id":"q1","question":"余弦调度的三个区域是什么？","options":["预热、平台、衰减","预热（线性0→lr_max）、余弦衰减（lr_max→lr_min）、地板（lr_min）","随机、递增、递减","启动、运行、停止"],"correct":"B","explanation":"预热：0到warmup_steps线性从0到lr_max；余弦衰减：warmup到total_steps余弦到lr_min；地板：total_steps后固定在lr_min。"},
+    {"id":"q2","question":"为什么调度在两个端点都连续？","options":["随机的","cos(0)=1给出lr_max匹配预热端点，cos(π)=-1给出lr_min匹配衰减端点","更美观","防止错误"],"correct":"B","explanation":"余弦函数在warmup_steps处cos(0)=1给出lr_max，在total_steps处cos(π)=-1给出lr_min，两个端点自然连续。"},
+    {"id":"q3","question":"梯度范数如何帮助诊断训练问题？","options":["不帮助","损失之前的峰值预示发散，预热后保持高位预示峰值过高","增加速度","减少参数"],"correct":"B","explanation":"发散训练在损失之前显示梯度范数峰值；过度激进的峰值在预热后范数保持高位。"},
+    {"id":"q4","question":"为什么lr_min不应为零？","options":["计算更简单","lr_min=0使调度在尾部长尾时优化器停止学习","更安全","更美观"],"correct":"B","explanation":"lr_min=0的调度产生看起来很好但模型实际未完成训练的训练曲线。10%的lr_max保持优化器在长尾期间学习。"}
+  ]
+}
