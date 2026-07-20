@@ -1,0 +1,4 @@
+[
+  {"question":"InfoNCE的正负样本如何定义？","options":["batch内N对正样本，N²-N负样本","无关","无关2","无关3"],"correct":0,"explanation":"batch内N对正样本，N²-N负样本","stage":"pre"},
+  {"question":"温度tau的作用？","options":["控制softmax锐度","无关","无关2","无关3"],"correct":0,"explanation":"控制softmax锐度","stage":"post"}
+]

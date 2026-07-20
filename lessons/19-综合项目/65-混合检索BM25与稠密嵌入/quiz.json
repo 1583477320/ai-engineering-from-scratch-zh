@@ -1,0 +1,4 @@
+[
+  {"question":"RRF的k=60有什么意义？","options":["深位候选仍能投票","无关","无关2","无关3"],"correct":0,"explanation":"深位候选仍能投票","stage":"pre"},
+  {"question":"为什么RRF优于分数加权？","options":["排名在模态间天然可比较","无关","无关2","无关3"],"correct":0,"explanation":"排名在模态间天然可比较","stage":"post"}
+]

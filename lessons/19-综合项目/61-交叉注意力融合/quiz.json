@@ -1,0 +1,4 @@
+[
+  {"question":"交叉注意力中查询来自什么模态？","options":["文本","无关","无关2","无关3"],"correct":0,"explanation":"文本","stage":"pre"},
+  {"question":"KV缓存为什么使推理更快？","options":["图像键值计算一次后复用","无关","无关2","无关3"],"correct":0,"explanation":"图像键值计算一次后复用","stage":"post"}
+]

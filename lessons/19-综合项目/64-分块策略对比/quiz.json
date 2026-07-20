@@ -1,0 +1,4 @@
+[
+  {"question":"为什么递归分割通常优于固定窗口？","options":["保留文档结构层次","无关","无关2","无关3"],"correct":0,"explanation":"保留文档结构层次","stage":"pre"},
+  {"question":"新语料的默认策略？","options":["递归分割，目标800字符","无关","无关2","无关3"],"correct":0,"explanation":"递归分割，目标800字符","stage":"post"}
+]

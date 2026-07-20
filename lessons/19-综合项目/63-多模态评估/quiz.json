@@ -1,0 +1,4 @@
+[
+  {"question":"R@1的含义是什么？","options":["第一个结果就是正确匹配","无关","无关2","无关3"],"correct":0,"explanation":"第一个结果就是正确匹配","stage":"pre"},
+  {"question":"BLEU-4需要平滑处理吗？","options":["是，小样本需要","无关","无关2","无关3"],"correct":0,"explanation":"是，小样本需要","stage":"post"}
+]
