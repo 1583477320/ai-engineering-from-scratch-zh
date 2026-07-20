@@ -1,0 +1,9 @@
+{
+  "title": "Token与位置嵌入",
+  "questions": [
+    {"id":"q1","question":"嵌入阶段的输入和输出形状是什么？","options":["输入(B,T)为token ID，输出(B,T,D)为float向量","输入(B,T,D)为向量，输出(B,T)为ID","输入(B,T)为ID，输出(B,T)为向量","输入(T)为序列，输出(B,D)为矩阵"],"correct":"B","explanation":"输入为(B,T)的token ID，经过token嵌入查询后输出(B,T,D)的float向量，其中D为模型维度。"},
+    {"id":"q2","question":"学习位置嵌入和正弦位置嵌入的关键区别是什么？","options":["学习嵌入更快","学习嵌入是参数且受最大上下文长度限制；正弦嵌入无参数但在此课程中预计算固定表","正弦嵌入更准确","学习嵌入更好"],"correct":"B","explanation":"学习嵌入是参数（max_context_length*D个参数），超过训练长度无法查询；正弦嵌入无参数，此处预计算固定表格，两者都强制执行最大上下文长度。"},
+    {"id":"q3","question":"token嵌入和位置嵌入如何合成？","options":["拼接","逐元素相加","点积","平均"],"correct":"B","explanation":"合成是逐元素相加而非拼接。相加保持D在网络中不变，让模型按特征决定token含义还是位置占主导。"},
+    {"id":"q4","question":"正弦位置嵌入的sin和cos配对带来了什么有用性质？","options":["更少的参数","位置p+k的向量是位置p的向量的线性函数","更快的计算","更好的准确率"],"correct":"B","explanation":"sin和cos配对使位置p+k的向量是位置p的向量的线性函数，让注意力层易学习相对位置偏移。"}
+  ]
+}

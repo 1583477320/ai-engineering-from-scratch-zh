@@ -1,0 +1,9 @@
+{
+  "title": "滑动窗口数据集",
+  "questions": [
+    {"id":"q1","question":"因果语言模型的输入和目标形状是什么？","options":["输入(B,T)和目标(B,T)，其中目标是输入向右移一位","输入(B,T)和目标(B,T+1)","输入(B,T+1)和目标(B,T)","输入(B,T)和目标(B,T)相同"],"correct":"A","explanation":"因果LM中，输入shape为(B,T)，目标shape为(B,T)，目标在位置t的值为输入在位置t+1的值，即目标=输入向左移一位。"},
+    {"id":"q2","question":"为什么需要滑动窗口而非只取非重叠窗口？","options":["更便宜","让模型看到更多样的预测下一个token任务","更快","更简单"],"correct":"B","explanation":"如果模型只看到非重叠窗口，每个训练示例教它相同的T个边界。滑动窗口移动这些边界，使模型看到更多样的预测下一个token任务。"},
+    {"id":"q3","question":"stride=T、stride=T//2和stride=1分别有什么影响？","options":["无影响","stride=T产生非重叠窗口；stride=T//2翻倍样本数；stride=1最大化重叠","stride越大越好","stride越小越好"],"correct":"B","explanation":"stride=T产生非重叠窗口；stride=T//2产生50%重叠、翻倍样本；stride=1最大化重叠、增至T倍。"},
+    {"id":"q4","question":"确定性洗牌为什么重要？","options":["更安全","相同种子产生相同顺序，使两个超参数不同的运行可比","更快","更省内存"],"correct":"B","explanation":"无种子时两次运行看到的数据顺序不同，损失曲线因与变更无关的原因而偏离。每个epoch的种子=base_seed+epoch_index。"}
+  ]
+}
