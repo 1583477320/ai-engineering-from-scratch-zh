@@ -1,0 +1,65 @@
+{
+  "title": "内容审核系统",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "OpenAI审核API的`omni-moderation-latest`基于什么模型？",
+      "options": [
+        "GPT-3.5",
+        "GPT-4",
+        "GPT-4o",
+        "GPT-5"
+      ],
+      "correct": "C",
+      "explanation": "OpenAI审核API的`omni-moderation-latest`（2024）基于GPT-4o，一次调用分类文本+图像。"
+    },
+    {
+      "id": "q2",
+      "question": "三层审核模式包括哪三层？",
+      "options": [
+        "预处理、处理、后处理",
+        "输入审核、输出审核、自定义审核",
+        "规则、机器学习、深度学习",
+        "本地、云端、边缘"
+      ],
+      "correct": "B",
+      "explanation": "三层审核模式包括：输入审核（生成前）、输出审核（生成后）、自定义审核（领域规则）。"
+    },
+    {
+      "id": "q3",
+      "question": "为什么仅输入审核不够？",
+      "options": [
+        "输入审核太慢",
+        "无法捕获输出幻觉和对抗性绕过",
+        "输入审核成本太高",
+        "输入审核不支持多语言"
+      ],
+      "correct": "B",
+      "explanation": "仅输入审核无法捕获输出幻觉（第12-14节编码攻击绕过输入分类器）和对抗性内容。"
+    },
+    {
+      "id": "q4",
+      "question": "Perspective API是什么时代的产物？",
+      "options": [
+        "LLM时代",
+        "LLM前时代",
+        "后LLM时代",
+        "量子计算时代"
+      ],
+      "correct": "B",
+      "explanation": "Perspective API（Google Jigsaw）是LLM前时代的毒性评分系统（2020年前），现在用作内容审核研究基线。"
+    },
+    {
+      "id": "q5",
+      "question": "Azure Content Moderator的退役时间是什么时候？",
+      "options": [
+        "2025年2月",
+        "2026年2月",
+        "2027年2月",
+        "2028年2月"
+      ],
+      "correct": "C",
+      "explanation": "Azure Content Moderator于2024年2月弃用，2027年2月退役，由Azure AI Content Safety取代。"
+    }
+  ]
+}
