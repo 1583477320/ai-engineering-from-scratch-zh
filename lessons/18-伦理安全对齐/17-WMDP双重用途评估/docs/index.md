@@ -89,7 +89,125 @@ print(f"  平均: {result['avg']:.1%}")
 print(f"  最大提升: {result['max_uplift']:.0%}")
 ```
 
+### 第 2 步：遗忘效果模拟
+
+```python
+def simulate_unlearning(original_scores, general_capability=0.85):
+    """模拟 RMU 遗忘效果——降低领域分数但保持通用能力。"""
+    # RMU 将领域分数降至接近随机（25%），通用能力下降几个百分点
+    unlearned = {domain: 0.25 + random.uniform(-0.02, 0.02)
+                 for domain in original_scores}
+    general_drop = general_capability - random.uniform(0.02, 0.05)
+
+    return {
+        "original": original_scores,
+        "unlearned": unlearned,
+        "general_original": general_capability,
+        "general_after": general_drop,
+        "tradeoff": general_capability - general_drop,
+    }
+
+
+# 模拟
+original = {"生物安全": 0.45, "网络安全": 0.52, "化学": 0.38}
+result = simulate_unlearning(original)
+
+print("=== 遗忘效果 ===")
+print("领域分数:")
+for domain in original:
+    orig = original[domain]
+    unlearned = result["unlearned"][domain]
+    print(f"  {domain}: {orig:.1%} → {unlearned:.1%} (降低 {(orig-unlearned):.0%})")
+
+print(f"\n通用能力: {result['general_original']:.1%} → {result['general_after']:.1%} "
+      f"(降低 {result['tradeoff']:.1%})")
+print(f"结论: 领域分数降至随机(25%)，通用能力仅降低 {result['tradeoff']:.1%}")
+```
+
+### 第 3 步：新手提升计算
+
+```python
+def compute_uplift(novice_baseline, model_assisted, expert_ceiling):
+    """计算新手相对提升和专家绝对能力。"""
+    relative_uplift = model_assisted / novice_baseline
+    absolute_ceiling = expert_ceiling
+
+    return {
+        "novice_baseline": novice_baseline,
+        "model_assisted": model_assisted,
+        "relative_uplift": relative_uplift,
+        "expert_ceiling": absolute_ceiling,
+        "interpretation": (
+            f"模型帮助新手提升 {relative_uplift:.1f} 倍。"
+            f"专家可以达到 {absolute_ceiling:.1%} 的能力上限。"
+        ),
+    }
+
+
+# Anthropic 2025 试验数据
+result = compute_uplift(
+    novice_baseline=0.15,   # 新手基线
+    model_assisted=0.38,    # 模型辅助后
+    expert_ceiling=0.85,    # 专家上限
+)
+print(f"=== 新手提升分析 ===")
+print(f"  新手基线: {result['novice_baseline']:.1%}")
+print(f"  模型辅助: {result['model_assisted']:.1%}")
+print(f"  相对提升: {result['relative_uplift']:.1f}x")
+print(f"  专家上限: {result['expert_ceiling']:.1%}")
+print(f"  {result['interpretation']}")
+```
+
 完整代码见 `code/main.py`。
+
+---
+
+### 4. 升级叙事的三个阶段
+
+```python
+def uplift_narrative_timeline():
+    """2024-2025 双重使用升级叙事时间线。"""
+    phases = [
+        {
+            "date": "2024",
+            "label": "轻微提升",
+            "source": "OpenAI/Anthropic 早期评估",
+            "finding": "新手在生物相关任务上相对于互联网搜索有小优势",
+            "framing": "模型有帮助，但不比 Google 多很多",
+            "risk_level": "低",
+        },
+        {
+            "date": "2025年4月",
+            "label": "处于临界点",
+            "source": "OpenAI 准备框架 v2",
+            "finding": "模型'处于有意义地帮助新手制造已知生物威胁的临界点'",
+            "framing": "警告——临界点接近，不是能力声明",
+            "risk_level": "中",
+        },
+        {
+            "date": "2025",
+            "label": "2.53倍提升",
+            "source": "Anthropic 生物武器获取试验",
+            "finding": "受控研究显示新手获得 2.53 倍提升",
+            "framing": "不足以排除 ASL-3",
+            "risk_level": "高",
+        },
+    ]
+
+    print("=== 双重使用升级叙事时间线 ===\n")
+    for p in phases:
+        print(f"  [{p['date']}] {p['label']}")
+        print(f"    来源: {p['source']}")
+        print(f"    发现: {p['finding']}")
+        print(f"    定性: {p['framing']}")
+        print(f"    风险等级: {p['risk_level']}")
+        print()
+
+
+uplift_narrative_timeline()
+```
+
+这个时间线展示了 2024-2025 年的叙事如何从"轻微提升"演变到"不足以排除 ASL-3"。每个阶段都增加了紧迫性，推动了安全框架的迭代。
 
 ---
 
