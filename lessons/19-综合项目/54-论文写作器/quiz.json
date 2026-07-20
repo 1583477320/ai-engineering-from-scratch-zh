@@ -1,0 +1,4 @@
+[
+  {"question":"为什么骨架优先于散文？","options":["结构验证先于内容填充","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"结构验证先于内容填充","stage":"pre"},
+  {"question":"渲染合约保证什么？","options":["图表标签和引用完整性","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"图表标签和引用完整性","stage":"post"}
+]

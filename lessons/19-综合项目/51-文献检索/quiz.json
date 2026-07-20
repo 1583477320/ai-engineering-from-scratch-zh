@@ -1,0 +1,4 @@
+[
+  {"question":"BM25 中 k1 参数控制什么？","options":["词频饱和度","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"词频饱和度","stage":"pre"},
+  {"question":"引用图遍历的 BFS 上限为什么是两跳？","options":["一跳太浅，三跳爆炸","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"一跳太浅，三跳爆炸","stage":"post"}
+]

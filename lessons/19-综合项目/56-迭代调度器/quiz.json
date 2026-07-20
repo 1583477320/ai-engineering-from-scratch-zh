@@ -1,0 +1,4 @@
+[
+  {"question":"UCB 的探索项如何随运行次数变化？","options":["随 sqrt(log(total)/n) 递减","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"随 sqrt(log(total)/n) 递减","stage":"pre"},
+  {"question":"未尝试分支的 UCB 值是什么？","options":["+inf","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"+inf","stage":"post"}
+]

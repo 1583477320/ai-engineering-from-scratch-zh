@@ -1,0 +1,4 @@
+[
+  {"question":"端到端演示的主要目的是什么？","options":["验证课程可组合性","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"验证课程可组合性","stage":"pre"},
+  {"question":"演示如何处理无触发情况？","options":["抛出 NoTriggerError","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"抛出 NoTriggerError","stage":"post"}
+]

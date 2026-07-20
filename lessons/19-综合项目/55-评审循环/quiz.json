@@ -1,0 +1,4 @@
+[
+  {"question":"为什么需要连续两轮平台检测？","options":["单轮持平可能是噪声","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"单轮持平可能是噪声","stage":"pre"},
+  {"question":"五个维度的分数是向量还是标量？","options":["向量","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"向量","stage":"post"}
+]

@@ -1,0 +1,4 @@
+[
+  {"question":"Pre-LN 与 Post-LN 的训练稳定性区别？","options":["Pre-LN 更稳定无需预热","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"Pre-LN 更稳定无需预热","stage":"pre"},
+  {"question":"ViT-Base 的总参数量约是多少？","options":["86M","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"86M","stage":"post"}
+]

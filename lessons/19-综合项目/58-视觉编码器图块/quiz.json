@@ -1,0 +1,4 @@
+[
+  {"question":"图块嵌入将 224×224 图像压缩为多少词元？","options":["196 图块+1 CLS","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"196 图块+1 CLS","stage":"pre"},
+  {"question":"Conv2d 技巧与 unfold 有什么关系？","options":["数值等价","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"数值等价","stage":"post"}
+]

@@ -1,0 +1,4 @@
+[
+  {"question":"余弦对齐损失的输出范围是多少？","options":["[0, 2]","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"[0, 2]","stage":"pre"},
+  {"question":"冻结编码器的好处是什么？","options":["仅训练 1.3M 投影参数","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"仅训练 1.3M 投影参数","stage":"post"}
+]
