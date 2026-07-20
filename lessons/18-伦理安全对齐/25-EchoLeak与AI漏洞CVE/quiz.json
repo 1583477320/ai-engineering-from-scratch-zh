@@ -1,0 +1,65 @@
+{
+  "title": "EchoLeak与AI漏洞CVE",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "EchoLeak攻击的CVSS评分是多少？",
+      "options": [
+        "7.5",
+        "8.0",
+        "9.3",
+        "10.0"
+      ],
+      "correct": "C",
+      "explanation": "CVE-2025-32711 EchoLeak的CVSS评分为9.3，最初被评为较低严重性，后因演示MFA验证码泄露而升级。"
+    },
+    {
+      "id": "q2",
+      "question": "Aim Labs将EchoLeak漏洞类别称为？",
+      "options": [
+        "提示注入攻击",
+        "数据泄露漏洞",
+        "LLM作用域违规",
+        "零点击攻击"
+      ],
+      "correct": "C",
+      "explanation": "Aim Labs将此类漏洞称为LLM作用域违规（LLM Scope Violation），强调外部不受信任输入操纵模型访问特权作用域并泄露数据。"
+    },
+    {
+      "id": "q3",
+      "question": "EchoLeak攻击链的三个边界是什么？",
+      "options": [
+        "输入、处理、输出",
+        "检索、作用域、输出",
+        "网络、应用、数据",
+        "认证、授权、审计"
+      ],
+      "correct": "B",
+      "explanation": "三边界模型包括：检索（不受信任内容进入上下文）、作用域（访问特权数据）、输出（数据泄露）。三个边界必须独立控制。"
+    },
+    {
+      "id": "q4",
+      "question": "为什么CSP无法阻止EchoLeak攻击？",
+      "options": [
+        "CSP配置错误",
+        "CSP不支持HTTPS",
+        "泄露通过CSP批准的Microsoft域名进行",
+        "CSP仅适用于XSS攻击"
+      ],
+      "correct": "C",
+      "explanation": "EchoLeak通过Microsoft签名的URL泄露数据，该域名已被CSP批准，因此安全策略允许该请求。"
+    },
+    {
+      "id": "q5",
+      "question": "OWASP LLM Top 10 2025将什么列为首要威胁？",
+      "options": [
+        "数据泄露",
+        "模型投毒",
+        "提示注入",
+        "拒绝服务"
+      ],
+      "correct": "C",
+      "explanation": "OWASP LLM Top 10 2025将提示注入列为LLM01，即应用层首要威胁。"
+    }
+  ]
+}
