@@ -1,0 +1,9 @@
+{
+  "title": "函数调用调度器",
+  "questions": [
+    {"id":"q1","question":"哪些错误类型会被重试？","options":["所有错误","仅timeout和transient","仅schema错误","仅not_found"],"correct":"B","explanation":"只有timeout和transient错误重试。schema错误是确定性的，重试不改变结果；not_found和internal也不重试。"},
+    {"id":"q2","question":"为什么非幂等工具不重试超时？","options":["更便宜","超时的写入可能已提交，重试会重复写入","更快","更简单"],"correct":"B","explanation":"非幂等工具（如db.write）超时后可能已提交，重试会执行两次。幂等工具重试是安全的。"},
+    {"id":"q3","question":"幂等键为什么由调用者派生？","options":["更简单","防止调度器错误地将语义不同的调用视为相同","更安全","更高效"],"correct":"B","explanation":"仅从参数派生键会使两个语义不同的调用看起来相同。调用者有上下文（step_id+tool_name+args）来正确派生。"},
+    {"id":"q4","question":"调度器的信号量并发限制防止什么？","options":["内存泄漏","扇出耗尽事件循环","数据竞争","死锁"],"correct":"B","explanation":"40个工具调用同时运行会打开40个连接，大多数后端不喜欢一个客户端的40个并行连接。信号量限制同时运行数。"}
+  ]
+}

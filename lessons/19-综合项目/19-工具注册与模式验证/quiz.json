@@ -1,0 +1,9 @@
+{
+  "title": "工具注册与模式验证",
+  "questions": [
+    {"id":"q1","question":"为什么工具注册表要在工具之前构建？","options":["更简单","智能体无法验证的工具就是无法调用的工具","更便宜","更安全"],"correct":"B","explanation":"没有模式的工具调用是猜测游戏。注册表是'什么工具存在'、'参数是什么形状'、'调用什么处理程序'的唯一真实来源。"},
+    {"id":"q2","question":"JSON Schema 2020-12子集覆盖了几个关键字？","options":["4个","6个","8个","12个"],"correct":"B","explanation":"8个关键字：type、properties、required、enum、minLength、maxLength、pattern、items。覆盖90%工具调用。"},
+    {"id":"q3","question":"为什么验证器必须是纯净的（无I/O）？","options":["更快","可在重放日志上重运行","更安全","更简单"],"correct":"B","explanation":"纯净验证器不调用处理程序、不读取文件，可以在重放日志上重运行用于调试。"},
+    {"id":"q4","question":"JSON指针错误路径的作用是什么？","options":["记录日志","让模型能一轮自我纠正","加密数据","压缩输出"],"correct":"B","explanation":"精确的错误路径（如/user/email）比自然语言错误描述更有效，模型可直接修正。"}
+  ]
+}
