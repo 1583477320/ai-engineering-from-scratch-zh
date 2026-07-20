@@ -1,0 +1,4 @@
+[
+  {"question":"BLEU的简短惩罚(BP)什么时候=1？","options":["候选长度>=参考长度时","无关","无关2","无关3"],"correct":0,"explanation":"候选长度>=参考长度时","stage":"pre"},
+  {"question":"ROUGE-L基于什么算法？","options":["最长公共子序列(LCS)","无关","无关2","无关3"],"correct":0,"explanation":"最长公共子序列(LCS)","stage":"post"}
+]

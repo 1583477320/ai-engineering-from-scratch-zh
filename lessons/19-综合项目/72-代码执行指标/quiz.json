@@ -1,0 +1,4 @@
+[
+  {"question":"为什么代码执行需要子进程隔离？","options":["防止死循环和恶意代码","无关","无关2","无关3"],"correct":0,"explanation":"防止死循环和恶意代码","stage":"pre"},
+  {"question":"pass@k的公式？","options":["1-C(n-c,k)/C(n,k)","无关","无关2","无关3"],"correct":0,"explanation":"1-C(n-c,k)/C(n,k)","stage":"post"}
+]

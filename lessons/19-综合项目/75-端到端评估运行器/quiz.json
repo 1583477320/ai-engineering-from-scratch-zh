@@ -1,0 +1,4 @@
+[
+  {"question":"适配器接口为什么设计得小？","options":["确保指标和模型无关","无关","无关2","无关3"],"correct":0,"explanation":"确保指标和模型无关","stage":"pre"},
+  {"question":"自终止演示的判定标准？","options":["规则适配器排名严格高于随机","无关","无关2","无关3"],"correct":0,"explanation":"规则适配器排名严格高于随机","stage":"post"}
+]

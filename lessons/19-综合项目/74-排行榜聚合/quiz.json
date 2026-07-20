@@ -1,0 +1,4 @@
+[
+  {"question":"均值排名和胜率排名的区别？","options":["均值敏感极端值，胜率更鲁棒","无关","无关2","无关3"],"correct":0,"explanation":"均值敏感极端值，胜率更鲁棒","stage":"pre"},
+  {"question":"bootstrap CI如何计算？","options":["有放回重采样百分位区间","无关","无关2","无关3"],"correct":0,"explanation":"有放回重采样百分位区间","stage":"post"}
+]

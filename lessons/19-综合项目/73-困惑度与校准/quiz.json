@@ -1,0 +1,4 @@
+[
+  {"question":"困惑度=词表大小意味着什么？","options":["模型均匀分布，什么都没学到","无关","无关2","无关3"],"correct":0,"explanation":"模型均匀分布，什么都没学到","stage":"pre"},
+  {"question":"ECE和Brier的区别？","options":["ECE按桶平均，Brier惩罚分散预测","无关","无关2","无关3"],"correct":0,"explanation":"ECE按桶平均，Brier惩罚分散预测","stage":"post"}
+]
