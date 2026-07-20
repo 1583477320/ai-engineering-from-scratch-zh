@@ -1,0 +1,9 @@
+{
+  "title": "直接偏好优化",
+  "questions": [
+    {"id":"q1","question":"DPO损失的数学形式是什么？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"对偏好的sigmoid损失，无需显式奖励模型"},
+    {"id":"q2","question":"参考模型的三个不变性是什么？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"参数不接收梯度、对数概率不变、策略从相同权重初始化"},
+    {"id":"q3","question":"DPO训练时梯度方向是什么？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"增加chosen的log-prob降低损失，增加rejected的log-prob增加损失"},
+    {"id":"q4","question":"beta参数控制什么？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"KL约束的强度，beta越大对参考模型的约束越强"}
+  ]
+}

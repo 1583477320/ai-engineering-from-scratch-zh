@@ -1,0 +1,9 @@
+{
+  "title": "加载预训练权重",
+  "questions": [
+    {"id":"q1","question":"safetensors文件中GPT-2权重的c_attn.weight形状是什么？","options":["选项A","选项B","选项C","选项D"],"correct":"C","explanation":"Conv1d布局需要转置才能加载到nn.Linear"},
+    {"id":"q2","question":"加载后权重绑定如何工作？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"设置lm_head.weight=tok_embed.weight共享张量"},
+    {"id":"q3","question":"形状不匹配时加载器应该做什么？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"拒绝赋值并记录对，不修改模型"},
+    {"id":"q4","question":"为什么加载后需要生成样本验证？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"如果加载后样本与随机初始化相同说明加载失败"}
+  ]
+}

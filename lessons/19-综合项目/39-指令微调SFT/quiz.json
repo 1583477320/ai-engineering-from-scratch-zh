@@ -1,0 +1,9 @@
+{
+  "title": "指令微调SFT",
+  "questions": [
+    {"id":"q1","question":"SFT为什么需要掩码指令token？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"指令是给定的，零梯度让模型专注于预测响应"},
+    {"id":"q2","question":"ignore_index=-100在PyTorch中有什么作用？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"这些位置贡献零损失和零梯度"},
+    {"id":"q3","question":"精确匹配评测中规范化步骤包括什么？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"小写、去除空格、折叠双空格"},
+    {"id":"q4","question":"边界token RESP_ID的作用是什么？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"分隔指令区域和响应区域，响应从该位置之后开始"}
+  ]
+}

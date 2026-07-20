@@ -1,0 +1,9 @@
+{
+  "title": "分类器微调",
+  "questions": [
+    {"id":"q1","question":"头部替换与全量微调的核心区别是什么？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"冻结身体仅训练头部 vs 整个堆栈都训练"},
+    {"id":"q2","question":"为什么冻结身体在小数据集上更安全？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"防止灾难性遗忘，身体的预训练被过拟合噪声冲刷"},
+    {"id":"q3","question":"均值池化如何工作？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"按注意力掩码加权平均序列隐藏状态"},
+    {"id":"q4","question":"分类头的参数量是多少？","options":["选项A","选项B","选项C","选项D"],"correct":"B","explanation":"hidden_dim*num_classes + bias"}
+  ]
+}
