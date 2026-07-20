@@ -1,0 +1,9 @@
+{
+  "title": "智能体循环契约",
+  "questions": [
+    {"id":"q1","question":"智能体循环的六个状态是什么？","options":["输入、处理、输出、存储、监控、日志","IDLE、PLANNING、EXECUTING、AWAITING_TOOL、REFLECTING、DONE","启动、运行、暂停、恢复、停止、重启","准备、执行、检查、调整、完成、归档"],"correct":"B","explanation":"六状态：IDLE（空闲）、PLANNING（规划）、EXECUTING（执行）、AWAITING_TOOL（等待工具）、REFLECTING（反思）、DONE（完成）。"},
+    {"id":"q2","question":"拉取点在什么情况下触发？","options":["每次工具调用时","需要工具结果或预算耗尽/钩子请求人工审查时","每次状态转换时","仅在会话结束时"],"correct":"B","explanation":"两个拉取点：AWAITING_TOOL（需要工具结果）和on_pause（预算耗尽或钩子请求人工审查）。"},
+    {"id":"q3","question":"钩子和事件的区别是什么？","options":["没有区别","钩子是命令式的（修改、中止），事件是观察式的（记录、传输）","钩子更快","事件更可靠"],"correct":"B","explanation":"钩子是命令式——可修改负载、引发中止；事件是观察式——记录和传输，不修改循环行为。"},
+    {"id":"q4","question":"为什么智能体循环是确定性状态机而非聊天循环？","options":["更简单","给定相同事件日志可重放会话，无需重新调用模型","更慢","更灵活"],"correct":"B","explanation":"确定性意味着给定相同事件日志可重放会话，这对调试和会话恢复至关重要。"}
+  ]
+}

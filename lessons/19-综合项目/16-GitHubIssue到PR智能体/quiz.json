@@ -1,0 +1,9 @@
+{
+  "title": "GitHub Issue到PR智能体",
+  "questions": [
+    {"id":"q1","question":"异步云编码智能体的触发机制是什么？","options":["命令行输入","GitHub issue标签或PR评论webhook","定时器触发","API调用"],"correct":"B","explanation":"GitHub webhook（issue标签或PR评论）触发智能体运行，无需交互式终端。"},
+    {"id":"q2","question":"为什么智能体不能直接写入main分支？","options":["main分支不存在","分支保护策略执行'不直接推送main'和'不强制推送'","智能体不支持Git","main分支太大"],"correct":"B","explanation":"分支保护策略是唯一能执行'不直接推送main'和'不强制推送'的表面，App永远不被加入绕过列表。"},
+    {"id":"q3","question":"每仓库预算控制在哪里执行？","options":["GitHub服务器","沙箱内","分发器处","PR审查时"],"correct":"B","explanation":"每仓库每日PR数上限和美元上限在分发器处执行，防止智能体启动时就超支。"},
+    {"id":"q4","question":"CI验证门控检查什么？","options":["代码风格","测试通过+覆盖率增量不超阈值","PR标题格式","commit消息"],"correct":"B","explanation":"验证步骤运行完整测试套件，计算覆盖率增量，如果覆盖率下降超过2%则PR标记needs-review。"}
+  ]
+}
