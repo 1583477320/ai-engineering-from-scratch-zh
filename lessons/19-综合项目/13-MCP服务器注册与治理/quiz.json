@@ -1,0 +1,9 @@
+{
+  "title": "MCP服务器注册与治理",
+  "questions": [
+    {"id":"q1","question":"StreamableHTTP传输在2026年MCP中的作用是什么？","options":["加密通信","替代stdio+SSE成为默认网络传输","压缩请求","负载均衡"],"correct":"B","explanation":"StreamableHTTP是MCP 2026修订版的默认传输，无状态HTTP+流式，取代SSE+stdio用于网络服务器。"},
+    {"id":"q2","question":"为什么破坏性工具需要人工审批？","options":["减少API调用次数","防止未经审查的有状态变更","提高响应速度","降低认证成本"],"correct":"B","explanation":"破坏性工具（如创建工单、写入数据库）需要新鲜的人工审批，防止未经审查的有状态变更。"},
+    {"id":"q3","question":".well-known/mcp-capabilities文档包含什么？","options":["模型权重","工具清单、认证要求、传输URL","API密钥","服务器源代码"],"correct":"B","explanation":"该文档暴露工具清单、认证需求、传输URL、所属团队和SLO等能力元数据。"},
+    {"id":"q4","question":"注册表服务在MCP生态中的角色是什么？","options":["存储模型权重","索引MCP服务器，支持发现、验证和启用","执行推理","训练模型"],"correct":"B","explanation":"注册表从各服务器的能力清单轮询、验证并索引，让平台团队发现和管理工具。"}
+  ]
+}

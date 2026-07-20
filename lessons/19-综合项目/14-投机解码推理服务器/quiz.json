@@ -1,0 +1,9 @@
+{
+  "title": "投机解码推理服务器",
+  "questions": [
+    {"id":"q1","question":"投机解码的接受率取决于什么？","options":["GPU内存大小","草案模型与目标模型的对齐度和输入分布","网络延迟","磁盘I/O速度"],"correct":"B","explanation":"接受率取决于草案-目标对齐度和输入分布——不同流量（代码、聊天）产生不同的接受率。"},
+    {"id":"q2","question":"为什么EAGLE-3优于ngram草案？","options":["更大GPU内存","在目标隐藏状态上训练，预测更准确","更快的推理速度","更小的模型体积"],"correct":"B","explanation":"EAGLE-3在目标模型的隐藏状态上训练草案头，比ngram更准确地预测下一个token。"},
+    {"id":"q3","question":"投机解码拒绝时p99延迟更差的原因是什么？","options":["GPU利用率更高","验证传递更大，因为所有草案token都需要验证","网络负载增加","内存碎片"],"correct":"B","explanation":"拒绝时验证传递包含k个草案token，比单token验证更大，导致p99延迟增加。"},
+    {"id":"q4","question":"P-EAGLE与串行EAGLE的区别是什么？","options":["更小的模型","一次验证多个草案分支的树结构","更快的训练速度","更高的量化精度"],"correct":"B","explanation":"P-EAGLE运行并行投机，一次目标传递验证草案分支树中的多个分支。"}
+  ]
+}
