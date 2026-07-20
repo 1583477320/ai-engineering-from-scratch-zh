@@ -1,0 +1,9 @@
+{
+  "title": "验证门与观测预算",
+  "questions": [
+    {"id":"q1","question":"门链为什么需要短路语义？","options":["更安全","第一个拒绝即返回，避免运行更贵的门","更简单","更准确"],"correct":"B","explanation":"第一个拒绝即短路返回，不执行后续更贵的门（如预算门需读取整个账本）。"},
+    {"id":"q2","question":"WhitelistGate为什么是第一个门？","options":["最复杂","最便宜（O(1)哈希查找），最强的声明","最慢","最不重要"],"correct":"B","explanation":"白名单门是O(1)哈希查找，最便宜且是最强的声明——工具不在契约中。"},
+    {"id":"q3","question":"观测账本解决哪两类问题？","options":["内存泄漏和网络延迟","无界观测和过时新鲜度","认证和授权","日志和监控"],"correct":"B","explanation":"无界观测（grep返回50万token）和过时新鲜度（重读最早观测而非最新）。"},
+    {"id":"q4","question":"BudgetGate在什么时候触发？","options":["每次工具调用时","累积token达到上限后拒绝所有进一步调用","仅在会话开始时","仅在错误时"],"correct":"B","explanation":"累积token达到上限后，BudgetGate拒绝所有进一步工具调用。"}
+  ]
+}
