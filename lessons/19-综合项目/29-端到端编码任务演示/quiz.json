@@ -1,0 +1,4 @@
+[
+  {"question":"为什么用确定性策略而非LLM？","options":["可复现且测试可断言步数","无关","无关2","无关3"],"correct":0,"explanation":"可复现且测试可断言步数","stage":"pre"},
+  {"question":"五个断言中零门拒绝是什么意思？","options":["所有合法工具调用都通过了门链","无关","无关2","无关3"],"correct":0,"explanation":"所有合法工具调用都通过了门链","stage":"post"}
+]

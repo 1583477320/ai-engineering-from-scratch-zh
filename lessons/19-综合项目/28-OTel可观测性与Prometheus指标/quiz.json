@@ -1,0 +1,4 @@
+[
+  {"question":"OTel GenAI约定的作用？","options":["标准化LLM应用span属性名","无关","无关2","无关3"],"correct":0,"explanation":"标准化LLM应用span属性名","stage":"pre"},
+  {"question":"为什么JSONL导出器是合理的离线替代？","options":["它产生可流式grep的标准格式","无关","无关2","无关3"],"correct":0,"explanation":"它产生可流式grep的标准格式","stage":"post"}
+]

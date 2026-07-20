@@ -1,0 +1,4 @@
+[
+  {"question":"固定任务的三个组成部分是什么？","options":["目标、设置和验证器","无关","无关2","无关3"],"correct":0,"explanation":"目标、设置和验证器","stage":"pre"},
+  {"question":"pass@1和pass@k分别说明什么？","options":["单次成功率和多次尝试中至少一次成功概率","无关","无关2","无关3"],"correct":0,"explanation":"单次成功率和多次尝试中至少一次成功概率","stage":"post"}
+]
