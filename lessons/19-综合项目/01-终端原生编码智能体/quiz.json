@@ -1,0 +1,65 @@
+{
+  "title": "终端原生编码智能体",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "编码智能体的四表面架构是什么？",
+      "options": [
+        "输入、处理、输出、存储",
+        "计划、行动、观察、恢复",
+        "感知、推理、行动、学习",
+        "编码、测试、部署、监控"
+      ],
+      "correct": "B",
+      "explanation": "四表面架构包括：计划（Plan）维护TodoWrite状态、行动（Act）调度工具调用、观察（Observe）捕获输出、恢复（Recover）处理工具错误。"
+    },
+    {
+      "id": "q2",
+      "question": "2026年编码智能体的八种生命周期钩子不包括哪个？",
+      "options": [
+        "PreToolUse",
+        "PostToolUse",
+        "SessionStart",
+        "ModelTrain"
+      ],
+      "correct": "D",
+      "explanation": "八种钩子是：SessionStart、SessionEnd、PreToolUse、PostToolUse、UserPromptSubmit、Notification、Stop、PreCompact。"
+    },
+    {
+      "id": "q3",
+      "question": "为什么沙箱隔离是编码智能体的关键安全组件？",
+      "options": [
+        "提高运行速度",
+        "防止工具调用破坏宿主机文件系统",
+        "减少模型调用次数",
+        "降低token消耗"
+      ],
+      "correct": "B",
+      "explanation": "沙箱隔离确保所有工具调用在独立环境中执行，不会破坏宿主机文件系统或执行恶意操作。"
+    },
+    {
+      "id": "q4",
+      "question": "Live-SWE-agent在SWE-bench Verified上用什么模型达到了多少准确率？",
+      "options": [
+        "GPT-4，65.3%",
+        "Claude Opus 4.5，79.2%",
+        "Gemini Pro，71.8%",
+        "Llama 3，58.4%"
+      ],
+      "correct": "B",
+      "explanation": "Live-SWE-agent在SWE-bench Verified上用Opus 4.5达到了79.2%的准确率。"
+    },
+    {
+      "id": "q5",
+      "question": "成本控制的三个层是什么？",
+      "options": [
+        "CPU、内存、磁盘",
+        "每轮token上限、每次会话美元预算、硬回合数限制",
+        "模型选择、提示设计、输出截断",
+        "训练、推理、部署"
+      ],
+      "correct": "B",
+      "explanation": "三层成本控制：每轮token上限（200k）、每次会话美元预算（$5）、硬回合数限制（50轮）。"
+    }
+  ]
+}
