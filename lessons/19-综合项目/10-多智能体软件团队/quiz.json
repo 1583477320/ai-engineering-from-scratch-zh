@@ -1,0 +1,53 @@
+{
+  "title": "多智能体软件团队",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "多智能体软件团队中四个角色分别是什么？",
+      "options": [
+        "产品经理、开发、测试、运维",
+        "架构师、编码员、评审者、测试者",
+        "规划者、执行者、检查者、部署者",
+        "设计师、程序员、QA、发布经理"
+      ],
+      "correct": "B",
+      "explanation": "架构师（Opus 4.7）制定计划、编码员（Sonnet 4.7）并行实现、评审者（GPT-5.4）把关、测试者（Gemini 2.5 Pro）验证。"
+    },
+    {
+      "id": "q2",
+      "question": "什么是Token放大？",
+      "options": [
+        "模型输出token膨胀",
+        "跨角色总token与单智能体完成同一任务的token之比",
+        "提示工程的token优化技术",
+        "并行处理的token加速"
+      ],
+      "correct": "B",
+      "explanation": "Token放大是多智能体的开销指标：跨角色总token除以单智能体完成同一任务的token。"
+    },
+    {
+      "id": "q3",
+      "question": "评审者不能做什么？",
+      "options": [
+        "不能阅读代码",
+        "不能批准自己提出的更改",
+        "不能与编码员通信",
+        "不能查看测试结果"
+      ],
+      "correct": "B",
+      "explanation": "评审者不能批准自己提出的更改，这是智能体治理的基本原则，防止利益冲突。"
+    },
+    {
+      "id": "q4",
+      "question": "并行工作树使用什么机制隔离编码员工作？",
+      "options": [
+        "Docker容器",
+        "git worktree add + Daytona沙箱",
+        "Python虚拟环境",
+        "Kubernetes命名空间"
+      ],
+      "correct": "B",
+      "explanation": "每个编码员通过`git worktree add`创建独立工作树，配合Daytona沙箱实现文件系统和进程隔离。"
+    }
+  ]
+}

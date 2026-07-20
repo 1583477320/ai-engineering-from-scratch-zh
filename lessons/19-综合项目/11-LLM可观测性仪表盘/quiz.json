@@ -1,0 +1,53 @@
+{
+  "title": "LLM可观测性仪表盘",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "尾采样器决定保留哪些追踪？",
+      "options": [
+        "仅保留错误追踪",
+        "保留所有追踪",
+        "100%错误追踪+10%成功追踪",
+        "仅保留高成本的追踪"
+      ],
+      "correct": "C",
+      "explanation": "尾采样器保留100%的错误追踪和10%的成功追踪，平衡存储成本与覆盖率。"
+    },
+    {
+      "id": "q2",
+      "question": "GenAI语义约定用于什么？",
+      "options": [
+        "定义AI模型的架构",
+        "规范LLM span属性的OpenTelemetry标准",
+        "定义提示词格式",
+        "规范模型训练流程"
+      ],
+      "correct": "B",
+      "explanation": "GenAI语义约定是OpenTelemetry规范，定义了LLM span的标准属性（system、model、tokens等）。"
+    },
+    {
+      "id": "q3",
+      "question": "Eval span与父追踪的关系是什么？",
+      "options": [
+        "独立存储",
+        "作为子span链接到父追踪",
+        "存储在单独的数据库中",
+        "不保留关联关系"
+      ],
+      "correct": "B",
+      "explanation": "Eval span作为子span链接到父LLM调用，携带评测分数，可以追溯每个响应的质量。"
+    },
+    {
+      "id": "q4",
+      "question": "PSI（人口稳定指数）用于检测什么？",
+      "options": [
+        "模型性能下降",
+        "提示分布漂移",
+        "成本异常",
+        "延迟变化"
+      ],
+      "correct": "B",
+      "explanation": "PSI比较本周提示嵌入分布与基线分布的差异，大于0.2表示有意义的漂移。"
+    }
+  ]
+}
