@@ -1,0 +1,9 @@
+{
+  "title": "Transformer块",
+  "questions": [
+    {"id":"q1","question":"Pre-LN和Post-LN的关键区别是什么？","options":["Pre-LN更快","Pre-LN中LayerNorm在残差分支内、残差传递未归一化信号；Post-LN在残差相加之后","Pre-LN更准确","Pre-LN参数更少"],"correct":"B","explanation":"Pre-LN将LayerNorm放在残差分支内、子层之前，残差传递未归一化信号使梯度可直接传播到嵌入层。Post-LN在残差相加之后，梯度必须通过LayerNorm。"},
+    {"id":"q2","question":"为什么Pre-LN可以在无warmup时训练稳定？","options":["更少的参数","残差路径未归一化，梯度可直接传播到嵌入层","更少的层","更大的学习率"],"correct":"B","explanation":"Pre-LN中残差路径未归一化，梯度可直接传播到嵌入层，在12层深度和3e-4学习率下不会快速衰减。"},
+    {"id":"q3","question":"Transformer块中的MLP是什么形状？","options":["D→D","D→4D→D","4D→D→4D","D→D→D"],"correct":"B","explanation":"位置MLP是两层网络，隐藏宽度为嵌入宽度的4倍，使用GELU激活，无token间通信。"},
+    {"id":"q4","question":"残差连接的两个作用是什么？","options":["加速计算和增加参数","使梯度路径跨深度相加+让每个块学习增量更新","减少内存和增加并行","防止过拟合和正则化"],"correct":"B","explanation":"残差连接使梯度路径跨深度相加（保持梯度范数在范围内），并让每个块学习对运行表示的增量更新而非完全替换。"}
+  ]
+}
