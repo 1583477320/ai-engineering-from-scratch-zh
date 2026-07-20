@@ -1,0 +1,9 @@
+{
+  "title": "评测工具与固定任务",
+  "questions": [
+    {"id":"q1","question":"三种确定性验证器是什么？","options":["单元测试、集成测试、端到端测试","file_equals、regex_match、shell_exit_zero","准确率、召回率、F1","BERT、GPT、T5"],"correct":"B","explanation":"三种验证器：file_equals（文件比较）、regex_match（正则匹配）、shell_exit_zero（shell命令退出码为零）。"},
+    {"id":"q2","question":"pass@k的公式是什么？","options":["p^k","1 - (1-p)^k","p * k","sqrt(p)"],"correct":"B","explanation":"pass@k = 1 - (1-p)^k，其中p是经验通过率，k是采样次数。表示k次独立样本中至少一次通过的概率。"},
+    {"id":"q3","question":"为什么评测工具需要固定任务而非人类评估？","options":["更便宜","确定性验证器使评测可重现，不依赖模型随机性","更快","更简单"],"correct":"B","explanation":"确定性验证器给定相同文件产生相同结果，使评测可重现，不依赖模型随机性或人类主观判断。"},
+    {"id":"q4","question":"scratch目录在什么时候被清理？","options":["永不清理","每个样本完成后在finally块中清理","会话结束时清理","由操作系统自动清理"],"correct":"B","explanation":"每个样本在tempfile.mkdtemp()中运行，完成后在finally块中shutil.rmtree清理，防止磁盘空间泄漏。"}
+  ]
+}

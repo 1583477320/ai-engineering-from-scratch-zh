@@ -1,0 +1,10 @@
+{
+  "title": "沙箱运行器",
+  "questions": [
+    {"id":"q1","question":"沙箱的四个拒绝轴是什么？","options":["CPU、内存、磁盘、网络","名称、argv、shell元字符、路径监狱","认证、授权、审计、加密","编码、解码、压缩、解压"],"correct":"B","explanation":"四个拒绝轴：名称（拒绝列表）、argv（解释器检查）、shell元字符、路径监狱（项目根检查）。"},
+    {"id":"q2","question":"为什么路径监狱用os.path.realpath而非普通路径比较？","options":["更快","防止符号链接逃逸","更简单","更安全"],"correct":"B","explanation":"符号链接可能指向项目根之外。realpath解析所有符号链接后检查前缀，防止此类逃逸。"},
+    {"id":"q3","question":"为什么python3 -c '...'会被拒绝？","options":["Python不支持-c标志","-c标志等于shell调用，绕过沙箱","Python太慢","Python有安全漏洞"],"correct":"B","explanation":"解释器带-c/-e标志等于shell调用的伪装，可能执行任意命令，因此被拒绝。"},
+    {"id":"q4","question":"SandboxResult的exit_code -100表示什么？","options":["成功","超时","被沙箱拒绝","文件未找到"],"correct":"B","explanation":"-100表示被沙箱拒绝（denied），-101表示超时。"},
+    {"id":"q5","question":"生产环境沙箱应该在本课基础上增加什么？","options":["更复杂的拒绝列表","Docker容器、微VM、能力丢弃、只读挂载、ulimit","更多的可执行文件","更短的超时时间"],"correct":"B","explanation":"生产环境需要OS级隔离：非特权Docker容器、微VM、能力丢弃、项目根只读挂载、ulimit内存CPU、环境清洗。"}
+  ]
+}

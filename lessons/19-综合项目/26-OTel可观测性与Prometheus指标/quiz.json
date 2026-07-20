@@ -1,0 +1,9 @@
+{
+  "title": "OTel可观测性与Prometheus指标",
+  "questions": [
+    {"id":"q1","question":"为什么OTel GenAI语义约定比自定义字段名更好？","options":["更快","每个OTel兼容后端都能读取标准属性","更便宜","更安全"],"correct":"B","explanation":"OTel GenAI语义约定是跨LLM框架共享的标准——如果智能体写这些属性，Grafana/Honeycomb/Jaeger都能读取。"},
+    {"id":"q2","question":"追踪和指标的区别是什么？","options":["没有区别","追踪回答'发生了什么'，指标回答'多久发生一次'","追踪更详细","指标更便宜"],"correct":"B","explanation":"追踪看单次调用（哪个工具、多长时间、什么错误），指标看聚合趋势（p95延迟、调用频率）。"},
+    {"id":"q3","question":"JSONL导出器的优势是什么？","options":["支持加密","每行一个JSON对象，可流式/grep/导入","压缩率高","支持并发写入"],"correct":"B","explanation":"JSONL是最简单的可流式、grep和导入格式。一行一个span对象，下游工具可直接处理。"},
+    {"id":"q4","question":"直方图的默认桶集用于什么测量？","options":["内存使用","CPU使用","延迟（毫秒）","token计数"],"correct":"B","explanation":"OTel默认直方图桶集（5/10/25/50/100/250/500/1000/2500/5000/10000ms）用于延迟分布。"}
+  ]
+}
