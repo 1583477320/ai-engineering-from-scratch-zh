@@ -1,0 +1,4 @@
+[
+  {"question":"组合时谁替换optim.step？","options":["ZeRO-1 step","无关","无关2","无关3"],"correct":0,"explanation":"ZeRO-1 step","stage":"pre"},
+  {"question":"四个不变量中哪个证明同步正确？","options":["每设备参数范数一致","无关","无关2","无关3"],"correct":0,"explanation":"每设备参数范数一致","stage":"post"}
+]

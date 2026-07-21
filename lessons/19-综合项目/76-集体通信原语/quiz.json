@@ -1,0 +1,4 @@
+[
+  {"question":"环形allreduce每设备通信量？","options":["2T(N-1)/N","无关","无关2","无关3"],"correct":0,"explanation":"2T(N-1)/N","stage":"pre"},
+  {"question":"树形allreduce的优势场景？","options":["小N或高延迟链路","无关","无关2","无关3"],"correct":0,"explanation":"小N或高延迟链路","stage":"post"}
+]

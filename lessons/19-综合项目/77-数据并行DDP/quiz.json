@@ -1,0 +1,4 @@
+[
+  {"question":"DDP的allreduce为什么用平均而非求和？","options":["平均梯度不随设备数变化","无关","无关2","无关3"],"correct":0,"explanation":"平均梯度不随设备数变化","stage":"pre"},
+  {"question":"桶分组的作用？","options":["将N个小allreduce合并为一个","无关","无关2","无关3"],"correct":0,"explanation":"将N个小allreduce合并为一个","stage":"post"}
+]

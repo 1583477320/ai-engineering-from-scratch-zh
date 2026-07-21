@@ -1,0 +1,4 @@
+[
+  {"question":"分片检查点的关键优势？","options":["每设备并行写入，带宽随集群扩展","无关","无关2","无关3"],"correct":0,"explanation":"每设备并行写入，带宽随集群扩展","stage":"pre"},
+  {"question":"原子写入的模式？","options":["写tmp→fsync→POSIX重命名","无关","无关2","无关3"],"correct":0,"explanation":"写tmp→fsync→POSIX重命名","stage":"post"}
+]

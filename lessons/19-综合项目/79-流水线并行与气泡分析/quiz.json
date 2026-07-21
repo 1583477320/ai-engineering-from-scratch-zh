@@ -1,0 +1,4 @@
+[
+  {"question":"气泡比例公式？","options":["(N-1)/(M+N-1)","无关","无关2","无关3"],"correct":0,"explanation":"(N-1)/(M+N-1)","stage":"pre"},
+  {"question":"为什么阶段均衡比参数量更重要？","options":["不等计算量拖累整个流水线","无关","无关2","无关3"],"correct":0,"explanation":"不等计算量拖累整个流水线","stage":"post"}
+]

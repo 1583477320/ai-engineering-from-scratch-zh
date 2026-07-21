@@ -1,0 +1,4 @@
+[
+  {"question":"ZeRO-1分片什么？","options":["优化器状态","无关","无关2","无关3"],"correct":0,"explanation":"优化器状态","stage":"pre"},
+  {"question":"ZeRO-1通信量与DDP相比如何？","options":["相同（都是allreduce=reduce_scatter+allgather）","无关","无关2","无关3"],"correct":0,"explanation":"相同（都是allreduce=reduce_scatter+allgather）","stage":"post"}
+]
