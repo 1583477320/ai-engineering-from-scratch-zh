@@ -1,0 +1,4 @@
+[
+  {"question":"fp16 每参数占用多少字节？","options":["2 字节","4 字节","1 字节","8 字节"],"correct":0,"explanation":"fp16 使用 16 位即 2 字节表示一个参数。fp32 是 4 字节。","stage":"pre"},
+  {"question":"PyTorch 中为什么 GPU 计时需要 torch.cuda.synchronize()？","options":["GPU 计算是异步的，需要同步等完成","synchronize 提高 GPU 速度","同步才能释放显存","PyTorch 要求每次操作后同步"],"correct":0,"explanation":"GPU 启动计算后立即返回 CPU——计时需要等待 GPU 实际完成才能获得准确时间。","stage":"post"}
+]

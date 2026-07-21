@@ -1,0 +1,4 @@
+[
+  {"question":"AI 工程环境的四层技术栈从底向上是什么？","options":["系统→包管理器→运行时→AI库","Python→Node.js→Rust→Julia","CPU→GPU→TPU→NPU","编辑器→Shell→Git→驱动"],"correct":0,"explanation":"从系统基础开始，向上是包管理器、语言运行时、AI/ML 库。每层依赖下一层。","stage":"pre"},
+  {"question":"为什么 uv 比 pip 快？","options":["它是用 Rust 写的，并行解析","它是 PyTorch 的一部分","它不使用缓存","它只安装少量包"],"correct":0,"explanation":"uv 用 Rust 实现，利用内存安全性和并发优势。它缓存已下载的包、并行解析依赖。","stage":"post"}
+]

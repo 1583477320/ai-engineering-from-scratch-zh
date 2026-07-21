@@ -1,0 +1,4 @@
+[
+  {"question":"Git 的四个核心区域是什么？","options":["工作目录/暂存区/本地仓库/远程","编辑/保存/运行/推送到云端","索引/缓存/分支/标签","开发/测试/生产/部署"],"correct":0,"explanation":"工作目录→git add→暂存区→git commit→本地仓库→git push→远程(GitHub)","stage":"pre"},
+  {"question":"为什么在 main 分支上直接修改代码是危险的？","options":["实验可能破坏主分支且无法回退","Git 不允许在 main 上修改","main 分支不能 push","修改 main 会删除其他分支"],"correct":0,"explanation":"在 main 上直接修改可能破坏稳定的代码。始终创建分支进行实验，合并前确保 main 干净。","stage":"post"}
+]
