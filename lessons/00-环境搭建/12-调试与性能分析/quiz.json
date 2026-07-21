@@ -1,0 +1,4 @@
+[
+  {"question":"AI 代码最常见的隐形 bug 是什么？","options":["语法错误","张量在错误设备上静默运行","网络超时","内存溢出"],"correct":1,"explanation":"模型在 GPU 但张量在 CPU 不会崩溃，训练继续运行但极慢。这是最隐蔽的 AI bug。","stage":"pre"},
+  {"question":"TensorBoard 损失下降但验证损失上升说明什么？","options":["训练正常","过拟合","学习率太低","数据加载错误"],"correct":1,"explanation":"训练损失下降但验证损失上升是过拟合的经典信号——模型记忆了训练数据但未学到泛化能力。","stage":"post"}
+]

@@ -1,0 +1,4 @@
+[
+  {"question":"AI 工作中最佳的存储格式是什么？","options":["CSV","JSON","Parquet","XML"],"correct":2,"explanation":"Parquet 使用列式存储，比 CSV 小 3-10 倍、读取快 5-10 倍。Arrow 是内存中的格式，CSV 和 JSON 用于交换。","stage":"pre"},
+  {"question":"为什么数据划分必须设置随机种子？","options":["Python 要求","确保每次运行产生相同的划分，实验可复现","提高性能","减少内存使用"],"correct":1,"explanation":"没有固定种子的划分每次运行结果不同，无法比较不同超参数配置下的训练效果。","stage":"post"}
+]

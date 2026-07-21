@@ -1,0 +1,4 @@
+[
+  {"question":"Linux 中 `rm -rf` 有什么特点？","options":["可以撤销","永久删除，没有回收站","只删除空目录","需要 sudo 权限"],"correct":1,"explanation":"`rm -rf` 是永久删除，Linux 没有回收站。执行前务必双击检查路径。","stage":"pre"},
+  {"question":"WSL2 如何支持 GPU？","options":["WSL2 内置 NVIDIA 驱动","在 Windows 侧安装 NVIDIA 驱动，WSL2 自动直通","WSL2 不支持 GPU","需要手动安装 CUDA toolkit"],"correct":1,"explanation":"WSL2 通过虚拟化层将 Windows 的 GPU 直通给 Linux 内核。只需在 Windows 侧安装 NVIDIA 驱动，CUDA 在 WSL2 内部即可用。","stage":"post"}
+]

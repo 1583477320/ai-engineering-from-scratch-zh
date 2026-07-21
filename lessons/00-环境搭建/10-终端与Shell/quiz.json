@@ -1,0 +1,4 @@
+[
+  {"question":"tmux 与 nohup 的核心区别是什么？","options":["tmux 可以分离和重连，nohup 只能后台运行","tmux 需要 sudo，nohup 不需要","nohup 比 tmux 更快","两者完全相同"],"correct":0,"explanation":"nohup 让进程在终端关闭后继续，但无法重连查看输出。tmux 在虚拟会话中运行，可以分离后重连，还能多窗格并行。","stage":"pre"},
+  {"question":"`>` 和 `>>` 的区别是什么？","options":["两者相同","> 覆盖文件，>> 追加到文件","> 追加到文件，>> 覆盖","> 运行更快"],"correct":1,"explanation":"> 覆盖文件内容，>> 追加到文件末尾。训练日志应该用 >> 以保留历史。","stage":"post"}
+]
