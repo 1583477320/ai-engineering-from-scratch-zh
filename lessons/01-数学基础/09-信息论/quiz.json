@@ -1,0 +1,4 @@
+[
+  {"question":"交叉熵损失在分类中等于什么？","options":["平均惊讶度","负对数概率","KL 散度","互信息"],"correct":1,"explanation":"对于 one-hot 标签，交叉熵 H(P,Q) = -log(q(正确类别))，即正确类别的负对数概率。","stage":"pre"},
+  {"question":"KL 散度不对称意味着什么？","options":["D_KL(P||Q) = D_KL(Q||P)","用 Q 编码 P 和用 P 编码 Q 的代价不同","KL 不能用于优化","KL 总是正值"],"correct":1,"explanation":"用 Q 替代 P 的代价不同于用 P 替代 Q 的代价——它们衡量不同的信息损失方向。","stage":"post"}
+]
