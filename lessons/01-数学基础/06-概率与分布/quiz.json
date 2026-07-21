@@ -1,0 +1,4 @@
+[
+  {"question":"对数概率的作用？","options":["乘法变加法，避免下溢","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"乘法变加法，避免下溢","stage":"pre"},
+  {"question":"为什么正态分布无处不在？","options":["中心极限定理","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"中心极限定理","stage":"post"}
+]

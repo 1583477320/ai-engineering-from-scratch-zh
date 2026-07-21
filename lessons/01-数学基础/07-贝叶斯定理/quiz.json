@@ -1,0 +1,4 @@
+[
+  {"question":"MAP估计等价什么正则化？","options":["L2正则化","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"L2正则化","stage":"pre"},
+  {"question":"朴素贝叶斯为什么在假设不成立时仍有效？","options":["分类器只需排序，不需要精确概率","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"分类器只需排序，不需要精确概率","stage":"post"}
+]

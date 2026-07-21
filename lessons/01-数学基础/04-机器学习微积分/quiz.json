@@ -1,0 +1,4 @@
+[
+  {"question":"梯度下降的更新规则是什么？","options":["w_new = w_old - 学习率 × dL/dw","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"w_new = w_old - 学习率 × dL/dw","stage":"pre"},
+  {"question":"为什么深度学习不用牛顿法？","options":["Hessian N×N 矩阵内存不可行","无关答案1","无关答案2","无关答案3"],"correct":0,"explanation":"Hessian N×N 矩阵内存不可行","stage":"post"}
+]
