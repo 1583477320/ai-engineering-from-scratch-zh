@@ -1,0 +1,4 @@
+[
+  {"question":"SVD 对任何形状的矩阵都适用吗？","options":["是，任何形状、任何秩","否，只能用于方阵","只能用于满秩矩阵","只能用于对称矩阵"],"correct":0,"explanation":"SVD 是最通用的矩阵分解——对任何形状、任何秩的矩阵都适用。这是它优于特征分解的地方。","stage":"pre"},
+  {"question":"截断 SVD 的最优性保证？","options":["只是近似最优","Eckart-Young 定理证明它是所有 rank-k 矩阵中最优的","没有数学保证","只对对称矩阵成立"],"correct":1,"explanation":"Eckart-Young-Mirsky 定理证明截断 SVD 在 Frobenius 和谱范数下都是最优的 rank-k 近似。","stage":"post"}
+]

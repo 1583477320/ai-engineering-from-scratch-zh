@@ -1,0 +1,4 @@
+[
+  {"question":"Log-Sum-Exp 技巧为什么有效？","options":["减去最大值后 exp 最大值为 1，溢出消除","使用更高精度计算","跳过大值","使用整数运算"],"correct":0,"explanation":"减去 max(x) 后最大指数为 exp(0)=1，不可能溢出；至少一个项为 1，和至少为 1，不可能下溢到 -inf。","stage":"pre"},
+  {"question":"为什么训练优先使用 bfloat16 而非 float16？","options":["bfloat16 更精确","bfloat16 有与 float32 相同的指数范围，训练中范围比精度更重要","bfloat16 速度更快","两者没有区别"],"correct":1,"explanation":"float16 最大值仅 65,504，训练中经常溢出。bfloat16 有 8 位指数（范围 ±3.4e38），梯度不需要损失缩放。","stage":"post"}
+]
