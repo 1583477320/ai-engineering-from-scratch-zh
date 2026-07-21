@@ -1,0 +1,4 @@
+[
+  {"question":"输出分类器解决什么输入分类器不能的问题？","options":["模型输出自身包含PII或毒性内容","无关","无关2","无关3"],"correct":0,"explanation":"模型输出自身包含PII或毒性内容","stage":"pre"},
+  {"question":"策略路由的动作有哪些？","options":["block/redact/warn/log","无关","无关2","无关3"],"correct":0,"explanation":"block/redact/warn/log","stage":"post"}
+]

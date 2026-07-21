@@ -1,0 +1,4 @@
+[
+  {"question":"规则的三要素？","options":["名称+谓词+解释","无关","无关2","无关3"],"correct":0,"explanation":"名称+谓词+解释","stage":"pre"},
+  {"question":"修正器做什么？","options":["草稿到修订版的确定性变换","无关","无关2","无关3"],"correct":0,"explanation":"草稿到修订版的确定性变换","stage":"post"}
+]

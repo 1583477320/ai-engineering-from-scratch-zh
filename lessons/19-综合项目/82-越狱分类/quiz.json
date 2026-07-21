@@ -1,0 +1,4 @@
+[
+  {"question":"六类别越狱分类法的依据？","options":["攻击滥用的信任边界","无关","无关2","无关3"],"correct":0,"explanation":"攻击滥用的信任边界","stage":"pre"},
+  {"question":"匹配API是检测器吗？","options":["不是，是标签生产者","无关","无关2","无关3"],"correct":0,"explanation":"不是，是标签生产者","stage":"post"}
+]

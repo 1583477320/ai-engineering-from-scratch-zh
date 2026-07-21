@@ -1,0 +1,4 @@
+[
+  {"question":"不足拒绝率和过度拒绝率的区别？","options":["不安全提示回答了 vs 安全提示拒绝了","无关","无关2","无关3"],"correct":0,"explanation":"不安全提示回答了 vs 安全提示拒绝了","stage":"pre"},
+  {"question":"为什么同时报告两者？","options":["只优化一个会牺牲另一个","无关","无关2","无关3"],"correct":0,"explanation":"只优化一个会牺牲另一个","stage":"post"}
+]

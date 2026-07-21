@@ -1,0 +1,4 @@
+[
+  {"question":"检测器的三层结构？","options":["归一化+子串规则+正则规则","无关","无关2","无关3"],"correct":0,"explanation":"归一化+子串规则+正则规则","stage":"pre"},
+  {"question":"为什么偏向召回？","options":["漏回归比误报更致命","无关","无关2","无关3"],"correct":0,"explanation":"漏回归比误报更致命","stage":"post"}
+]
