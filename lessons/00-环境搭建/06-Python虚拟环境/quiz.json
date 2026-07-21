@@ -1,0 +1,4 @@
+[
+  {"question":"虚拟环境的作用是什么？","options":["加速 Python 运行","隔离 Python 包和解释器，不影响系统其他项目","创建多个 Python 版本","压缩代码大小"],"correct":1,"explanation":"虚拟环境创建 Python 解释器和包的独立安装目录，每个项目有自己的依赖，互不影响。","stage":"pre"},
+  {"question":"pyproject.toml 比 requirements.txt 好在哪？","options":["支持可选依赖组，可以用 pip install -e 安装","格式更好看","文件更小","安装速度更快"],"correct":0,"explanation":"pyproject.toml 支持可选依赖组（如 torch、llm），可以按需安装，是 Python 打包的现代标准。","stage":"post"}
+]

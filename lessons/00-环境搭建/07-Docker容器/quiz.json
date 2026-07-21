@@ -1,0 +1,4 @@
+[
+  {"question":"Docker 镜像和容器的关系是什么？","options":["容器是镜像的运行实例，镜像是只读模板","两者完全相同","容器比镜像大","镜像只能运行一个容器"],"correct":0,"explanation":"镜像是只读模板（类比：菜谱），容器是镜像的运行实例（类比：正在做的菜）。一个镜像可以运行多个容器。","stage":"pre"},
+  {"question":"为什么 AI 项目比一般软件更需要 Docker？","options":["AI 代码更难写","AI 依赖链复杂，需要锁定 CUDA 和 PyTorch 版本","AI 不需要版本控制","Docker 专门用于 AI"],"correct":1,"explanation":"AI 技术栈涉及 CUDA 版本、PyTorch 版本、flash-attn 等编译依赖。Docker 将所有这些打包成镜像，解决‘在我机器上能跑’的问题。","stage":"post"}
+]

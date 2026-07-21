@@ -1,0 +1,4 @@
+[
+  {"question":"Jupyter 中 %timeit 和 %%time 的区别？","options":["%timeit 多次取平均，%%time 运行一次","%timeit 只测 CPU，%%time 测 GPU","两者完全相同","%timeit 测内存，%%time 测时间"],"correct":0,"explanation":"%timeit 自动多次运行并取平均值，适合微基准测试。%%time 运行一次并报告墙上时间，适合训练循环。","stage":"pre"},
+  {"question":"为什么需要定期重启 Jupyter 内核？","options":["内核每 10 分钟自动重启","清除隐藏状态和内存泄漏，避免变量残留","重启可以加速代码执行","内核重启后变量自动保存"],"correct":1,"explanation":"删除单元格不会清除其创建的内存。定期重启内核清除陈旧变量和内存泄漏。","stage":"post"}
+]

@@ -1,0 +1,4 @@
+[
+  {"question":"Remote SSH 的工作原理是什么？","options":["VS Code 在远程机器上运行整个应用","VS Code 在远程机器上运行轻量级服务器，本地编辑器通过 SSH 通信","SSH 直接传输代码","远程运行 Jupyter Notebook"],"correct":1,"explanation":"Remote SSH 在远程机器上安装轻量级服务器组件。本地 UI 通过 SSH 与远程服务器通信，代码执行、调试、LSP 都在远程。","stage":"pre"},
+  {"question":"为什么保存时自动格式化很重要？","options":["让代码更快","永远不用手动调整格式，代码风格始终一致","减少文件大小","自动生成文档"],"correct":1,"explanation":"Black 在每次保存时自动处理格式，使代码风格始终保持一致，避免了手动格式化的心智负担和代码审查中的格式争论。","stage":"post"}
+]
