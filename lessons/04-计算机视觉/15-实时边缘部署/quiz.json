@@ -1,0 +1,62 @@
+[
+  {
+    "question": "你在基准测试报告中写 \"平均延迟 5 毫秒\"，实际使用中发现偶尔会超过 50 毫秒。这缺失了什么？",
+    "options": [
+      "什么都不缺——均值已经足够描述性能",
+      "百分位（p50/p95/p99）、预热纪律和 CUDA 同步；均值会掩盖尾部延迟，且没有预热的数据可能测量的是 JIT 编译而非内核执行",
+      "模型参数量",
+      "数据集名称"
+    ],
+    "correct": 1,
+    "explanation": "生产环境的延迟测量必须报告百分位——实时系统是在尾部超时时崩溃的，不是在平均值超时时。没有预热的话，第一次前向传播包含 JIT 编译和冷缓存填充，数值完全不代表真实性能。没有 CUDA synchronize() 的话，GPU kernel 调度返回时 kernel 还没执行完，你测到的只是调度开销。这三个条件必须同时满足，数字才有意义。",
+    "stage": "pre"
+  },
+  {
+    "question": "FLOPs 和设备上的真实延迟并不总是完美对应。为什么？",
+    "options": [
+      "FLOPs 计数器坏了",
+      "不同操作有不同的硬件友好度——深度可分离卷积 FLOPs 更低但在 GPU 上受内存带宽限制，而密集矩阵乘法虽然 FLOPs 更高但能充分利用 Tensor Core。内存带宽、内核启动开销和缓存行为也决定了真实的 wall-clock 延迟远超出于 FLOPs",
+      "FLOPs 忽略了批次大小",
+      "PyTorch 计算 FLOPs 不正确"
+    ],
+    "correct": 1,
+    "explanation": "FLOPs 是一个便宜但不完美的代理指标。实际的墙钟延迟取决于操作与硬件优势的对齐程度：密集矩阵乘法匹配 Tensor Core，深度卷积受限于内存带宽，注意力机制受序列长度的平方级内存读取影响。做架构搜索时 FLOPs 是有用的；做部署决策时必须用目标设备实测。",
+    "stage": "pre"
+  },
+  {
+    "question": "对 ImageNet 级别的视觉模型应用训练后静态 INT8 量化（PTQ），通常会损失多少准确率？",
+    "options": [
+      "5-10 个百分点",
+      "正确校准下通常损失 0.1-1 个百分点——BatchNorm 已融合的卷积模型在 INT8 量化下表现特别稳定",
+      "永远为零——无损",
+      "20 个百分点以上——不可用"
+    ],
+    "correct": 1,
+    "explanation": "经过良好校准的视觉模型在做 PTQ 静态 INT8 量化后通常只损失不到 1 个百分点的准确率。更大的精度损失来源通常是三个问题：(1) 校准数据量不足；(2) 激活值存在极端异常值（可以用逐通道量化或裁剪解决）；(3) BatchNorm 层未融合到卷积中。处理好这些之后，INT8 量化几乎是白送的优化。",
+    "stage": "post"
+  },
+  {
+    "question": "你的移动 App 需要一个视觉模型，要求小于 10 MB 且延迟低于 10 毫秒。你应该选择哪个骨干网络？",
+    "options": [
+      "ResNet-50",
+      "MobileNetV3-Small 或 EfficientNet-Lite-B0 量化为 INT8——两者都针对这个预算设计，且能干净地编译到 TFLite / Core ML",
+      "ViT-Base",
+      "ConvNeXt-Large"
+    ],
+    "correct": 1,
+    "explanation": "2026 年的移动端视觉部署仍然以 MobileNetV3 和 EfficientNet-Lite 系列为主导，因为它们在设计之初就针对资源受限场景做了优化：深度可分离卷积、h-swish 激活函数、squeeze-excite 注意力机制，以及从第一天起就为量化做准备。ResNet-50 和 ViT-Base 在 FP32 下有 100M+ 参数（约 400 MB），即使在 INT8 下也有 100MB 以上，远远超出了 10 MB 的内存预算。",
+    "stage": "post"
+  },
+  {
+    "question": "你将 PyTorch 模型导出为 ONNX（opset 17），但报错 'Unsupported operator'。最可能的原因是什么？",
+    "options": [
+      "ONNX 库版本太旧",
+      "(1) 自定义算子没有 ONNX 映射；(2) 非确定性控制流路径无法被追踪（tracing）捕捉；(3) Python 中的张量-标量交互在 ONNX 中没有等价表示。修复方法：替换算子、使用 torch.jit.script 处理控制流、或升级到更高的 opset 版本",
+      "模型参数太多了",
+      "输入形状不对"
+    ],
+    "correct": 1,
+    "explanation": "ONNX 导出默认使用 tracing（追踪），所以任何 tracing 无法捕捉的内容——运行时控制流、Python 级别的分支、自定义 CUDA 算子——都会导致导出失败。大多数报错归根结底是单个节点没有对应的 ONNX 算子定义（通常是一个很小的自定义 OP 或对 torch.special.* 的调用）。修复方式通常是替换该算子、切换到 torch.jit.script 处理控制流，或者升级到支持该新算子的更高 opset 版本。",
+    "stage": "post"
+  }
+]
