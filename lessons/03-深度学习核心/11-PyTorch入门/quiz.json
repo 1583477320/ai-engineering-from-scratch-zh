@@ -1,0 +1,62 @@
+[
+  {
+    "question": "PyTorch 中的 autograd 自动微分引擎的核心作用是什么？",
+    "options": [
+      "自动下载数据集并预处理",
+      "在前向传播时记录计算图，调用 .backward() 时自动计算每个参数的梯度",
+      "自动选择最优的学习率和优化器",
+      "自动将模型转换为 C++ 代码部署"
+    ],
+    "correct": 1,
+    "explanation": "autograd 是 PyTorch 自动梯度的核心。前向传播时，它在幕后构建一张计算图，记录每个张量上的操作。调用 .backward() 时，autograd 沿着计算图反向遍历，利用链式法则自动计算出每个叶张量的梯度。这消除了手动编写 backward() 的繁琐工作。",
+    "stage": "pre"
+  },
+  {
+    "question": "训练循环中必须包含以下哪个模式切换，才能让 Dropout 和 BatchNorm 正确工作？",
+    "options": [
+      "model.train() 和 model.eval()",
+      "model.cuda() 和 model.cpu()",
+      "model.zero_grad() 和 model.step()",
+      "model.enable_autograd() 和 model.disable_autograd()"
+    ],
+    "correct": 0,
+    "explanation": "Dropout 和 BatchNorm 在训练和推理时行为不同。model.train() 开启 Dropout 随机失活和 BatchNorm 基于批数据的统计；model.eval() 关闭 Dropout 并使用 BatchNorm 累积的运行均值/方差。忘记切换会导致推理结果不正确。",
+    "stage": "pre"
+  },
+  {
+    "question": "nn.CrossEntropyLoss 要求输入是什么形式的数据？",
+    "options": [
+      "已经经过 Softmax 归一化的概率分布",
+      "原始的 logits（未经过 Softmax 的输出）",
+      "经过 Sigmoid 激活的值",
+      "经过 ReLU 激活的值"
+    ],
+    "correct": 1,
+    "explanation": "nn.CrossEntropyLoss 内部融合了 LogSoftmax 和 NLLLoss。传入原始 logits 即可——先在内部做 Softmax 再算交叉熵。如果先手动对 logits 做 Softmax 再传入，梯度会出错，因为 Softmax 被应用了两次。",
+    "stage": "post"
+  },
+  {
+    "question": "PyTorch 相比纯 Python 实现（如自制的迷你框架）训练速度快上百倍，最根本的原因是什么？",
+    "options": [
+      "PyTorch 使用了更高深的算法",
+      "PyTorch 将运算下发给优化的 C++/CUDA 内核在 GPU 上并行执行，而纯 Python 循环逐条解释执行",
+      "PyTorch 在训练时跳过了前向传播中的部分计算",
+      "PyTorch 的模型参数量更少"
+    ],
+    "correct": 1,
+    "explanation": "核心差距在计算引擎。PyTorch 的核心矩阵运算（如 torch.mm、torch.bmm）底层由 C++ 和 CUDA 实现，在 GPU 上有数万个核心并行执行。而纯 Python 版本的循环在 CPU 上逐条解释执行，每个操作都有巨大的解释器开销。一张 A100 GPU 有 6912 个 CUDA 核心，等效并行度远超 CPU。",
+    "stage": "post"
+  },
+  {
+    "question": "保存和加载 PyTorch 模型时，推荐使用哪种方式？",
+    "options": [
+      "torch.save(model, 'model.pt') 保存整个模型对象，torch.load('model.pt') 直接恢复",
+      "torch.save(model.state_dict(), 'model.pt') 保存参数字典，加载时先创建模型再调用 load_state_dict",
+      "直接复制模型文件到另一个目录作为备份",
+      "使用 Python 的 pickle.dump 序列化模型"
+    ],
+    "correct": 1,
+    "explanation": "state_dict() 保存的是模型参数的 OrderedDict，与模型定义解耦。当你修改了模型代码后，保存整个模型对象（pickle 方式）会因为类结构变化而无法加载。state_dict 方式更安全、更便携，推荐在绝大多数场景使用。",
+    "stage": "post"
+  }
+]
