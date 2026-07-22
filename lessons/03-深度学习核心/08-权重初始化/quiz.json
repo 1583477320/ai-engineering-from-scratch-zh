@@ -1,0 +1,62 @@
+[
+  {
+    "question": "如果将神经网络的所有权重初始化为零，会发生什么？",
+    "options": [
+      "网络正常训练但速度较慢",
+      "所有神经元计算相同输出、收到相同梯度，每层只有 1 个有效神经元",
+      "网络立即发散",
+      "零初始化是推荐的默认做法"
+    ],
+    "correct": 1,
+    "explanation": "零权重使每个神经元计算相同的函数、收到相同的梯度、更新相同的量。这种对称性意味着数百个参数的行为如同一个。即使隐藏层有 512 个神经元，有效参数始终为 1。",
+    "stage": "pre"
+  },
+  {
+    "question": "随机初始化的尺度为什么如此重要？",
+    "options": [
+      "权重越大训练越快",
+      "方差过大导致激活爆炸，方差过小导致激活消失，两种情况都无法训练",
+      "尺度只影响输出层",
+      "只要权重非零，尺度就不重要"
+    ],
+    "correct": 1,
+    "explanation": "每层将方差乘以 fan_in 乘以 Var(w)。如果这个乘积大于 1，信号在层间指数级增长（爆炸）；如果小于 1，信号指数级缩小（消失）。正确的初始化让这个乘积恰好为 1。",
+    "stage": "pre"
+  },
+  {
+    "question": "Kaiming/He 初始化的方差公式是什么？",
+    "options": [
+      "Var(w) = 1/fan_in",
+      "Var(w) = 2/fan_in",
+      "Var(w) = 2/(fan_in + fan_out)",
+      "Var(w) = 1/(fan_in + fan_out)"
+    ],
+    "correct": 1,
+    "explanation": "Kaiming 初始化使用 Var(w) = 2/fan_in。因子 2 补偿了 ReLU 将一半激活归零的效果：负值变为 0，有效 fan_in 减半。没有因子 2，信号每层缩小约 0.5 倍。",
+    "stage": "post"
+  },
+  {
+    "question": "什么时候应该使用 Xavier/Glorot 而不是 Kaiming/He？",
+    "options": [
+      "任何时候，Xavier 通用性更好",
+      "使用 Sigmoid 或 Tanh 激活函数时，它们不像 ReLU 那样将一半输出归零",
+      "训练数据量较小时",
+      "使用 Adam 优化器时"
+    ],
+    "correct": 1,
+    "explanation": "Xavier 使用 Var(w) = 2/(fan_in + fan_out)，适用于在零附近近似线性的激活函数（Sigmoid、Tanh）。Kaiming 的额外因子 2 是为了补偿 ReLU 的一半归零效果，Xavier 不需要这个补偿。",
+    "stage": "post"
+  },
+  {
+    "question": "GPT-2 为什么将残差层权重缩放 1/sqrt(2N)？",
+    "options": [
+      "为了加速训练",
+      "每次残差加法都增加方差，缩放防止信号在 N 层后无限增长",
+      "为了减少参数量",
+      "为了改善分词效率"
+    ],
+    "correct": 1,
+    "explanation": "残差连接 x = x + sublayer(x) 每次加法都增加方差。经过 N 个残差层，方差增长约 N 倍。缩放 1/sqrt(2N) 使每次加法增加的方差为 Var/(2N)，N 次累积后总增长为 0.5，信号保持稳定。",
+    "stage": "post"
+  }
+]
