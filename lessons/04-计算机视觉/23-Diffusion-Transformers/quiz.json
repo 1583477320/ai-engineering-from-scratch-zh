@@ -1,0 +1,62 @@
+[
+  {
+    "question": "Diffusion Transformer（DiT）与传统 DDPM-U-Net 的最本质区别是什么？",
+    "options": [
+      "DiT 使用卷积而非注意力，所以更快",
+      "DiT 用 Transformer 替代 U-Net 作为去噪器，对图像 patch 序列建模，架构可预测地缩放，且与 Transformer 文本编码器天然兼容",
+      "DiT 依赖更大的训练数据集，但架构相同",
+      "DiT 是一种图像分类器，不是生成模型"
+    ],
+    "correct": 1,
+    "explanation": "DiT 将扩散去噪视为序列建模问题：图像被切分为 patch，每个 patch 视为一个词元，送入 Transformer。自注意力机制让每个 patch 直接与所有其他 patch 交互，避免了 U-Net 卷积归纳偏好对长程依赖的限制。同时，Transformer 的缩放行为与大语言模型一致，可以精确预测参数增加时的性能提升。所有 2026 年的主流文生图模型（SD3、FLUX、Z-Image）都采用 DiT 架构。",
+    "stage": "pre"
+  },
+  {
+    "question": "Rectified Flow 训练的网络预测目标与 DDPM 有何不同？",
+    "options": [
+      "预测目标完全相同，都是噪声 epsilon",
+      "DDPM 预测噪声 epsilon，Rectified Flow 预测速度向量 epsilon - x_0（从数据指向噪声的方向）",
+      "Rectified Flow 预测最终去噪结果 x_0 本身",
+      "Rectified Flow 没有明确的预测目标，只用损失函数"
+    ],
+    "correct": 1,
+    "explanation": "DDPM 的噪声预测目标是直接预测加的噪声 epsilon。Rectified Flow 定义了数据和噪声之间的直线插值，网络学习预测这条直线上的速度向量 v = epsilon - x_0（即从数据指向噪声的方向）。采样时沿反方向积分这个速度，从噪声走回数据。由于路径是直线，只需要 20 步 Euler 积分，而 DDPM 需要 1000 步。",
+    "stage": "pre"
+  },
+  {
+    "question": "MMDiT（SD3）为什么要为文本和图像分别维护独立的权重流？",
+    "options": [
+      "为了减少参数量",
+      "因为文本嵌入和图像嵌入的统计特性不同；独立权重让每种模态在自己的表示空间中处理，再通过联合注意力融合",
+      "这是从 U-Net 继承来的设计，后来被 FLUX 废弃",
+      "只有图像词元真正进入注意力层，文本仅作为门控信号"
+    ],
+    "correct": 1,
+    "explanation": "SD3 的 MMDiT 使用双流架构：文本词元通过一套权重处理，图像词元通过另一套权重处理，但在联合自注意力层交互。这样做的原因是文本嵌入（来自 CLIP/T5 编码器，离散分布特征）和图像 patch 嵌入（连续的特征向量）统计特性差异显著，使用同一组权重处理两者不是最优。实验结果表明，双流设计显著提升了提示词遵循度和文本渲染能力。",
+    "stage": "post"
+  },
+  {
+    "question": "AdaLN-Zero 中 MLP 零初始化的作用是什么？",
+    "options": [
+      "让模型权重保持为零，不做任何预测",
+      "确保训练开始时 gate=0，整个 DiT Block 表现为恒等映射，允许梯度在深层网络中稳定回传，防止初始化阶段的梯度爆炸",
+      "让输出恒为 0，加速收敛",
+      "仅为了代码美观，没有实际作用"
+    ],
+    "correct": 1,
+    "explanation": "AdaLN-Zero 中调制 MLP 的权重和偏置初始化为零，意味着训练开始时 scale=0、shift=0、gate=0。Gate=0 使得残差连接完全不起作用——输入原样通过块。这允许梯度在深层网络中稳定回传，避免初始化阶段的梯度爆炸。随着训练进行，梯度缓慢将参数从零偏离，网络逐步学习条件信息。这与 ResNet 的零初始化残差连接原理相似。",
+    "stage": "post"
+  },
+  {
+    "question": "FLUX.1-schnell 能用 4 步推理的关键技术是什么？",
+    "options": [
+      "使用了不同的模型架构",
+      "蒸馏（Distillation）——用多步高质量教师模型的输出指导少步学生模型训练，使 1-4 步推理的质量接近 20-30 步",
+      "使用了更小的模型参数量",
+      "降低了输入图像分辨率"
+    ],
+    "correct": 1,
+    "explanation": "Schnell、Turbo、LCM 等变体都使用蒸馏技术：先训练一个需要 20-30 步的全质量教师模型（如 FLUX.1-dev），然后通过对抗扩散蒸馏或一致性模型训练，让学生模型学会用 1-4 步复现教师的输出。教师和学生的架构与参数量通常相同（FLUX.1-dev 和 schnell 都是 12B），变化的只是推理所需步数。这是工业生产中实时生成流水线的核心技术。",
+    "stage": "post"
+  }
+]

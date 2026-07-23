@@ -1,0 +1,62 @@
+[
+  {
+    "question": "与 NeRF 相比，3D 高斯泼溅（3D Gaussian Splatting）的主要优势是什么？",
+    "options": [
+      "高斯泼溅的渲染质量永远高于 NeRF，没有任何场景例外",
+      "NeRF 的论文后来被撤回，不再有效",
+      "高斯泼溅使用显式高斯集合而非隐式 MLP：渲染是 GPU 光栅化达到 100+ fps，训练只需几分钟，场景可直接编辑，且 Khronos 和 OpenUSD 都在 2026 年将其标准化",
+      "PyTorch 停止了对 NeRF 算子的支持"
+    ],
+    "correct": 2,
+    "explanation": "3D 高斯泼溅用显式的三维高斯集合替换了 NeRF 中隐式的 MLP。渲染变为排序后的 Alpha 合成，消费级 GPU 上可以达到 100+ fps。训练运行几分钟。每个高斯都是可编辑的。2026 年 Khronos 发布了 glTF 高斯泼溅扩展，OpenUSD 26.03 添加了原生模式，使 3DGS 成为可移植的生产格式。",
+    "stage": "pre"
+  },
+  {
+    "question": "3D 高斯泼溅中每个高斯携带的参数中，球谐函数（SH）系数有什么作用？",
+    "options": [
+      "编码高斯在空间中的精确位置",
+      "计算高斯的协方差矩阵",
+      "编码每个高斯的颜色随观察方向的变化（视图相关颜色），degree-3 提供 16 个系数 per 通道",
+      "控制高斯的透明度衰减速度"
+    ],
+    "correct": 2,
+    "explanation": "球谐函数是定义在单位球面上的傅里叶基。每个高斯存储学习的 SH 系数，用于编码其颜色如何随观察方向变化。degree-3 有 16 个系数 per 通道，共 48 个浮点数 per 高斯。这使得高斯能够表达 Lambertian 漫反射、镜面高光、微弱反射和轻微辉光等视图相关效果。",
+    "stage": "pre"
+  },
+  {
+    "question": "Alpha 合成公式 C = sum_i alpha_i * T_i * c_i 中，透射率 T_i 的含义是什么？",
+    "options": [
+      "第 i 个高斯发出光的强度",
+      "从相机到第 i 个高斯为止，光线未被前面任何高斯吸收的累积概率",
+      "场景中所有高斯的总透明度之和",
+      "渲染像素的最终亮度"
+    ],
+    "correct": 1,
+    "explanation": "透射率 T_i = prod_{j < i}(1 - alpha_j) 表示从相机出发按深度排序后，到达第 i 个高斯之前未被前面所有高斯遮挡或吸收的光线比例。这本质上是一个累积的可见度因子，也是标准体积渲染方程的核心概念，NeRF 和高斯泼溅共用这个方程。",
+    "stage": "post"
+  },
+  {
+    "question": "3D 高斯泼溅训练过程中，密度估计（densification）的克隆和分裂操作分别由什么触发？",
+    "options": [
+      "克隆和分裂都是随机触发的，与梯度无关",
+      "高梯度幅值且小尺度触发克隆（需要更多局部细节）；高梯度且大尺度触发分裂（一个大高斯太平滑）；透明度低于阈值触发剪枝",
+      "只在训练的前 5000 轮运行，之后自动停止",
+      "只有当 MSE 损失超过某个固定阈值时才触发"
+    ],
+    "correct": 1,
+    "explanation": "自适应密度估计是 3DGS 能从约 10 万 SfM 种子高斯增长到收敛时 100 万至 500 万个的关键机制。克隆复制那些梯度大但尺度小的不足分辨率高斯；分裂将过大的高斯拆成两个更小的高斯；剪枝删除训练中透明度衰减到阈值以下的高斯。这三个操作加上参数梯度下降构成了完整的训练动力学。",
+    "stage": "post"
+  },
+  {
+    "question": "如果你想将一个 3DGS 场景同时部署到 Unreal Engine、Apple Vision Pro 和一个 Three.js Web 查看器中，在 2026 年最合适的导出方案是什么？",
+    "options": [
+      "只导出 .ply 文件，因为它兼容所有平台",
+      "分别导出三种不同格式给每个平台单独使用",
+      "glTF KHR_gaussian_splatting（Khronos 2026.02 RFC）覆盖 Web 和通用场景，OpenUSD（OpenUSD 26.03）覆盖 Omniverse 和 Vision Pro 管线",
+      "导出 .splat 格式，因为它是 PlayCanvas 标准"
+    ],
+    "correct": 2,
+    "explanation": "到 2026 年，Khronos 发布了 glTF KHR_gaussian_splatting 扩展（2026.02 RFC），OpenUSD 26.03 也添加了原生的 3DGS 模式。同时导出这两种格式可以确保跨平台的互操作性——glTF 适用于 Three.js、Babylon.js、Cesium 等 Web 查看器，OpenUSD 适用于 NVIDIA Omniverse、Pixar 和 Apple Vision Pro 管线。.ply 虽然是研究领域的标准交换格式，但在生产环境的结构化支持不如这两种新标准。",
+    "stage": "post"
+  }
+]
