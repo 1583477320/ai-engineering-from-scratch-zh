@@ -338,5 +338,50 @@ function escapeJs(str) {
     .replace(/\r/g, "\\r");
 }
 
-// ── 执行 ──
+// ── 复制课程 Markdown 到 site/lessons/ ─────────────────────
+function copyLessons() {
+  const siteLessonsDir = path.join(__dirname, "lessons");
+  if (!fs.existsSync(siteLessonsDir)) {
+    fs.mkdirSync(siteLessonsDir, { recursive: true });
+  }
+
+  let copied = 0;
+  for (const phaseDir of fs.readdirSync(LESSONS_DIR)) {
+    const phasePath = path.join(LESSONS_DIR, phaseDir);
+    if (!fs.statSync(phasePath).isDirectory()) continue;
+
+    const sitePhaseDir = path.join(siteLessonsDir, phaseDir);
+    if (!fs.existsSync(sitePhaseDir)) {
+      fs.mkdirSync(sitePhaseDir, { recursive: true });
+    }
+
+    for (const lessonDir of fs.readdirSync(phasePath)) {
+      const lessonPath = path.join(phasePath, lessonDir);
+      if (!fs.statSync(lessonPath).isDirectory()) continue;
+
+      // 复制 docs/index.md
+      const srcMd = path.join(lessonPath, "docs", "index.md");
+      const dstMdDir = path.join(sitePhaseDir, lessonDir, "docs");
+      if (fs.existsSync(srcMd)) {
+        if (!fs.existsSync(dstMdDir)) {
+          fs.mkdirSync(dstMdDir, { recursive: true });
+        }
+        fs.copyFileSync(srcMd, path.join(dstMdDir, "index.md"));
+      }
+
+      // 复制 quiz.json
+      const srcQuiz = path.join(lessonPath, "quiz.json");
+      const dstQuiz = path.join(sitePhaseDir, lessonDir, "quiz.json");
+      if (fs.existsSync(srcQuiz)) {
+        fs.copyFileSync(srcQuiz, dstQuiz);
+      }
+
+      copied++;
+    }
+  }
+  console.log(`\n已复制 ${copied} 节课程内容到 site/lessons/`);
+}
+
+// ── 所行 ──
 build();
+copyLessons();

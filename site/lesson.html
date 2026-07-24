@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>课程 - AI Engineering 从零</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23fafaf5'/><rect x='2' y='2' width='28' height='28' fill='none' stroke='%233553ff' stroke-width='1.2'/><text x='6' y='22' font-size='14' font-family='monospace' fill='%233553ff'>AI</text></svg>">
+  <link rel="stylesheet" href="style.css?v=20260724">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=VT323&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Lesson Page Layout ── */
+    .lesson-wrap {
+      display: flex;
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: var(--header-offset);
+    }
+    .lesson-sidebar {
+      width: 260px;
+      min-width: 260px;
+      border-right: 1px solid var(--border);
+      padding: 2rem 1rem 2rem 0;
+      position: sticky;
+      top: var(--header-offset);
+      height: calc(100vh - var(--header-offset));
+      overflow-y: auto;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+    }
+    .lesson-sidebar h3 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--ink-mute);
+      margin-bottom: 0.5rem;
+      padding-left: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .lesson-sidebar .sidebar-phase {
+      margin-bottom: 1rem;
+    }
+    .lesson-sidebar .sidebar-phase-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ink);
+      padding: 0.25rem 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+    .lesson-sidebar a {
+      display: block;
+      padding: 0.2rem 0.75rem;
+      color: var(--ink-soft);
+      text-decoration: none;
+      border-radius: 4px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .lesson-sidebar a:hover {
+      background: var(--bg-surface);
+      color: var(--ink);
+    }
+    .lesson-sidebar a.active {
+      background: var(--blueprint-tint);
+      color: var(--blueprint);
+      font-weight: 600;
+    }
+    .lesson-sidebar a .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .lesson-sidebar a .dot.complete { background: var(--complete); }
+    .lesson-sidebar a .dot.in-progress { background: var(--status-in-progress); }
+    .lesson-sidebar a .dot.planned { background: var(--planned); }
+
+    .lesson-main {
+      flex: 1;
+      min-width: 0;
+      padding: 2rem 2.5rem 4rem;
+      max-width: 820px;
+    }
+    .lesson-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .lesson-meta .badge {
+      display: inline-block;
+      padding: 0.2em 0.6em;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      background: var(--bg-surface);
+      color: var(--ink-soft);
+      border: 1px solid var(--border);
+    }
+
+    /* ── Lesson Content Styles ── */
+    .lesson-body h1 { font-size: 2rem; margin-top: 0; }
+    .lesson-body h2 { font-size: 1.5rem; margin-top: 2.5rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+    .lesson-body h3 { font-size: 1.2rem; margin-top: 2rem; }
+    .lesson-body h4 { font-size: 1.05rem; margin-top: 1.5rem; }
+    .lesson-body blockquote {
+      border-left: 3px solid var(--blueprint);
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      background: var(--blueprint-tint);
+      border-radius: 0 4px 4px 0;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+    .lesson-body p { margin: 0.8rem 0; line-height: 1.8; }
+    .lesson-body ul, .lesson-body ol { padding-left: 1.5rem; margin: 0.8rem 0; }
+    .lesson-body li { margin: 0.3rem 0; line-height: 1.7; }
+    .lesson-body pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin: 1rem 0;
+    }
+    .lesson-body code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: var(--code-bg);
+      padding: 0.15em 0.35em;
+      border-radius: 3px;
+    }
+    .lesson-body pre code {
+      background: none;
+      padding: 0;
+      font-size: inherit;
+    }
+    .lesson-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .lesson-body th, .lesson-body td {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    .lesson-body th {
+      background: var(--bg-surface);
+      font-weight: 600;
+    }
+    .lesson-body hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+    .lesson-body a { color: var(--blueprint); text-decoration: none; }
+    .lesson-body a:hover { text-decoration: underline; }
+    .lesson-body img { max-width: 100%; border-radius: 4px; }
+
+    /* ── Checklist ── */
+    .lesson-body .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.3rem 0;
+    }
+    .lesson-body .checklist-item input[type="checkbox"] {
+      margin-top: 0.35rem;
+      accent-color: var(--blueprint);
+    }
+
+    /* ── Quiz Styles ── */
+    .quiz-section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--blueprint);
+    }
+    .quiz-section h2 {
+      border-top: none;
+      padding-top: 0;
+      margin-top: 0;
+    }
+    .quiz-q {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--bg-surface);
+      border-radius: 6px;
+    }
+    .quiz-q .q-label {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      color: var(--ink-mute);
+      margin-bottom: 0.5rem;
+    }
+    .quiz-q .q-text {
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .quiz-q .q-options label {
+      display: block;
+      padding: 0.3rem 0.5rem;
+      margin: 0.2rem 0;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .quiz-q .q-options label:hover {
+      background: var(--blueprint-tint);
+    }
+    .quiz-q .q-options input[type="radio"] {
+      margin-right: 0.5rem;
+      accent-color: var(--blueprint);
+    }
+    .quiz-q .q-explain {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+      display: none;
+    }
+    .quiz-q .q-explain.show { display: block; }
+    .quiz-q .q-explain.correct { border-color: var(--complete); background: rgba(53,83,255,0.05); }
+    .quiz-q .q-explain.wrong { border-color: #ff4444; background: rgba(255,68,68,0.05); }
+    .quiz-check-btn {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      background: var(--blueprint);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    .quiz-check-btn:hover { background: var(--accent-hover); }
+
+    /* ── Navigation ── */
+    .lesson-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      gap: 1rem;
+    }
+    .lesson-nav a {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.9rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .lesson-nav a:hover {
+      border-color: var(--blueprint);
+      background: var(--blueprint-tint);
+    }
+    .lesson-nav a .nav-label {
+      font-size: 0.75rem;
+      color: var(--ink-mute);
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .lesson-nav a .nav-title {
+      font-weight: 600;
+      margin-top: 0.2rem;
+    }
+
+    /* ── Loading / Error ── */
+    .lesson-loading {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--ink-mute);
+    }
+    .lesson-loading .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid var(--border);
+      border-top-color: var(--blueprint);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .lesson-error {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .lesson-error h2 { color: var(--ink-mute); border: none; padding: 0; }
+    .lesson-error p { color: var(--ink-mute); margin-top: 0.5rem; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .lesson-sidebar { display: none; }
+      .lesson-main { padding: 1.5rem 1.5rem 3rem; }
+    }
+    @media (max-width: 768px) {
+      .lesson-main { padding: 1rem 1rem 2rem; }
+      .lesson-body h1 { font-size: 1.5rem; }
+      .lesson-nav { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- header.js 会插入导航栏 -->
+  </div>
+
+  <div class="lesson-wrap">
+    <!-- 侧边栏 -->
+    <aside class="lesson-sidebar" id="sidebar">
+      <div class="lesson-loading">
+        <div class="spinner"></div>
+        <p>加载课程目录...</p>
+      </div>
+    </aside>
+
+    <!-- 主内容 -->
+    <main class="lesson-main" id="lessonMain">
+      <div class="lesson-loading" id="lessonLoading">
+        <div class="spinner"></div>
+        <p>加载课程内容...</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="data.js?v=20260724"></script>
+  <script src="progress.js?v=20260724"></script>
+  <script src="header.js?v=20260724" defer></script>
+  <script>
+  (function () {
+    'use strict';
+
+    // ── URL 参数解析 ──
+    var params = new URLSearchParams(window.location.search);
+    var lessonPath = params.get('path'); // e.g. "lessons/00-环境搭建/01-开发环境配置"
+
+    if (!lessonPath) {
+      showError('未指定课程', '请从 <a href="index.html">首页</a> 或 <a href="catalog.html">目录</a> 选择课程。');
+      return;
+    }
+
+    // ── 解析阶段和课程编号 ──
+    var parts = lessonPath.split('/');
+    var phaseDir = parts[1] || '';
+    var lessonDir = parts[2] || '';
+
+    // ── 查找当前课程在 PHASES 中的位置 ──
+    var currentPhase = null;
+    var currentLessonIdx = -1;
+    var currentPhaseIdx = -1;
+
+    for (var pi = 0; pi < PHASES.length; pi++) {
+      var phase = PHASES[pi];
+      for (var li = 0; li < phase.lessons.length; li++) {
+        if (phase.lessons[li].path === lessonPath) {
+          currentPhase = phase;
+          currentPhaseIdx = pi;
+          currentLessonIdx = li;
+          break;
+        }
+      }
+      if (currentPhase) break;
+    }
+
+    if (!currentPhase) {
+      showError('课程未找到', '路径 <code>' + escapeHtml(lessonPath) + '</code> 在课程数据中不存在。');
+      return;
+    }
+
+    var currentLesson = currentPhase.lessons[currentLessonIdx];
+
+    // ── 更新页面标题 ──
+    document.title = currentLesson.name + ' - AI Engineering 从零';
+
+    // ── 获取 markdown 内容 ──
+    var mdUrl = lessonPath + '/docs/index.md';
+    var quizUrl = lessonPath + '/quiz.json';
+
+    fetch(mdUrl)
+      .then(function (res) {
+        if (!res.ok) throw new Error('not-found');
+        return res.text();
+      })
+      .then(function (md) {
+        renderLesson(md);
+        // 获取测验
+        fetch(quizUrl)
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .catch(function () { return null; })
+          .then(function (data) {
+            if (data && data.length > 0) renderQuiz(data);
+          });
+      })
+      .catch(function () {
+        showError('课程内容未找到', '无法加载 <code>' + escapeHtml(mdUrl) + '</code>。课程可能尚未编写完成。');
+      });
+
+    // ── 渲染 Markdown ──
+    function renderLesson(md) {
+      var main = document.getElementById('lessonMain');
+      var html = parseMd(md);
+
+      // 构建导航
+      var navHtml = buildNav();
+
+      main.innerHTML =
+        '<div class="lesson-body">' + html + '</div>' +
+        '<div id="quizContainer"></div>' +
+        navHtml;
+
+      // 标记已访问
+      if (typeof AIFSProgress !== 'undefined') {
+        AIFSProgress.recordVisit(lessonPath);
+      }
+    }
+
+    // ── Markdown 解析器 ──
+    function parseMd(src) {
+      var lines = src.split('\n');
+      var out = [];
+      var inCode = false;
+      var codeBuf = [];
+      var codeLang = '';
+      var inTable = false;
+      var tableBuf = [];
+
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+
+        // 代码块
+        if (line.match(/^```/)) {
+          if (inCode) {
+            out.push('<pre><code class="lang-' + codeLang + '">' + escapeHtml(codeBuf.join('\n')) + '</code></pre>');
+            inCode = false;
+            codeBuf = [];
+            codeLang = '';
+          } else {
+            inCode = true;
+            codeLang = line.replace(/^```/, '').trim() || 'text';
+          }
+          continue;
+        }
+        if (inCode) { codeBuf.push(line); continue; }
+
+        // 表格
+        if (line.match(/^\|.*\|$/)) {
+          if (!inTable) {
+            inTable = true;
+            tableBuf = [];
+          }
+          tableBuf.push(line);
+          continue;
+        } else if (inTable) {
+          out.push(renderTable(tableBuf));
+          inTable = false;
+          tableBuf = [];
+        }
+
+        // 空行
+        if (line.trim() === '') {
+          out.push('');
+          continue;
+        }
+
+        // 标题
+        var hMatch = line.match(/^(#{1,6})\s+(.+)/);
+        if (hMatch) {
+          var level = hMatch[1].length;
+          var text = hMatch[2];
+          var slug = slugify(text);
+          out.push('<h' + level + ' id="' + slug + '">' + inlineFormat(text) + '</h' + level + '>');
+          continue;
+        }
+
+        // 引用
+        if (line.match(/^>\s/)) {
+          var quoteLines = [];
+          while (i < lines.length && lines[i].match(/^>\s?/)) {
+            quoteLines.push(lines[i].replace(/^>\s?/, ''));
+            i++;
+          }
+          i--;
+          out.push('<blockquote>' + inlineFormat(quoteLines.join('<br>')) + '</blockquote>');
+          continue;
+        }
+
+        // 分隔线
+        if (line.match(/^---+$/)) {
+          out.push('<hr>');
+          continue;
+        }
+
+        // 无序列表
+        if (line.match(/^[-*]\s+/)) {
+          var listItems = [];
+          while (i < lines.length && lines[i].match(/^[-*]\s+/)) {
+            var itemText = lines[i].replace(/^[-*]\s+/, '');
+            // checkbox
+            if (itemText.match(/^\[[ x]\]\s*/)) {
+              var checked = itemText[1] === 'x' ? ' checked' : '';
+              var inner = itemText.replace(/^\[[ x]\]\s*/, '');
+              listItems.push('<li class="checklist-item"><input type="checkbox"' + checked + ' disabled> ' + inlineFormat(inner) + '</li>');
+            } else {
+              listItems.push('<li>' + inlineFormat(itemText) + '</li>');
+            }
+            i++;
+          }
+          i--;
+          out.push('<ul>' + listItems.join('') + '</ul>');
+          continue;
+        }
+
+        // 有序列表
+        if (line.match(/^\d+\.\s+/)) {
+          var olistItems = [];
+          while (i < lines.length && lines[i].match(/^\d+\.\s+/)) {
+            olistItems.push('<li>' + inlineFormat(lines[i].replace(/^\d+\.\s+/, '')) + '</li>');
+            i++;
+          }
+          i--;
+          out.push('<ol>' + olistItems.join('') + '</ol>');
+          continue;
+        }
+
+        // 段落
+        out.push('<p>' + inlineFormat(line) + '</p>');
+      }
+
+      if (inTable) out.push(renderTable(tableBuf));
+      if (inCode) out.push('<pre><code>' + escapeHtml(codeBuf.join('\n')) + '</code></pre>');
+
+      return out.join('\n');
+    }
+
+    // ── 表格渲染 ──
+    function renderTable(rows) {
+      if (rows.length < 2) return '';
+      var html = '<table>';
+      // 表头
+      var headers = splitTableRow(rows[0]);
+      html += '<thead><tr>';
+      for (var h = 0; h < headers.length; h++) {
+        html += '<th>' + inlineFormat(headers[h]) + '</th>';
+      }
+      html += '</tr></thead>';
+      // 表体（跳过分隔行 |---|---|）
+      html += '<tbody>';
+      for (var r = 2; r < rows.length; r++) {
+        var cells = splitTableRow(rows[r]);
+        html += '<tr>';
+        for (var c = 0; c < cells.length; c++) {
+          html += '<td>' + inlineFormat(cells[c]) + '</td>';
+        }
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      return html;
+    }
+
+    function splitTableRow(row) {
+      return row.replace(/^\||\|$/g, '').split('|').map(function (s) { return s.trim(); });
+    }
+
+    // ── 行内格式化 ──
+    function inlineFormat(text) {
+      // 图片
+      text = text.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+      // 链接
+      text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      // 粗斜体
+      text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+      // 粗体
+      text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      // 斜体
+      text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      // 行内代码
+      text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+      return text;
+    }
+
+    // ── Slugify（支持中文） ──
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^\w一-鿿㐀-䶿]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+
+    // ── 渲染测验 ──
+    function renderQuiz(questions) {
+      var container = document.getElementById('quizContainer');
+      var html = '<div class="quiz-section"><h2>📝 测验</h2>';
+
+      questions.forEach(function (q, qi) {
+        var stageLabel = q.stage === 'pre' ? '课前自测' : '课后检测';
+        html += '<div class="quiz-q" id="quiz-q-' + qi + '">';
+        html += '<div class="q-label">' + stageLabel + ' #' + (qi + 1) + '</div>';
+        html += '<div class="q-text">' + inlineFormat(q.question) + '</div>';
+        html += '<div class="q-options">';
+
+        if (q.options) {
+          q.options.forEach(function (opt, oi) {
+            html += '<label><input type="radio" name="q' + qi + '" value="' + oi + '"> ' + inlineFormat(opt) + '</label>';
+          });
+        }
+
+        html += '</div>';
+        html += '<button class="quiz-check-btn" onclick="checkQuiz(' + qi + ', ' + q.answer + ')">检查答案</button>';
+        html += '<div class="q-explain" id="quiz-explain-' + qi + '">';
+        html += '<strong>解析：</strong> ' + inlineFormat(q.explanation || '');
+        html += '</div>';
+        html += '</div>';
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // ── 检查测验答案 ──
+    window.checkQuiz = function (qi, correctAnswer) {
+      var selected = document.querySelector('input[name="q' + qi + '"]:checked');
+      if (!selected) return;
+
+      var explainEl = document.getElementById('quiz-explain-' + qi);
+      var isCorrect = parseInt(selected.value) === correctAnswer;
+
+      explainEl.className = 'q-explain show ' + (isCorrect ? 'correct' : 'wrong');
+      if (isCorrect) {
+        explainEl.innerHTML = '✅ ' + explainEl.innerHTML;
+      } else {
+        explainEl.innerHTML = '❌ 正确答案是第 ' + (correctAnswer + 1) + ' 项。' + explainEl.innerHTML;
+      }
+    };
+
+    // ── 上一课/下一课导航 ──
+    function buildNav() {
+      var prev = null;
+      var next = null;
+
+      if (currentLessonIdx > 0) {
+        prev = currentPhase.lessons[currentLessonIdx - 1];
+      } else if (currentPhaseIdx > 0) {
+        var prevPhase = PHASES[currentPhaseIdx - 1];
+        prev = prevPhase.lessons[prevPhase.lessons.length - 1];
+      }
+
+      if (currentLessonIdx < currentPhase.lessons.length - 1) {
+        next = currentPhase.lessons[currentLessonIdx + 1];
+      } else if (currentPhaseIdx < PHASES.length - 1) {
+        var nextPhase = PHASES[currentPhaseIdx + 1];
+        if (nextPhase.lessons.length > 0) {
+          next = nextPhase.lessons[0];
+        }
+      }
+
+      var html = '<div class="lesson-nav">';
+
+      if (prev) {
+        html += '<a href="lesson.html?path=' + encodeURIComponent(prev.path) + '">';
+        html += '<div class="nav-label">← 上一课</div>';
+        html += '<div class="nav-title">' + escapeHtml(prev.name) + '</div>';
+        html += '</a>';
+      } else {
+        html += '<div></div>';
+      }
+
+      if (next) {
+        html += '<a href="lesson.html?path=' + encodeURIComponent(next.path) + '" style="text-align:right">';
+        html += '<div class="nav-label">下一课 →</div>';
+        html += '<div class="nav-title">' + escapeHtml(next.name) + '</div>';
+        html += '</a>';
+      } else {
+        html += '<div></div>';
+      }
+
+      html += '</div>';
+      return html;
+    }
+
+    // ── 渲染侧边栏 ──
+    function renderSidebar() {
+      var sidebar = document.getElementById('sidebar');
+      var html = '<h3>课程目录</h3>';
+
+      for (var pi = 0; pi < PHASES.length; pi++) {
+        var phase = PHASES[pi];
+        html += '<div class="sidebar-phase">';
+        html += '<div class="sidebar-phase-title">' + phase.id + ' · ' + escapeHtml(phase.name) + '</div>';
+
+        for (var li = 0; li < phase.lessons.length; li++) {
+          var lesson = phase.lessons[li];
+          var activeClass = (pi === currentPhaseIdx && li === currentLessonIdx) ? ' active' : '';
+          html += '<a href="lesson.html?path=' + encodeURIComponent(lesson.path) + '" class="' + activeClass + '">';
+          html += '<span class="dot ' + lesson.status + '"></span>';
+          html += escapeHtml(lesson.name);
+          html += '</a>';
+        }
+
+        html += '</div>';
+      }
+
+      sidebar.innerHTML = html;
+
+      // 滚动到当前课程
+      var activeLink = sidebar.querySelector('a.active');
+      if (activeLink) {
+        activeLink.scrollIntoView({ block: 'center' });
+      }
+    }
+
+    // ── 工具函数 ──
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function showError(title, msg) {
+      var main = document.getElementById('lessonMain');
+      main.innerHTML = '<div class="lesson-error"><h2>' + escapeHtml(title) + '</h2><p>' + msg + '</p></div>';
+    }
+
+    // ── 初始化 ──
+    renderSidebar();
+  })();
+  </script>
+</body>
+</html>
