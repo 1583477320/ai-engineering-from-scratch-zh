@@ -2,7 +2,7 @@
  * AI Engineering 从零 - 课程数据
  * 
  * 由 site/build.js 自动生成，请勿手动编辑
- * 生成时间: 2026-07-24T03:41:58.445Z
+ * 生成时间: 2026-07-24T05:20:55.891Z
  */
 
 const TOTAL_LESSONS = 503;
