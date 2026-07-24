@@ -3,7 +3,7 @@
  * 被所有页面引用，自动更新 GitHub 星标数。
  */
 (function () {
-  var REPO = 'zhao/ai-engineering-from-scratch-zh';
+  var REPO = '1583477320/ai-engineering-from-scratch-zh';
   var CACHE_KEY = 'gh:stars:' + REPO;
   var CACHE_TTL_MS = 10 * 60 * 1000; // 10 分钟缓存
 
