@@ -388,9 +388,10 @@
     // ── 更新页面标题 ──
     document.title = currentLesson.name + ' - AI Engineering 从零';
 
-    // ── 获取 markdown 内容 ──
-    var mdUrl = lessonPath + '/docs/index.md';
-    var quizUrl = lessonPath + '/quiz.json';
+    // ── 获取 markdown 内容（从 GitHub raw） ──
+    var GITHUB_RAW = 'https://raw.githubusercontent.com/1583477320/ai-engineering-from-scratch-zh/main/';
+    var mdUrl = GITHUB_RAW + lessonPath + '/docs/index.md';
+    var quizUrl = GITHUB_RAW + lessonPath + '/quiz.json';
 
     fetch(mdUrl)
       .then(function (res) {
