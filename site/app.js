@@ -200,9 +200,8 @@
 
     for (var i = 0; i < p.lessons.length; i++) {
       var l = p.lessons[i];
-      var pathMatch = l.url ? l.url.match(/(lessons\/[^/]+\/[^/]+)\/?$/) : null;
-      var lessonPath = pathMatch ? pathMatch[1] : '';
-      var userComplete = hasProgress && lessonPath && window.AIFSProgress.isLessonComplete(lessonPath);
+            var lessonPath = l.path || '';
+      var userComplete = window.AIFSProgress && lessonPath && window.AIFSProgress.isLessonComplete(lessonPath);
       if (userComplete) userDone++;
 
       var statusClass = l.status.replace(/ /g, '-');
@@ -210,8 +209,8 @@
 
       html += '<div class="modal-lesson' + (userComplete ? ' user-done' : '') + '">';
       html += '<span class="modal-lesson-status ' + statusClass + '"' + (userComplete ? ' title="你已完成此课程"' : '') + '></span>';
-      if (l.url) {
-        html += '<a href="' + l.url + '" target="_blank" rel="noopener">' + escapeHtml(l.name) + '</a>';
+      if (lessonPath) {
+        html += '<a href="lesson.html?path=' + encodeURIComponent(lessonPath) + '">' + escapeHtml(l.name) + '</a>';
       } else {
         html += '<a>' + escapeHtml(l.name) + '</a>';
       }
